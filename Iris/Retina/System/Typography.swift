@@ -120,7 +120,7 @@ struct Typography_Previews: PreviewProvider {
                     Text("Text").retinaTypography(.h3)
                     Text("Text").retinaTypography(.h4)
                     Text("Text").retinaTypography(.h5)
-                    Text("Text").retinaTypography(.h6)
+                    Text("Text")
                 }
                 Group {
     //                Text("Text").retinaTypography(.s1)
