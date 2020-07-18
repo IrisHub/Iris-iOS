@@ -13,7 +13,8 @@ public struct RetinaTypography: ViewModifier {
     
     private enum Family: String {
         case
-        main = "HelveticaNeue"
+        main = "HelveticaNeue",
+        secondary = "Georgia"
     }
     
     private enum Weight: String {
@@ -54,24 +55,24 @@ public struct RetinaTypography: ViewModifier {
         return "\(familyName)-\(fontWeight)"
     }
     
-    private func sizingFont(family: Family, weight: Weight, size: Size) -> Font {
+    private func customFont(family: Family, weight: Weight, size: Size) -> Font {
         return Font.custom(getName(family, weight), size: size.rawValue)
     }
     
     public func body(content: Content) -> some View {
         switch style {
         case .h1: return content
-            .font(sizingFont(family: .main, weight: .bold, size: .one))
+            .font(customFont(family: .secondary, weight: .bold, size: .one))
         case .h2: return content
-            .font(sizingFont(family: .main, weight: .bold, size: .two))
+            .font(customFont(family: .main, weight: .bold, size: .two))
         case .h3: return content
-            .font(sizingFont(family: .main, weight: .bold, size: .three))
+            .font(customFont(family: .main, weight: .bold, size: .three))
         case .h4: return content
-            .font(sizingFont(family: .main, weight: .bold, size: .four))
+            .font(customFont(family: .main, weight: .bold, size: .four))
         case .h5: return content
-            .font(sizingFont(family: .main, weight: .bold, size: .five))
+            .font(customFont(family: .main, weight: .bold, size: .five))
         case .h6: return content
-            .font(sizingFont(family: .main, weight: .bold, size: .six))
+            .font(customFont(family: .main, weight: .bold, size: .six))
 
         case .s1: return content
             .font(.system(size: 15, weight: .semibold))
@@ -79,9 +80,9 @@ public struct RetinaTypography: ViewModifier {
             .font(.system(size: 13, weight: .semibold))
             
         case .p5: return content
-            .font(sizingFont(family: .main, weight: .regular, size: .five))
+            .font(customFont(family: .main, weight: .regular, size: .five))
         case .p6: return content
-            .font(sizingFont(family: .main, weight: .regular, size: .six))
+            .font(customFont(family: .main, weight: .regular, size: .six))
 
         case .c1: return content
             .font(.system(size: 12, weight: .regular))

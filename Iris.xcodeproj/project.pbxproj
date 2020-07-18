@@ -103,8 +103,8 @@
 		B13A8FBA24C264BB0069032F /* Retina */ = {
 			isa = PBXGroup;
 			children = (
-				B13A8FBC24C264D00069032F /* Fields */,
 				B13A8FBB24C264C40069032F /* System */,
+				B13A8FBC24C264D00069032F /* Fields */,
 			);
 			path = Retina;
 			sourceTree = "<group>";
