@@ -8,52 +8,34 @@
 
 import SwiftUI
 
+struct Card {
+    var title: String
+    var shortcuts: [String]
+}
+
+struct DiscoveryItem: Hashable {
+    var title: String
+    var imageUrl: String
+}
+
+
 struct ContentView: View {
+    let settings: [String]
+    @State var selectedSettings: [String]
+
     var body: some View {
-        ZStack(alignment: .top) {
-            Rectangle()
-                .frame(width: 300, height: 500)
-                .foregroundColor(.retinaBackground)
-            VStack(alignment: .leading) {
-                Image("food")
-                    .renderingMode(.original)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 300, height: 300)
-                    .clipped()
-
-                Text("By Ingredient")
-                    .retinaTypography(.h4)
-                    .padding([.top, .leading])
-                    .foregroundColor(.retinaBasic)
-                
-                Divider().frame(width: 300)
-                
-                Text("Your Shortcuts").retinaTypography(.p6)                    .padding(.leading)
-
-                
-                Button(action: {}) {
-                    Text("Pasta")
-                }.padding([.top, .leading])
-                
-                Button(action: {}) {
-                    Text("Salmon")
-                }.padding(.leading)
-                Button(action: {}) {
-                    Text("Avocado")
-                }.padding(.leading)
-                Button(action: {}) {
-                    Text("Shrimp")
-                }.padding(.leading)
-
-
+        List {
+            ForEach(settings, id: \.self) { item in
+                SelectionCell(title: item, selectedTitles: self.$selectedSettings, isSingleSelect: true)
             }
         }
     }
+
 }
 
 struct ContentView_Previews: PreviewProvider {
+    @State static var settings = ["pEars", "apples"]
     static var previews: some View {
-        ContentView().environment(\.colorScheme, .dark)
+        ContentView(settings: ["apples", "pears", "bananas", "pineapples"], selectedSettings: settings)
     }
 }
