@@ -17,6 +17,8 @@
 		B1607FD224C40B080075B436 /* SelectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1607FD124C40B080075B436 /* SelectionCell.swift */; };
 		B1607FD424C45F5D0075B436 /* SingleSelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1607FD324C45F5D0075B436 /* SingleSelectView.swift */; };
 		B1607FD624C47D320075B436 /* MultiSelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1607FD524C47D320075B436 /* MultiSelectView.swift */; };
+		B1607FDB24C4B6DB0075B436 /* Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1607FDA24C4B6DB0075B436 /* Search.swift */; };
+		B1607FDD24C4F5930075B436 /* IconText.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1607FDC24C4F5930075B436 /* IconText.swift */; };
 		B16544F124C3BF8500A44117 /* DiscoveryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B16544F024C3BF8500A44117 /* DiscoveryCell.swift */; };
 		B16544F324C3C20400A44117 /* DiscoveryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B16544F224C3C20400A44117 /* DiscoveryView.swift */; };
 		B16544F524C3C5B700A44117 /* WrapStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = B16544F424C3C5B700A44117 /* WrapStack.swift */; };
@@ -69,6 +71,8 @@
 		B1607FD124C40B080075B436 /* SelectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionCell.swift; sourceTree = "<group>"; };
 		B1607FD324C45F5D0075B436 /* SingleSelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleSelectView.swift; sourceTree = "<group>"; };
 		B1607FD524C47D320075B436 /* MultiSelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiSelectView.swift; sourceTree = "<group>"; };
+		B1607FDA24C4B6DB0075B436 /* Search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Search.swift; sourceTree = "<group>"; };
+		B1607FDC24C4F5930075B436 /* IconText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconText.swift; sourceTree = "<group>"; };
 		B16544F024C3BF8500A44117 /* DiscoveryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoveryCell.swift; sourceTree = "<group>"; };
 		B16544F224C3C20400A44117 /* DiscoveryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoveryView.swift; sourceTree = "<group>"; };
 		B16544F424C3C5B700A44117 /* WrapStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WrapStack.swift; sourceTree = "<group>"; };
@@ -177,6 +181,7 @@
 		B13A8FBB24C264C40069032F /* System */ = {
 			isa = PBXGroup;
 			children = (
+				B1607FD924C4844D0075B436 /* Extensions */,
 				B17AA3B324C179C400BC1BEA /* ColorPalette.xcassets */,
 				B1B10DFA24C14F3200F56835 /* Typography.swift */,
 				B17AA3B124C1794600BC1BEA /* Palette.swift */,
@@ -192,8 +197,17 @@
 				B13A8FBD24C265250069032F /* Toggles.swift */,
 				B13A8FBF24C265B10069032F /* TextFields.swift */,
 				B10A630C24C2C1E5004C79F1 /* Images.swift */,
+				B1607FDA24C4B6DB0075B436 /* Search.swift */,
+				B1607FDC24C4F5930075B436 /* IconText.swift */,
 			);
 			path = Fields;
+			sourceTree = "<group>";
+		};
+		B1607FD924C4844D0075B436 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		B1B10DBE24C111E000F56835 = {
@@ -420,10 +434,12 @@
 				B10A631224C2D10D004C79F1 /* ListView.swift in Sources */,
 				B10A630B24C2BDB6004C79F1 /* HomeCell.swift in Sources */,
 				B10A630F24C2C4D1004C79F1 /* Extensions.swift in Sources */,
+				B1607FDD24C4F5930075B436 /* IconText.swift in Sources */,
 				B1B1277924C3991300959667 /* LottieView.swift in Sources */,
 				B1B1277324C391F400959667 /* TitleView.swift in Sources */,
 				B1B1277F24C3ACAF00959667 /* SettingsCell.swift in Sources */,
 				B1607FD424C45F5D0075B436 /* SingleSelectView.swift in Sources */,
+				B1607FDB24C4B6DB0075B436 /* Search.swift in Sources */,
 				B1607FD624C47D320075B436 /* MultiSelectView.swift in Sources */,
 				B13A8FC024C265B10069032F /* TextFields.swift in Sources */,
 			);
