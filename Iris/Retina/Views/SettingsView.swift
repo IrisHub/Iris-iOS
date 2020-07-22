@@ -11,15 +11,31 @@ import SwiftUI
 struct SettingsView: View {
     var titles: [String]
     var settings: [String]
-
     
     var body: some View {
         ZStack {
-            Color.retinaFontBtn
-            VStack {
+            List {
                 ForEach(0 ..< settings.count) { idx in
-                    SettingsCell(title: self.titles[idx], setting: self.settings[idx]).frame(width: UIScreen.screenWidth, height: 72)
+                    SettingsCell(title: self.titles[idx], setting: self.settings[idx]).listRowInsets(EdgeInsets()).frame(width: UIScreen.screenWidth)
                 }
+                
+                Divider().frame(height: 2).background(Color.retinaFontBtn).listRowInsets(EdgeInsets()).padding(.top, 24)
+
+                SettingsCell(title: "", setting: "Privacy Policy").listRowInsets(EdgeInsets()).frame(width: UIScreen.screenWidth)
+                SettingsCell(title: "", setting: "Terms of Service").listRowInsets(EdgeInsets()).frame(width: UIScreen.screenWidth)
+                
+                HStack(alignment: .top) {
+                    Image("irissmall").resizable().foregroundColor(.white).padding(.trailing, 12).frame(width: 37, height: 34)
+                    VStack(alignment: .leading) {
+                        Text("Crafted for Shalin on May 22nd 2020").foregroundColor(.white)
+                        Text("User #3").foregroundColor(.white)
+                    }
+                }.padding([.top], 24)
+            }
+            .onAppear {
+                UITableView.appearance().separatorStyle = .none
+                UITableViewCell.appearance().backgroundColor = .black
+                UITableView.appearance().backgroundColor = .black
             }
         }
     }

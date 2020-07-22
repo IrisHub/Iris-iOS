@@ -17,13 +17,11 @@ struct TitleView: View {
             Text(title)
                 .retinaTypography(.h3)
                 .multilineTextAlignment(.leading)
-                .padding(.leading, 24)
             HStack {
                 Image(systemName: "star.fill").foregroundColor(.retinaInfo)
                 Text(metrics.joined(separator: "  •  "))
-                    .retinaTypography(.p5)
                     .multilineTextAlignment(.leading)
-            }.padding(.leading, 24)
+            }
         }
     }
 }

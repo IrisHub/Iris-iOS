@@ -16,12 +16,19 @@ struct SettingsCell: View {
         Button(action: {
             
         }) {
-            ZStack(alignment: .leading) {
-                Rectangle().frame(width: UIScreen.screenWidth, height: 72).foregroundColor(.retinaFontBtn)
-                HStack {
-                    Text(title).foregroundColor(.retinaBackground).retinaTypography(.h5).padding(24).multilineTextAlignment(.leading).frame(width: 204, alignment: .leading)
-                    Text(setting).foregroundColor(.retinaBasic).retinaTypography(.p5).padding(12).multilineTextAlignment(.leading).frame(width: 168, alignment: .trailing)
-                    Image(systemName: "chevron.right").foregroundColor(.retinaBackground)
+            ZStack {
+                Color.black
+                VStack {
+                    if !title.isEmpty {
+                        Text(title).foregroundColor(.white).retinaTypography(.h5).multilineTextAlignment(.leading).padding(.leading, 24).padding(.top, 36).frame(width: UIScreen.screenWidth, alignment: .leading)
+                    } else {
+                        Text(title).foregroundColor(.white).retinaTypography(.h5).multilineTextAlignment(.leading).padding(.leading, 24).padding(.top, 12).frame(width: UIScreen.screenWidth, alignment: .leading)
+                    }
+                    HStack {
+                        Text(setting).foregroundColor(.retinaBasic).retinaTypography(.p5).padding(12).multilineTextAlignment(.leading).padding(.leading, 48).padding(.top, 6).padding(.bottom, 6)
+                        Spacer()
+                        Image(systemName: "chevron.right").foregroundColor(.white).padding(.trailing, 24)
+                    }.background(Color.retinaFontBtn)
                 }
             }
         }

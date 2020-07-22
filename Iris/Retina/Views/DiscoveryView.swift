@@ -17,21 +17,18 @@ struct DiscoveryView: View {
             // add cell content here
             DiscoveryCell(title: item.title, backgroundImageUrl: item.imageUrl).frame(width: 160, height: 100)
         }
-        .padding(24)
-        .background(Color.black.opacity(0.05)
-        .edgesIgnoringSafeArea(.all))
     }
 }
 
 struct DiscoveryView_Previews: PreviewProvider {
     static var previews: some View {
         DiscoveryView(discoveryItem: [
-            DiscoveryItem(title: "Chicken", imageUrl: "food"),
-            DiscoveryItem(title: "Beef", imageUrl: "food"),
-            DiscoveryItem(title: "Carrots", imageUrl: "food"),
-            DiscoveryItem(title: "Broccoli", imageUrl: "food"),
-            DiscoveryItem(title: "Pasta", imageUrl: "food"),
-            DiscoveryItem(title: "Salmon", imageUrl: "food")
+            DiscoveryItem(title: "Chicken", imageUrl: "food", category: "Ingredient"),
+            DiscoveryItem(title: "Beef", imageUrl: "food", category: "Ingredient"),
+            DiscoveryItem(title: "Carrots", imageUrl: "food", category: "Ingredient"),
+            DiscoveryItem(title: "Broccoli", imageUrl: "food", category: "Ingredient"),
+            DiscoveryItem(title: "Pasta", imageUrl: "food", category: "Ingredient"),
+            DiscoveryItem(title: "Salmon", imageUrl: "food", category: "Ingredient")
         ])
     }
 }

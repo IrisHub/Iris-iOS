@@ -30,12 +30,11 @@ struct SelectionCell: View {
                 Rectangle().frame(width: UIScreen.screenWidth, height: 72).foregroundColor(.retinaFontBtn)
                 HStack {
                     Circle()
-                        .fill(self.selectedTitles.contains(where: {$0.caseInsensitiveCompare(self.title) == .orderedSame}) ? Color.retinaBackground : Color.retinaFontBtn)
+                        .fill(self.selectedTitles.contains(where: {$0.caseInsensitiveCompare(self.title) == .orderedSame}) ? Color.white : Color.retinaFontBtn)
                         .frame(width: 8, height: 8)
                         .padding(.leading, 24)
                     
-                    Text(title.capitalizingFirstLetter()).foregroundColor(.retinaBackground).retinaTypography(.h5).multilineTextAlignment(.leading).frame(width: 204, alignment: .leading).padding(.leading, 12)
-
+                    Text(title.capitalizingFirstLetter()).foregroundColor(.white).retinaTypography(.h5).multilineTextAlignment(.leading).frame(width: 204, alignment: .leading).padding(.leading, 12)
                 }
             }
         }

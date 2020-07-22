@@ -16,7 +16,7 @@ struct ListView: View {
     var body: some View {
         
         VStack(alignment: .leading) {
-            Text(title).retinaTypography(.h3).foregroundColor(.retinaActiveBasic)
+            Text(title).retinaTypography(.h3).foregroundColor(.black)
             
             ForEach(contents,  id: \.self) { content in
                 VStack {
@@ -25,7 +25,7 @@ struct ListView: View {
                         .fill(Color.retinaSuccess)
                         .frame(width: 15, height: 15)
 
-                        Text(content).retinaTypography(.p5).foregroundColor(.retinaActiveBasic).multilineTextAlignment(.leading)
+                        Text(content).retinaTypography(.p5).foregroundColor(.black).multilineTextAlignment(.leading)
                     }
                 }.padding(.top)
             }

@@ -111,6 +111,55 @@ struct retinaButton: View {
     }
 }
 
+struct retinaSearchButton: View {
+    enum Style {
+        case fill, outline, ghost
+    }
+
+    var text: String?
+    var color: Color = .retinaPrimary
+    var backgroundColor: Color = .black
+    var action: () -> Void
+    
+    var body: some View {
+        HStack {
+            Button(action: action, label: {
+                HStack() {
+                    HStack(spacing: 12) {
+                        Image(systemName: "magnifyingglass").padding(6)
+                        Text(text ?? "").retinaTypography(.p5)
+                    }
+                    Spacer()
+                }
+            }).style(.fill, color: color).padding([.leading, .trailing], 24)
+        }.frame(width: UIScreen.screenWidth, height: 90).background(backgroundColor)
+    }
+}
+
+
+struct retinaIconButton: View {
+    enum Style {
+        case fill, outline, ghost
+    }
+
+    var image: Image?
+    var backgroundColor: Color = .black
+    var action: () -> Void
+    
+    var body: some View {
+        HStack {
+            Button(action: action, label: {
+                image?.foregroundColor(.white).retinaTypography(.h5)
+            })
+        }
+        .frame(width: 48, height: 48)
+        .background(backgroundColor.opacity(0.8))
+        .cornerRadius(2)
+    }
+}
+
+
+
 
 // MARK: - Preview
 
@@ -146,6 +195,15 @@ public struct Input_Previews: PreviewProvider {
                 retinaButton(text: "Text", image: cloudImg, action: { print("click") })
                 retinaButton(image: cloudImg, action: { print("click") })
             }
+            
+            HStack(spacing: 5) {
+                retinaSearchButton(text: "Text", action: { print("click") })
+            }
+            
+            HStack(spacing: 5) {
+                retinaIconButton(image: (Image(systemName: "line.horizontal.3.decrease")), action: { print("click") })
+            }
+
             
             Button(action: { print("click") }, label: { Text("Custom") })
                 .style(.outline, color: .retinaFontBtn)

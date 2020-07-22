@@ -9,55 +9,56 @@
 import SwiftUI
 
 struct Search: View {
+    var isBack: Bool
+    var placeholder: String
     @Binding var searchText: String
-    @Binding var showCancelButton: Bool
 
     var body: some View {
-        HStack {
+        VStack {
             HStack {
-                Image(systemName: "magnifyingglass")
+                HStack {
+                    if (isBack) {
+                        
+                    }
+                    Image(systemName: isBack ? "chevron.left" : "magnifyingglass").padding(6).padding(.leading, 12).retinaTypography(.h5)
+                    
+                    ZStack(alignment: .leading) {
+                        if searchText.isEmpty { Text(placeholder).foregroundColor(.white).retinaTypography(.p5).padding(.leading, 12) }
+                        TextField("", text: $searchText).retinaTypography(.p5).padding(.leading, 12)
+                    }
+                    
 
-                TextField("Search", text: $searchText, onEditingChanged: { isEditing in
-                    self.showCancelButton = true
-                }, onCommit: {
-                    print("onCommit")
-                }).foregroundColor(.primary)
-
-                Button(action: {
-                    self.searchText = ""
-                }) {
-                    Image(systemName: "xmark.circle.fill").opacity(searchText == "" ? 0 : 1)
-                }
-            }
-            .padding(EdgeInsets(top: 8, leading: 6, bottom: 8, trailing: 6))
-            .foregroundColor(.secondary)
-            .background(Color(.secondarySystemBackground))
-            .cornerRadius(10.0)
-
-            if showCancelButton  {
-                Button("Cancel") {
-                        UIApplication.shared.endEditing(true) // this must be placed before the other commands here
+                    Button(action: {
                         self.searchText = ""
-                        self.showCancelButton = false
-                }
-                .foregroundColor(Color(.systemBlue))
+                        UIApplication.shared.endEditing(true) // this must be placed before the other commands here
+                    }) {
+                        Image(systemName: "xmark.circle.fill").opacity(searchText == "" ? 0 : 1)
+                    }.padding(6).padding(.trailing, 12)
+                }.frame(minHeight: 56)
+                    .foregroundColor(.white)
+                    .background(Color(.gray))
+                    .cornerRadius(4)
+                    .padding([.leading, .trailing], 24)
+
             }
+            .frame(width: UIScreen.screenWidth, height: 90)
         }
-        .padding(.horizontal)
-        .navigationBarHidden(showCancelButton) // .animation(.default) // animation does not work properly
+        
+
     }
 }
 
 struct Search_Previews: PreviewProvider {
     @State static var searchTextEmpty = ""
-    @State static var dontShowCancelButton = false
     @State static var searchTextFilled = "Hi Friends"
-    @State static var showCancelButton = true
     
     static var previews: some View {
         Group {
-            Search(searchText: $searchTextEmpty, showCancelButton: $dontShowCancelButton)
-            Search(searchText: $searchTextFilled, showCancelButton: $showCancelButton)
+            HStack {
+                retinaSearchButton(text: "Hello", color: .gray, backgroundColor: .white, action: { print("click") })
+            }
+            Search(isBack: true, placeholder: "Search", searchText: $searchTextEmpty)
+            Search(isBack: true, placeholder: "Search", searchText: $searchTextFilled)
         }
     }
 }

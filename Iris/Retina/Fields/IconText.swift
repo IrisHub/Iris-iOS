@@ -9,13 +9,24 @@
 import SwiftUI
 
 struct IconText: View {
+    var text: String
+    var icon: String
+    var iconColor: Color
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        HStack {
+            Image(systemName: icon)
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundColor(iconColor)
+
+            Text(text)
+                .retinaTypography(.p6)
+                .padding(.leading, 2)
+        }
     }
 }
 
 struct IconText_Previews: PreviewProvider {
     static var previews: some View {
-        IconText()
+        IconText(text: "For you", icon: "checkmark", iconColor: .retinaBasic)
     }
 }

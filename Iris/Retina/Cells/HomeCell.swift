@@ -8,38 +8,26 @@
 
 import SwiftUI
 
-struct HomeCell: View {
+struct HomeCell: View, Decodable, Hashable, Identifiable {
     
-    var card: Card
-    
+    var id:     Int
+    var name:   String = ""
+
     var body: some View {
         ZStack(alignment: .top) {
-            Rectangle()
-                .frame(width: 300, height: 500)
-                .foregroundColor(.retinaBackground).padding()
+
             VStack(alignment: .leading) {
-                
-                Image("food")
-                    .retinaRectangle(width: 300, height: 300)
+                HStack(alignment: .top) {
+                    HorizontalLabel(text: "1 of 3").padding(.top, 12)
+                    Image("food").retinaRectangle(width: 320, height: 400)
+                    Spacer()
+                }.frame(width: UIScreen.screenWidth)
 
+                TitleView(title: "Pasta with Broccoli and Cheddar Cheese", metrics: ["99% liked", "Intermediate", "30min"])
+                .frame(height: 140)
+                .padding([.leading], 24)
 
-                Text(card.title)
-                    .retinaTypography(.h4)
-                    .padding([.top, .leading])
-                    .foregroundColor(.retinaBasic)
-                
-                Divider().frame(width: 300)
-                
-                Text("Your Shortcuts").retinaTypography(.p6)                    .padding(.leading)
-
-                VStack(alignment: .leading) {
-                    ForEach(card.shortcuts, id: \.self) { shortcut in
-                        Button(action: {}) {
-                            Text(shortcut)
-                        }.padding([.top,.leading])
-                    }
-                }
-            }
+            }.frame(width: UIScreen.screenWidth).padding([.leading], 24)
         }
         
     }
@@ -47,6 +35,6 @@ struct HomeCell: View {
 
 struct HomeCell_Previews: PreviewProvider {
     static var previews: some View {
-        HomeCell(card: Card(title: "By ingredient", shortcuts: ["Pasta", "Salmon", "Avocado", "Shrimp"])).environment(\.colorScheme, .dark)
+        HomeCell(id: 0, name: "Hello")
     }
 }

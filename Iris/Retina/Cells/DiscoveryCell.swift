@@ -14,9 +14,10 @@ struct DiscoveryCell: View {
 
     var body: some View {
         ZStack {
-            Image(backgroundImageUrl).retinaRectangle(width: 160, height: 100)
-            Rectangle().frame(width: 160, height: 100).opacity(0.6)
-            Text(title).foregroundColor(.white).retinaTypography(.p5)
+            Image(backgroundImageUrl).retinaRectangle(width: 172, height: 100)
+            Rectangle().frame(width: 172, height: 100).opacity(0.6)
+            Text(title).frame(width: 148, height: 100).foregroundColor(.white).retinaTypography(.p5)
+                .multilineTextAlignment(.center)
         }
     }
 }

@@ -17,7 +17,12 @@ struct MultiSelectView: View {
         List {
             ForEach(settings, id: \.self) { item in
                 SelectionCell(title: item, selectedTitles: self.$selectedSettings, isSingleSelect: false)
+                .listRowInsets(EdgeInsets())
             }
+        }.onAppear {
+            UITableView.appearance().separatorStyle = .none
+            UITableViewCell.appearance().backgroundColor = .black
+            UITableView.appearance().backgroundColor = .black
         }
     }
 }
