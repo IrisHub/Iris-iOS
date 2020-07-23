@@ -58,7 +58,7 @@ struct RecipeView: View {
                         Spacer()
                     }
                     Spacer()
-                }
+                }.padding([.top], 24).edgesIgnoringSafeArea(.top)
             }
             
             Group {

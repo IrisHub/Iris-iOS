@@ -13,24 +13,17 @@ struct SettingsCell: View {
     var setting: String
     
     var body: some View {
-        Button(action: {
-            
-        }) {
-            ZStack {
-                Color.black
-                VStack {
-                    if !title.isEmpty {
-                        Text(title).foregroundColor(.white).retinaTypography(.h5).multilineTextAlignment(.leading).padding(.leading, 24).padding(.top, 36).frame(width: UIScreen.screenWidth, alignment: .leading)
-                    } else {
-                        Text(title).foregroundColor(.white).retinaTypography(.h5).multilineTextAlignment(.leading).padding(.leading, 24).padding(.top, 12).frame(width: UIScreen.screenWidth, alignment: .leading)
-                    }
-                    HStack {
-                        Text(setting).foregroundColor(.retinaBasic).retinaTypography(.p5).padding(12).multilineTextAlignment(.leading).padding(.leading, 48).padding(.top, 6).padding(.bottom, 6)
-                        Spacer()
-                        Image(systemName: "chevron.right").foregroundColor(.white).padding(.trailing, 24)
-                    }.background(Color.retinaFontBtn)
-                }
+        VStack {
+            if !title.isEmpty {
+                Text(title).foregroundColor(.white).retinaTypography(.h5).multilineTextAlignment(.leading).padding(.leading, 24).padding(.top, 36).frame(width: UIScreen.screenWidth, alignment: .leading)
+            } else {
+                Text(title).foregroundColor(.white).retinaTypography(.h5).multilineTextAlignment(.leading).padding(.leading, 24).padding(.top, 12).frame(width: UIScreen.screenWidth, alignment: .leading)
             }
+            HStack {
+                Text(setting).foregroundColor(.retinaBasic).retinaTypography(.p5).padding(12).multilineTextAlignment(.leading).padding(.leading, 48).padding(.top, 6).padding(.bottom, 6)
+                Spacer()
+                Image(systemName: "chevron.right").foregroundColor(.white).padding(.trailing, 24)
+            }.background(Color.retinaFontBtn)
         }
     }
 }

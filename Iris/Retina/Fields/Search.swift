@@ -18,10 +18,14 @@ struct Search: View {
         VStack {
             HStack {
                 HStack {
-                    if (isBack) {
-                        
-                    }
-                    Image(systemName: isBack ? "chevron.left" : "magnifyingglass").padding(6).padding(.leading, 12).retinaTypography(.h5)
+                    Button(action: {
+                        self.searchText = ""
+                        UIApplication.shared.endEditing(true) // this must be placed before the other commands here
+                        self.buttonCommit()
+                    }) {
+                        Image(systemName: isBack ? "chevron.left" : "magnifyingglass").retinaTypography(.h5)
+                    }.padding(6).padding(.leading, 12)
+
                                         
                     ZStack(alignment: .leading) {
                         if searchText.isEmpty { Text(placeholder).foregroundColor(.white).retinaTypography(.p5).padding(.leading, 12) }
@@ -32,7 +36,6 @@ struct Search: View {
                     Button(action: {
                         self.searchText = ""
                         UIApplication.shared.endEditing(true) // this must be placed before the other commands here
-                        self.buttonCommit()
                     }) {
                         Image(systemName: "xmark.circle.fill").opacity(searchText == "" ? 0 : 1)
                     }.padding(6).padding(.trailing, 12)

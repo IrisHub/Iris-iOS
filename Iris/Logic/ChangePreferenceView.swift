@@ -9,18 +9,28 @@
 import SwiftUI
 
 struct ChangePreferenceView: View {
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State static var settings = ["pEars", "apples"]
 
     var body: some View {
         VStack {
-            VStack() {
-                TopNavigationView(title: "Your Cuisines", bolded: "", subtitle: "Select multiple options", leftIconString: "chevron.left", rightIconStrings: ["", ""])
-            }
+            TopNavigationView(title: "Your Cuisines", bolded: "", subtitle: "Select multiple options", leftIconString: "chevron.left", rightIconStrings: ["", ""], buttonCommits: [{self.presentationMode.wrappedValue.dismiss()}, {}, {}])
             .edgesIgnoringSafeArea(.horizontal)
             .edgesIgnoringSafeArea(.top)
             
             MultiSelectView(settings: ["apples", "pears", "bananas", "pineapples"], selectedSettings: ChangePreferenceView.settings)
         }.background(Color.black)
+        .onAppear {
+            UITableView.appearance().separatorStyle = .none
+            UITableViewCell.appearance().backgroundColor = .black
+            UITableView.appearance().backgroundColor = .black
+            UITableViewCell.appearance().selectionStyle = .none
+        }
+        .buttonStyle(PlainButtonStyle())
+        .navigationBarBackButtonHidden(true)
+        .navigationBarTitle("")
+        .navigationBarHidden(true)
+        .resignKeyboardOnDragGesture()
     }
 }
 

@@ -11,7 +11,7 @@ import SwiftUI
 struct SingleSelectView: View {
 
     let settings: [String]
-    @State var selectedSettings: [String]
+    @Binding var selectedSettings: [String]
 
     var body: some View {
         List {
@@ -30,6 +30,6 @@ struct SingleSelectView: View {
 struct SingleSelectView_Previews: PreviewProvider {
     @State static var setting = ["pEars"]
     static var previews: some View {
-        SingleSelectView(settings: ["apples", "pears", "bananas", "pineapples"], selectedSettings: setting)
+        SingleSelectView(settings: ["apples", "pears", "bananas", "pineapples"], selectedSettings: $setting)
     }
 }

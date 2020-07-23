@@ -66,22 +66,34 @@ struct DiscoverySearch: View {
             List {
                 if (self.searchText.isEmpty) {
                     ForEach(self.discoveryItems, id: \.self) { item in
-                        SearchCell(title: item.title, subtitle: item.category)
-                        .listRowInsets(EdgeInsets())
+                        ZStack {
+                            NavigationLink(
+                              destination: TopChoicesView()) {
+                                SearchCell(title: item.title, subtitle: item.category)
+                                .listRowInsets(EdgeInsets())
+                            }
+                        }
                     }
                 } else {
                     ForEach(self.allItems.filter {
                         self.searchText.isEmpty ? true : $0.title.lowercased().contains(self.searchText.lowercased())
                     }, id: \.self) { item in
-                        SearchCell(title: item.title, subtitle: item.category)
-                        .listRowInsets(EdgeInsets())
+                        ZStack {
+                            NavigationLink(
+                              destination: TopChoicesView()) {
+                                SearchCell(title: item.title, subtitle: item.category)
+                                .listRowInsets(EdgeInsets())
+                            }
+                        }
                     }
                 }
             }.onAppear {
                 UITableView.appearance().separatorStyle = .none
                 UITableViewCell.appearance().backgroundColor = .black
                 UITableView.appearance().backgroundColor = .black
+                UITableViewCell.appearance().selectionStyle = .none
             }
+            .buttonStyle(PlainButtonStyle())
             .navigationBarBackButtonHidden(true)
             .navigationBarTitle("")
             .navigationBarHidden(true)
