@@ -24,11 +24,10 @@ struct TopNavigationView: View {
                     self.buttonCommits[0]
                 ) {
                     Image(systemName: self.leftIconString)
-                        .foregroundColor(Color.gray)
+                        .foregroundColor(Color.white)
                         .padding(.horizontal, 4)
                         .retinaTypography(.h5)
                 }
-                .buttonStyle(LeftNavButtonStyle())
 
                 Spacer()
                 
@@ -44,18 +43,22 @@ struct TopNavigationView: View {
                 Spacer()
                 
                 HStack(spacing: 22){
-                    Button(action: self.buttonCommits[1]) {
-                        Image(systemName: self.rightIconStrings[0])
-                            .foregroundColor(Color.gray)
-                            .padding(.horizontal, 4)
-                            .retinaTypography(.h5)
+                    if !self.rightIconStrings[0].isEmpty {
+                        Button(action: self.buttonCommits[1]) {
+                            Image(systemName: self.rightIconStrings[0])
+                                .foregroundColor(Color.gray)
+                                .padding(.horizontal, 4)
+                                .retinaTypography(.h5)
 
+                        }
                     }
-                    Button(action: self.buttonCommits[2]) {
-                        Image(systemName: self.rightIconStrings[1])
-                            .foregroundColor(Color.gray)
-                            .padding(.horizontal, 4)
-                            .retinaTypography(.h5)
+                    if !self.rightIconStrings[1].isEmpty {
+                        Button(action: self.buttonCommits[2]) {
+                            Image(systemName: self.rightIconStrings[1])
+                                .foregroundColor(Color.gray)
+                                .padding(.horizontal, 4)
+                                .retinaTypography(.h5)
+                        }
                     }
                 }
                 .buttonStyle(RightNavButtonStyle())

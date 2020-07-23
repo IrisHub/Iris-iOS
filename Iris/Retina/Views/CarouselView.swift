@@ -8,13 +8,15 @@
 
 import SwiftUI
 
-struct CarouselView: View
+struct CarouselView<Content: View>: View
 {
     var UIState: UIStateModel
     @State private var showingAlert = false
     @State var showBanner:Bool = false
     @State var bannerData: BannerModifier.BannerData = BannerModifier.BannerData(title: "", detail: "Iris will show fewer results like that from now on.", type: .Warning)
+    var commitDestination: Content
 
+    
     var body: some View
     {
         let spacing:            CGFloat = 20
@@ -22,9 +24,9 @@ struct CarouselView: View
         let cardHeight:         CGFloat = 400
 
         let items = [
-                        HomeCell( id: 0, name: "Hey" ),
-                        HomeCell( id: 1, name: "Ho" ),
-                        HomeCell( id: 2, name: "Lets" ),
+            HomeCell( id: 0, name: "Hey", commitDestination: self.commitDestination ),
+            HomeCell( id: 1, name: "Ho", commitDestination: self.commitDestination ),
+            HomeCell( id: 2, name: "Lets", commitDestination: self.commitDestination )
                     ]
         
         return  Canvas
@@ -42,7 +44,7 @@ struct CarouselView: View
                                   cardHeight:           cardHeight )
                             {
                                 item
-                                .gesture(LongPressGesture(minimumDuration: 0.5)
+                                .highPriorityGesture(LongPressGesture(minimumDuration: 0.5)
                                 .onEnded { _ in
                                     self.showingAlert = true
                                 })
@@ -119,7 +121,7 @@ struct Carousel<Items : View> : View {
             items
         }
         .offset(x: CGFloat(calcOffset), y: 0)
-        .gesture(DragGesture().updating($isDetectingLongPress) { currentState, gestureState, transaction in
+        .highPriorityGesture(DragGesture().updating($isDetectingLongPress) { currentState, gestureState, transaction in
             self.UIState.screenDrag = Float(currentState.translation.width)
 
         }.onEnded { value in
@@ -190,6 +192,6 @@ struct CarouselView_Previews: PreviewProvider {
     static var state: UIStateModel = UIStateModel()
     static var previews: some View {
         // Create the SwiftUI view that provides the window contents.
-        CarouselView(UIState: state)
+        CarouselView(UIState: state, commitDestination: RecipeView())
     }
 }

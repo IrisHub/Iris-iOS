@@ -12,6 +12,7 @@ struct Search: View {
     var isBack: Bool
     var placeholder: String
     @Binding var searchText: String
+    var buttonCommit: () -> Void = {}
 
     var body: some View {
         VStack {
@@ -21,7 +22,7 @@ struct Search: View {
                         
                     }
                     Image(systemName: isBack ? "chevron.left" : "magnifyingglass").padding(6).padding(.leading, 12).retinaTypography(.h5)
-                    
+                                        
                     ZStack(alignment: .leading) {
                         if searchText.isEmpty { Text(placeholder).foregroundColor(.white).retinaTypography(.p5).padding(.leading, 12) }
                         TextField("", text: $searchText).retinaTypography(.p5).padding(.leading, 12)
@@ -31,6 +32,7 @@ struct Search: View {
                     Button(action: {
                         self.searchText = ""
                         UIApplication.shared.endEditing(true) // this must be placed before the other commands here
+                        self.buttonCommit()
                     }) {
                         Image(systemName: "xmark.circle.fill").opacity(searchText == "" ? 0 : 1)
                     }.padding(6).padding(.trailing, 12)
@@ -57,8 +59,8 @@ struct Search_Previews: PreviewProvider {
             HStack {
                 retinaSearchButton(text: "Hello", color: .gray, backgroundColor: .white, action: { print("click") })
             }
-            Search(isBack: true, placeholder: "Search", searchText: $searchTextEmpty)
-            Search(isBack: true, placeholder: "Search", searchText: $searchTextFilled)
+            Search(isBack: true, placeholder: "Search", searchText: $searchTextEmpty, buttonCommit:{})
+            Search(isBack: true, placeholder: "Search", searchText: $searchTextFilled, buttonCommit:{})
         }
     }
 }

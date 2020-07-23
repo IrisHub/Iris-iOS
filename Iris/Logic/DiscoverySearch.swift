@@ -9,6 +9,9 @@
 import SwiftUI
 
 struct DiscoverySearch: View {
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @Binding var searchPresented: Bool
+
     let discoveryItems = [
         DiscoveryItem(title: "Chicken", imageUrl: "food", category: "Ingredient"),
         DiscoveryItem(title: "Beef", imageUrl: "food", category: "Ingredient"),
@@ -51,7 +54,7 @@ struct DiscoverySearch: View {
     var body: some View {
         VStack {
             // Search bar
-            Search(isBack: true, placeholder: "Search for a cuisine, or an ingredient", searchText: $searchText).padding(.top, 40).background(Color.gray)
+            Search(isBack: true, placeholder: "Search for a cuisine, or an ingredient", searchText: $searchText, buttonCommit:{self.presentationMode.wrappedValue.dismiss()}).padding(.top, 40).background(Color.gray)
             
             HStack {
                 if (self.searchText.isEmpty) {
@@ -79,16 +82,24 @@ struct DiscoverySearch: View {
                 UITableViewCell.appearance().backgroundColor = .black
                 UITableView.appearance().backgroundColor = .black
             }
+            .navigationBarBackButtonHidden(true)
             .navigationBarTitle("")
             .navigationBarHidden(true)
             .resignKeyboardOnDragGesture()
             
-        }.edgesIgnoringSafeArea(.top).background(Color.black)
+        }
+        .navigationBarBackButtonHidden(true)
+        .navigationBarTitle("")
+        .navigationBarHidden(true)
+        .edgesIgnoringSafeArea(.top)
+        .background(Color.black)
     }
 }
 
 struct DiscoverySearch_Previews: PreviewProvider {
+    @State static var searchPresented = true
+
     static var previews: some View {
-        DiscoverySearch()
+        DiscoverySearch(searchPresented: $searchPresented)
     }
 }

@@ -19,10 +19,14 @@ struct CollectionView<Content: View, Data: Hashable>: View {
     let headerMain: String
     let searchBarText: String
     
+    @Binding var searchPresented: Bool
+    @Binding var preferencesPresented: Bool
+
+    
     @State private var showingPopupA = false
 
 
-    init(data: Binding<[Data]>, cols: Int = 3, spacing: CGFloat = 5,_ viewBuilder: @escaping (Data) -> Content) {
+    init(data: Binding<[Data]>, cols: Int = 3, spacing: CGFloat = 5, searchPresented: Binding<Bool>, preferencesPresented: Binding<Bool>, _ viewBuilder: @escaping (Data) -> Content) {
         _data = data
         self.cols = cols
         self.spacing = spacing
@@ -30,6 +34,8 @@ struct CollectionView<Content: View, Data: Hashable>: View {
         self.headerTop = "Header Top"
         self.headerMain = "Main Title"
         self.searchBarText = "Search"
+        _searchPresented = searchPresented
+        _preferencesPresented = preferencesPresented
     }
 
     var body: some View {
@@ -105,12 +111,12 @@ struct CollectionView<Content: View, Data: Hashable>: View {
                     if geometry.frame(in: .global).minY >= UIApplication.topInset {
                         ZStack {
                             // final - current / final
-                            retinaSearchButton(text: self.searchBarText, color: .gray, backgroundColor: .white, action: { print("click") })
+                            retinaSearchButton(text: self.searchBarText, color: .gray, backgroundColor: .white, action: { self.searchPresented.toggle() })
                                 .offset(y: max(0, geometry.frame(in: .global).minY/9))
                         }
                     } else {
                         ZStack {
-                            retinaSearchButton(text: "Text", color: .gray, backgroundColor: .white, action: { print("click") }).offset(y: -(geometry.frame(in: .global).minY - UIApplication.topInset))
+                            retinaSearchButton(text: "Text", color: .gray, backgroundColor: .white, action: { self.searchPresented.toggle() }).offset(y: -(geometry.frame(in: .global).minY - UIApplication.topInset))
                         }
                     }
                 }
@@ -171,15 +177,18 @@ struct CollectionView_Previews: PreviewProvider {
         DiscoveryItem(title: "Salmon", imageUrl: "food", category: "Ingredient")
     ]
     @State static var colors: [Color] = [.pink, .red, .orange, .yellow, .green, .blue, .purple, .gray, .black]
+    
+    @State static var searchPresented = false
+    @State static var preferencesPresented = false
 
     static var previews: some View {
         Group {
-            CollectionView(data: $data, cols: 2, spacing: -10) { item in
+            CollectionView(data: $data, cols: 2, spacing: -10, searchPresented: $searchPresented, preferencesPresented: $preferencesPresented) { item in
                 // add cell content here
                 DiscoveryCell(title: item.title, backgroundImageUrl: item.imageUrl).frame(width: 160, height: 100)
             }
             
-            CollectionView(data: $colors, cols: 2, spacing: 20) { color in
+            CollectionView(data: $colors, cols: 2, spacing: 20, searchPresented: $searchPresented, preferencesPresented: $preferencesPresented) { color in
                 VStack {
                     Spacer()
                     Text(color.description)

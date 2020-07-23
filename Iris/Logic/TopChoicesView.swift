@@ -9,18 +9,23 @@
 import SwiftUI
 
 struct TopChoicesView: View {
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     var state: UIStateModel = UIStateModel()
-    
+
     var body: some View {
-        VStack {
-            VStack() {
-                TopNavigationView(title: "Your results for", bolded: "Chicken", subtitle: "Created for 3:20pm", leftIconString: "chevron.left", rightIconStrings: ["", ""])
+            VStack {
+                VStack() {
+                    TopNavigationView(title: "Your results for", bolded: "Chicken", subtitle: "Created for 3:20pm", leftIconString: "chevron.left", rightIconStrings: ["", ""], buttonCommits: [{self.presentationMode.wrappedValue.dismiss()}, {}, {}])
+                }
+                .edgesIgnoringSafeArea(.horizontal)
+                .edgesIgnoringSafeArea(.top)
+                
+                CarouselView(UIState: state, commitDestination: RecipeView())
+
             }
-            .edgesIgnoringSafeArea(.horizontal)
-            .edgesIgnoringSafeArea(.top)
-            
-            CarouselView(UIState: state)
-        }
+            .navigationBarBackButtonHidden(true)
+            .navigationBarTitle("")
+            .navigationBarHidden(true)
     }
 }
 

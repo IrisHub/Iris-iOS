@@ -40,6 +40,11 @@ extension Color {
     static let retinaActivePrimary = Color("activePrimary")
     /// Active State Color - Basic Style
     static let retinaActiveBasic = Color("activeBasic")
+    
+    static let retinaPink = Color(red: 248.0 / 255.0, green: 61.0 / 255.0, blue: 123.0 / 255.0)
+    static let retinaPurple = Color(red: 189.0 / 255.0, green: 63.0 / 255.0, blue: 187.0 / 255.0)
+    static let retinaGradient = LinearGradient(gradient: Gradient(colors: [.retinaPink, .retinaPurple]), startPoint: .top, endPoint: .bottom)
+
 }
 
 struct Color_Previews: PreviewProvider {

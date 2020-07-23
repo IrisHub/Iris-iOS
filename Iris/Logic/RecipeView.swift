@@ -10,6 +10,8 @@ import SwiftUI
 import SafariServices
 
 struct RecipeView: View {
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+
     // whether or not to show the Safari ViewController
     @State var showSafari = false
     // initial URL string
@@ -18,44 +20,47 @@ struct RecipeView: View {
     
     var body: some View {
         VStack {
-            ScrollView(.vertical, showsIndicators: false) {
-                GeometryReader { geometry in
-                    ZStack {
-                        if geometry.frame(in: .global).minY <= 0 {
-                            Image("food")
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: geometry.size.width, height: geometry.size.height)
-                            .offset(y: geometry.frame(in: .global).minY/9)
-                            .clipped()
-                        } else {
-                            Image("food")
+            ZStack {
+                ScrollView(.vertical, showsIndicators: false) {
+                    GeometryReader { geometry in
+                        ZStack {
+                            if geometry.frame(in: .global).minY <= 0 {
+                                Image("food")
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
-                                .frame(width: geometry.size.width, height: geometry.size.height + geometry.frame(in: .global).minY)
+                                .frame(width: geometry.size.width, height: geometry.size.height)
+                                .offset(y: geometry.frame(in: .global).minY/9)
                                 .clipped()
-                                .offset(y: -geometry.frame(in: .global).minY)
-                        }
-                        VStack {
-                            HStack {
-                                retinaIconButton(image: (Image(systemName: "chevron.left")), action: {  }).padding(24)
-                                Spacer()
+                            } else {
+                                Image("food")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: geometry.size.width, height: geometry.size.height + geometry.frame(in: .global).minY)
+                                    .clipped()
+                                    .offset(y: -geometry.frame(in: .global).minY)
                             }
-                            Spacer()
                         }
                     }
-                }
-                .frame(height: 400)
-                
-                VStack(alignment: .leading) {
-                    TitleView(title: "Chicken Avocado Toast", metrics: ["99% liked", "Intermediate", "30min"])
-                    .padding([.leading], 24)
-                    .frame(height: 140)
+                    .frame(height: 400)
+                    
+                    VStack(alignment: .leading) {
+                        TitleView(title: "Chicken Avocado Toast", metrics: ["99% liked", "Intermediate", "30min"])
+                        .padding([.leading], 24)
+                        .frame(height: 140)
 
-                    ListView(title: "Ingredients", contents: ["1 cup day old rice", "1 egg (yolk and white separated)", "1/2 cup frozen veggies ", "1/2 tbsp ham", "1/2 tbsp of thinly sliced chinese sausage", "2 tsp shaoxing rice wine ", "2 tsp dark soy sauce (replacable with regular soy sauce)", "Pinch of white pepper"]).padding([.leading, .top], 24)
+                        ListView(title: "Ingredients", contents: ["1 cup day old rice", "1 egg (yolk and white separated)", "1/2 cup frozen veggies ", "1/2 tbsp ham", "1/2 tbsp of thinly sliced chinese sausage", "2 tsp shaoxing rice wine ", "2 tsp dark soy sauce (replacable with regular soy sauce)", "Pinch of white pepper"]).padding([.leading, .top], 24)
+                    }
+                    
+                }.edgesIgnoringSafeArea(.top)
+                VStack {
+                    HStack {
+                        retinaIconButton(image: (Image(systemName: "chevron.left")), action: {self.presentationMode.wrappedValue.dismiss()}).padding(24)
+                        Spacer()
+                    }
+                    Spacer()
                 }
-                
-            }.edgesIgnoringSafeArea(.top)
+            }
+            
             Group {
                 ZStack {
                     Rectangle()

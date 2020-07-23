@@ -19,34 +19,44 @@ struct DiscoveryItem: Hashable {
     var category: String
 }
 
-
-//struct ContentView: View {
-//    let settings: [String]
-//    @State var selectedSettings: [String]
-//
-//    var body: some View {
-//        List {
-//            ForEach(settings, id: \.self) { item in
-//                SelectionCell(title: item, selectedTitles: self.$selectedSettings, isSingleSelect: true)
-//            }
-//        }
-//    }
-//
-//}
-//
-//struct ContentView_Previews: PreviewProvider {
-//    @State static var settings = ["pEars", "apples"]
-//    static var previews: some View {
-//        ContentView(settings: ["apples", "pears", "bananas", "pineapples"], selectedSettings: settings)
-//    }
-//}
-
 struct ContentView: View {
-    @State var isFull = false
-    
+    @State var searchPresented = false
+    @State var preferencesPresented = false
+    @State var discoveryItem: [DiscoveryItem]
+
     var body: some View {
-        NavigationView {
-            DiscoveryView(discoveryItem: [
+        ZStack {
+            NavigationView {
+                
+                if(searchPresented){
+                    NavigationLink(destination: DiscoverySearch(searchPresented: self.$searchPresented), isActive: $searchPresented) {
+                        DiscoverySearch(searchPresented: self.$searchPresented)
+                    }.hidden()
+                }else{
+                        CollectionView(data: $discoveryItem, cols: 2, spacing: 24, searchPresented: $searchPresented, preferencesPresented: $preferencesPresented) { item in
+                            // add cell content here
+                            NavigationLink(
+                              destination: TopChoicesView()) {
+                                DiscoveryCell(title: item.title, backgroundImageUrl: item.imageUrl)
+                            }.buttonStyle(PlainButtonStyle())
+                        }
+                        .navigationBarTitle("")
+                        .navigationBarHidden(true)
+                    }
+                }
+
+                
+                        
+//            DiscoverySearch(searchPresented: self.$searchPresented).offset(y: searchPresented ? 0 : 1000)
+        }
+    }
+}
+
+
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        Group {
+            ContentView(discoveryItem: [
                 DiscoveryItem(title: "Chicken", imageUrl: "food", category: "Ingredient"),
                 DiscoveryItem(title: "Beef", imageUrl: "food", category: "Ingredient"),
                 DiscoveryItem(title: "Carrots", imageUrl: "food", category: "Ingredient"),
@@ -82,23 +92,7 @@ struct ContentView: View {
                 DiscoveryItem(title: "Pasta", imageUrl: "food", category: "Ingredient"),
                 DiscoveryItem(title: "Salmon", imageUrl: "food", category: "Ingredient")
             ])
-//            .edgesIgnoringSafeArea(.top)
-            .navigationBarTitle("")
-            .navigationBarHidden(true)
-        }
-    }
-}
-
-
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        Group {
-           ContentView()
               .environment(\.colorScheme, .light)
-
-           ContentView()
-              .environment(\.colorScheme, .dark)
         }
     }
 }
