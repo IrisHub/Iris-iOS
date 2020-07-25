@@ -8,13 +8,12 @@
 
 import SwiftUI
 
-struct CarouselView<Content: View>: View
+struct CarouselView: View
 {
     var UIState: UIStateModel
     @State private var showingAlert = false
-    @State var showBanner:Bool = false
-    @State var bannerData: BannerModifier.BannerData = BannerModifier.BannerData(title: "", detail: "Iris will show fewer results like that from now on.", type: .Warning)
-    var commitDestination: Content
+    @Binding var showBanner : Bool
+    @Binding var recipePresented : Bool
 
     
     var body: some View
@@ -24,17 +23,13 @@ struct CarouselView<Content: View>: View
         let cardHeight:         CGFloat = 400
 
         let items = [
-            HomeCell( id: 0, name: "Hey", commitDestination: self.commitDestination ),
-            HomeCell( id: 1, name: "Ho", commitDestination: self.commitDestination ),
-            HomeCell( id: 2, name: "Lets", commitDestination: self.commitDestination )
+            HomeCell( id: 0, name: "Hey", recipePresented: self.$recipePresented ),
+            HomeCell( id: 1, name: "Ho", recipePresented: self.$recipePresented ),
+            HomeCell( id: 2, name: "Lets", recipePresented: self.$recipePresented )
                     ]
         
         return  Canvas
                 {
-                    //
-                    // TODO: find a way to avoid passing same arguments to Carousel and Item
-                    //
-                    
                     Carousel( numberOfItems: CGFloat( items.count ), spacing: spacing, widthOfHiddenCards: widthOfHiddenCards )
                     {
                         ForEach( items, id: \.self.id ) { item in
@@ -50,7 +45,6 @@ struct CarouselView<Content: View>: View
                                 })
                                 .alert(isPresented: self.$showingAlert) {
                                     Alert(title: Text("Was this recipe helpful?"), message: Text(""), primaryButton: .default(Text("Not Helpful"), action: {
-                                        self.bannerData.type = .Info
                                         self.showBanner = true
                                     }), secondaryButton: .default(Text("Cancel")))
                                 }
@@ -61,7 +55,6 @@ struct CarouselView<Content: View>: View
                     }
                     .environmentObject( self.UIState )
                 }
-                .banner(data: self.$bannerData, show: self.$showBanner)
     }
 }
 
@@ -155,7 +148,7 @@ struct Canvas<Content : View> : View {
     var body: some View {
         content
             .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .center)
-            .background(Color.white.edgesIgnoringSafeArea(.all))
+            .background(Color.retinaBase.edgesIgnoringSafeArea(.all))
     }
 }
 
@@ -190,8 +183,10 @@ struct Item<Content: View>: View {
 
 struct CarouselView_Previews: PreviewProvider {
     static var state: UIStateModel = UIStateModel()
+    @State static var recipePresented: Bool = false
+    @State static var showBanner:Bool = false
     static var previews: some View {
         // Create the SwiftUI view that provides the window contents.
-        CarouselView(UIState: state, commitDestination: RecipeView())
+        CarouselView(UIState: state, showBanner: $showBanner, recipePresented: $recipePresented)
     }
 }

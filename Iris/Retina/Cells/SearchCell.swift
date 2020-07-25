@@ -15,8 +15,8 @@ struct SearchCell: View {
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
-                Text(title).foregroundColor(.white).retinaTypography(.h5).multilineTextAlignment(.leading).padding(.leading, 24).padding(.top, 12)
-                Text(subtitle).foregroundColor(.retinaBasic).retinaTypography(.p5).multilineTextAlignment(.leading).padding(.leading, 24).padding(.top, 6).padding(.bottom, 12)
+                Text(title).foregroundColor(.retinaSnowWhite).retinaTypography(.h5_main).fixedSize(horizontal: false, vertical: true).padding(.leading, 24).padding(.top, 12)
+                Text(subtitle).foregroundColor(.retinaWinterGrey).retinaTypography(.p6_main).fixedSize(horizontal: false, vertical: true).padding(.leading, 24).padding(.top, 6).padding(.bottom, 12)
             }
             Spacer()
             Image(systemName: "chevron.right").foregroundColor(.white).padding(.trailing, 24)

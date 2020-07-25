@@ -11,107 +11,70 @@ import SwiftUI
 struct DiscoverySearch: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @Binding var searchPresented: Bool
-
-    let discoveryItems = [
-        DiscoveryItem(title: "Chicken", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Beef", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Carrots", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Broccoli", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Pasta", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Broccoli", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Pasta", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Broccoli", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Pasta", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Salmon", imageUrl: "food", category: "Ingredient")
-    ]
-    
-    let allItems = [
-        DiscoveryItem(title: "Chicken", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Beef", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Carrots", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Broccoli", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Pasta", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Broccoli", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Pasta", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Broccoli", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Pasta", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Salmon", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Chicken", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Beef", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Carrots", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Broccoli", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Pasta", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Broccoli", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Pasta", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Broccoli", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Pasta", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Salmon", imageUrl: "food", category: "Ingredient")
-    ]
-
-    
+    @ObservedObject var observed: Observer
     @State private var searchText = ""
     
     var body: some View {
         VStack {
             // Search bar
-            Search(isBack: true, placeholder: "Search for a cuisine, or an ingredient", searchText: $searchText, buttonCommit:{self.presentationMode.wrappedValue.dismiss()}).padding(.top, 40).background(Color.gray)
+            Search(isBack: true, placeholder: "Search for a cuisine, or an ingredient", searchText: $searchText, buttonCommit:{self.presentationMode.wrappedValue.dismiss()}).padding(.top, 40).background(Color.retinaOverlayLight)
             
             HStack {
                 if (self.searchText.isEmpty) {
-                    Text("Suggestions for you").retinaTypography(.h5).padding(.leading, 24).padding(.top, 12).foregroundColor(.white)
+                    Text("Suggestions for you").retinaTypography(.p5_main).padding(.leading, 24).padding(.top, 12).foregroundColor(.retinaWinterGrey)
                     Spacer()
                 }
             }
             
-            List {
+            ScrollView(.vertical) {
                 if (self.searchText.isEmpty) {
-                    ForEach(self.discoveryItems, id: \.self) { item in
-                        ZStack {
-                            NavigationLink(
-                              destination: TopChoicesView()) {
-                                SearchCell(title: item.title, subtitle: item.category)
-                                .listRowInsets(EdgeInsets())
-                            }
+                    ForEach(self.observed.discoveryItems.filter {
+                        $0.ideas == true
+                    }, id: \.self) { item in
+                        NavigationLink(
+                          destination: TopChoicesView()) {
+                            SearchCell(title: item.title, subtitle: item.category)
+                            .listRowInsets(EdgeInsets())
                         }
                     }
                 } else {
-                    ForEach(self.allItems.filter {
-                        self.searchText.isEmpty ? true : $0.title.lowercased().contains(self.searchText.lowercased())
-                    }, id: \.self) { item in
-                        ZStack {
+                    if self.observed.discoveryItems.filter { $0.title.lowercased().contains(self.searchText.lowercased()) }.count == 0 {
+                        Text("No search results found, sorry.").retinaTypography(.p5_main).padding(.top, 36).foregroundColor(.retinaWinterGrey)
+                    } else {
+                        ForEach(self.observed.discoveryItems.filter {
+                            self.searchText.isEmpty ? true : $0.title.lowercased().contains(self.searchText.lowercased())
+                        }, id: \.self) { item in
                             NavigationLink(
                               destination: TopChoicesView()) {
                                 SearchCell(title: item.title, subtitle: item.category)
                                 .listRowInsets(EdgeInsets())
+
                             }
                         }
                     }
                 }
-            }.onAppear {
+            }.padding([.bottom], 60).background(Color.retinaOverflow).edgesIgnoringSafeArea(.bottom)
+            .onAppear {
                 UITableView.appearance().separatorStyle = .none
-                UITableViewCell.appearance().backgroundColor = .black
-                UITableView.appearance().backgroundColor = .black
+                UITableViewCell.appearance().backgroundColor = Color.retinaOverflow.uiColor()
+                UITableView.appearance().backgroundColor = Color.retinaOverflow.uiColor()
                 UITableViewCell.appearance().selectionStyle = .none
             }
-            .buttonStyle(PlainButtonStyle())
-            .navigationBarBackButtonHidden(true)
-            .navigationBarTitle("")
-            .navigationBarHidden(true)
             .resignKeyboardOnDragGesture()
-            
         }
         .navigationBarBackButtonHidden(true)
         .navigationBarTitle("")
         .navigationBarHidden(true)
         .edgesIgnoringSafeArea(.top)
-        .background(Color.black)
+        .background(Color.retinaOverflow)
     }
 }
 
 struct DiscoverySearch_Previews: PreviewProvider {
     @State static var searchPresented = true
+    @ObservedObject static var observed = Observer()
 
     static var previews: some View {
-        DiscoverySearch(searchPresented: $searchPresented)
+        DiscoverySearch(searchPresented: $searchPresented, observed: observed)
     }
 }

@@ -15,12 +15,15 @@ struct TitleView: View {
     var body: some View {
         VStack(alignment: .leading) {
             Text(title)
-                .retinaTypography(.h3)
-                .multilineTextAlignment(.leading)
+                .retinaTypography(.h4_secondary)
+                .fixedSize(horizontal: false, vertical: true)
+                .foregroundColor(.retinaSnowWhite)
             HStack {
-                Image(systemName: "star.fill").foregroundColor(.retinaInfo)
+                Image(systemName: "star.fill")
+                    .foregroundColor(.retinaWinterGrey)
                 Text(metrics.joined(separator: "  •  "))
-                    .multilineTextAlignment(.leading)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .foregroundColor(.retinaWinterGrey)
             }
         }
     }

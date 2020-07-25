@@ -7,22 +7,76 @@
 //
 
 import SwiftUI
+import Alamofire
+import SwiftyJSON
 
 struct Card {
     var title: String
     var shortcuts: [String]
 }
 
-struct DiscoveryItem: Hashable {
+struct DiscoveryItem: Hashable, Identifiable {
+    var id: String = "1"
     var title: String
     var imageUrl: String
     var category: String
+    var discover: Bool = false
+    var ideas: Bool = false
 }
 
-struct ContentView<Content: View>: View {
+
+
+
+
+
+class Observer : ObservableObject{
+    @Published var discoveryItems = [DiscoveryItem]()
+    @Published var title: String = "None"
+    @Published var subtitle: String = "None"
+    
+    init() {
+        getSuggestions()
+    }
+    
+    func getSuggestions() {
+        AF.request("https://e2nmwaykqf.execute-api.us-west-1.amazonaws.com/alpha/cookingcardsearch")
+            .responseJSON { response in
+                let json = try! JSON(data: response.data ?? Data())
+                if let title = json["title"].string {
+                    self.title = title
+                }
+                if let subtitle = json["subtitle"].string {
+                    self.subtitle = subtitle
+                }
+                
+                
+                for (i,subJson):(String, JSON) in json["data"]["items"] {
+                    let item = DiscoveryItem(id: i, title: subJson["name"].stringValue, imageUrl: subJson["image"].stringValue, category: subJson["category"].stringValue, discover: subJson["discover"].boolValue, ideas: subJson["ideas"].boolValue)
+                    print(item)
+                    self.discoveryItems.append(item)
+                }
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+struct ContentView: View {
     var data: [DiscoveryItem]
-    let viewBuilder: (DiscoveryItem) -> Content
-    let cols: Int
     let spacing: CGFloat
     
     let headerTop: String
@@ -31,110 +85,159 @@ struct ContentView<Content: View>: View {
     
     @State var searchPresented: Bool = false
     @State var preferencesPresented: Bool = false
-
-    init(data: [DiscoveryItem], cols: Int = 3, spacing: CGFloat = 5, _ viewBuilder: @escaping (DiscoveryItem) -> Content) {
-        self.cols = cols
+    @ObservedObject var observed = Observer()
+    
+    init(data: [DiscoveryItem], spacing: CGFloat = 5) {
         self.spacing = spacing
-        self.viewBuilder = viewBuilder
         self.headerTop = "Header Top"
         self.headerMain = "Main Title"
-        self.searchBarText = "Search"
+        self.searchBarText = "Search for a cuisine, ingredient, dish"
         self.data = data
     }
-
+    
     var body: some View {
         ZStack {
             NavigationView {
                 GeometryReader { geometry in
-                    ScrollView {
-                        self.setupView(geometry: geometry).frame(minHeight: geometry.frame(in: .global).height)
+                    ScrollView(.vertical, showsIndicators: false) {
+                        VStack(alignment: .leading) {
+                            ZStack {
+                                VStack(alignment: .leading, spacing: 12) {
+                                    HStack(alignment: .top) {
+                                        Spacer()
+                                        Button(action: {
+                                            withAnimation {
+                                                self.preferencesPresented.toggle()
+                                            }
+                                        }) {
+                                            Image(systemName: "line.horizontal.3.decrease").foregroundColor(.retinaSnowWhite).retinaTypography(.h4_main)
+                                        }.padding(.trailing, 24)
+                                    }
+                                    
+                                    Text(self.observed.subtitle)
+                                        .retinaTypography(.p5_main)
+                                        .padding([.leading], 24)
+                                        .foregroundColor(.retinaWinterGrey)
+                                    Text(self.observed.title)
+                                        .retinaTypography(.h3_secondary)
+                                        .padding([.leading], 24)
+                                        .frame(width: UIScreen.screenWidth, alignment: .leading)
+                                        .foregroundColor(.retinaSnowWhite)
+                                }.frame(width: UIScreen.screenWidth, alignment: .leading).padding(.top, 96)
+                                
+                                GeometryReader { geometry in
+                                    Rectangle().offset(y: -(geometry.frame(in: .global).minY)).foregroundColor(Color.retinaOverflow)
+                                        .blur(radius: 20)
+                                        .padding(-25)
+                                        .frame(width: UIScreen.screenWidth, height: UIApplication.topInset*1.5)
+                                }
+                            }.zIndex(1)
+                            
+                            
+                            
+                            // Search view
+                            GeometryReader { geometry in
+                                VStack {
+                                    NavigationLink(destination: DiscoverySearch(searchPresented: self.$searchPresented, observed: self.observed), isActive: self.$searchPresented) { EmptyView() }
+                                    if geometry.frame(in: .global).minY >= UIApplication.topInset {
+                                        ZStack {
+                                            retinaSearchButton(text: self.searchBarText, color: .retinaOverlayDark, backgroundColor: .retinaOverflow, action: { self.searchPresented = true })
+                                                .offset(y: max(0, geometry.frame(in: .global).minY/9))
+                                        }
+                                    } else {
+                                        ZStack {
+                                            retinaSearchButton(text: self.searchBarText, color: .retinaOverlayDark, backgroundColor: .retinaOverflow, action: { self.searchPresented = true }).offset(y: -(geometry.frame(in: .global).minY - UIApplication.topInset))
+                                        }
+                                    }
+                                }
+                            }.frame(height: 60)
+                                .zIndex(1)
+                                .padding(.bottom, 24)
+                                .padding(.top, 100)
+                            
+                            VStack {
+                                HStack {
+                                    Text("Ingredient Suggestions").retinaTypography(.h5_main).padding(.leading, 24).padding(.top, 36).padding(.bottom, 12).foregroundColor(.retinaWinterGrey)
+                                    Spacer()
+                                }
+                                
+                                ScrollView(.horizontal, showsIndicators: false) {
+                                    HStack {
+                                        ForEach(self.observed.discoveryItems.filter {
+                                            $0.discover == true && $0.category == "ingredient"
+                                        }, id: \.self) { item in
+                                            NavigationLink(
+                                            destination: TopChoicesView()) {
+                                                DiscoveryCell(title: item.title, backgroundImageUrl: item.imageUrl).padding([.leading, .trailing], 6)
+                                            }.buttonStyle(PlainButtonStyle())
+                                        }
+                                    }.padding(.leading, 12)
+                                }
+                                
+                                HStack {
+                                    Text("Dish Suggestions").retinaTypography(.h5_main).padding(.leading, 24).padding(.top, 36).foregroundColor(.retinaWinterGrey).padding(.bottom, 12)
+                                    Spacer()
+                                }
+                                
+                                ScrollView(.horizontal, showsIndicators: false) {
+                                    HStack {
+                                        ForEach(self.observed.discoveryItems.filter {
+                                            $0.discover == true && $0.category == "dish"
+                                        }, id: \.self) { item in
+                                            NavigationLink(
+                                            destination: TopChoicesView()) {
+                                                DiscoveryCell(title: item.title, backgroundImageUrl: item.imageUrl).padding([.leading, .trailing], 6)
+                                            }.buttonStyle(PlainButtonStyle())
+                                        }
+                                    }.padding(.leading, 12)
+                                }
+                                
+                                
+                                HStack {
+                                    Text("Cuisine Suggestions").retinaTypography(.h5_main).padding(.leading, 24).padding(.top, 36).foregroundColor(.retinaWinterGrey).padding(.bottom, 12)
+                                    Spacer()
+                                }
+                                
+                                ScrollView(.horizontal, showsIndicators: false) {
+                                    HStack {
+                                        ForEach(self.observed.discoveryItems.filter {
+                                            $0.discover == true && $0.category == "cuisine"
+                                        }, id: \.self) { item in
+                                            NavigationLink(
+                                            destination: TopChoicesView()) {
+                                                DiscoveryCell(title: item.title, backgroundImageUrl: item.imageUrl).padding([.leading, .trailing], 6)
+                                            }.buttonStyle(PlainButtonStyle())
+                                        }
+                                    }.padding(.leading, 12).padding([.bottom], 120)
+                                }
+                            }.padding([.top], 48).background(Color.retinaSurface)
+                        }
                     }
                 }
+                .background(Color.retinaOverflow)
                 .navigationBarTitle("")
                 .navigationBarHidden(true)
-            }
-        }
-        .overlay(self.preferencesPresented ? PreferencesView(titles: ["Diet", "Food I don’t eat", "Time I have to cook Lunch", "Time I have to cook Dinner", "My cooking level", "Spice Tolerance", "See meals that are", "Top Cuisines"], settings: ["Vegan", "Eggs", "30min", "1 hour", "Intermediate", "Low", "Healthy", "American"], preferencesPresented: $preferencesPresented) : nil)
-
-
-    }
-    
-    private func cell(colIndex: Int, rowIndex: Int) -> some View {
-        let cellIndex = (rowIndex * cols) + colIndex
-        return ZStack {
-            if cellIndex < data.count {
-                self.viewBuilder(data[cellIndex])
-            }
-        }
-    }
-
-    private func setupView(geometry: GeometryProxy) -> some View {
-        let rowRemainder = Double(data.count).remainder(dividingBy: Double(cols))
-        let rowCount = data.count / cols + (rowRemainder == 0 ? 0 : 1)
-        let frame = geometry.frame(in: .global)
-        let totalSpacing = Int(spacing) * (cols - 1)
-        let cellWidth = (frame.width - CGFloat(totalSpacing))/CGFloat(cols)
-
-        return
-
-            VStack(alignment: .leading) {
+            }.background(Color.retinaSurface).edgesIgnoringSafeArea(.bottom)
+            
+            
+//            if self.preferencesPresented {
+//                PreferencesView(titles: ["Diet", "Food I don’t eat", "Time I have to cook Lunch", "Time I have to cook Dinner", "My cooking level", "Spice Tolerance", "See meals that are", "Top Cuisines"], settings: ["Vegan", "Eggs", "30min", "1 hour", "Intermediate", "Low", "Healthy", "American"], preferencesPresented: $preferencesPresented)
+//                .transition(.asymmetric(insertion: .move(edge: .bottom), removal: .opacity))
+//                    .animation(.easeInOut(duration: 0.2))
+//            }
+            
             ZStack {
-                VStack(alignment: .leading, spacing: 12) {
-                    HStack {
-                        Text(headerTop)
-                            .retinaTypography(.h4)
-                            .padding([.leading], 24)
-                        Spacer()
-                        retinaIconButton(image: (Image(systemName: "line.horizontal.3.decrease")), action: { self.preferencesPresented.toggle() })                            .padding([.trailing], 24)
-                    }.frame(width: UIScreen.screenWidth, alignment: .leading).padding(.top, 84)
-                    
-                    Text(headerMain)
-                        .retinaTypography(.h3)
-                        .padding([.leading], 24)
-                        .frame(width: UIScreen.screenWidth, alignment: .leading)
-                }
-                GeometryReader { geometry in
-                    Rectangle().offset(y: -(geometry.frame(in: .global).minY)).foregroundColor(.white)
-                    .blur(radius: 20)
-                    .padding(-25)
-                        .frame(width: UIScreen.screenWidth, height: UIApplication.topInset*1.5)
-                }
-            }.zIndex(1)
-            
-
-            
-            // Search view
-            GeometryReader { geometry in
-                VStack {
-                    NavigationLink(destination: DiscoverySearch(searchPresented: self.$searchPresented), isActive: self.$searchPresented) { EmptyView() }
-                    if geometry.frame(in: .global).minY >= UIApplication.topInset {
-                        ZStack {
-                            retinaSearchButton(text: self.searchBarText, color: .gray, backgroundColor: .white, action: { self.searchPresented = true })
-                                .offset(y: max(0, geometry.frame(in: .global).minY/9))
-                        }
-                    } else {
-                        ZStack {
-                            retinaSearchButton(text: "Text", color: .gray, backgroundColor: .white, action: { self.searchPresented = true }).offset(y: -(geometry.frame(in: .global).minY - UIApplication.topInset))
-                        }
-                    }
-                }
-            }.frame(height: 60)
-            .zIndex(1)
-            .padding(.bottom, 24)
-            .padding(.top, 100)
-
-            ForEach(0...rowCount-1, id: \.self) { row in
-                HStack() {
-                    ForEach(0...self.cols-1, id: \.self) { col in
-                        NavigationLink(
-                          destination: TopChoicesView()) {
-                            self.cell(colIndex: col, rowIndex: row)
-                            .frame(maxWidth: cellWidth)
-                        }.buttonStyle(PlainButtonStyle())
-                    }
-                }.padding([.leading, .trailing, .top], 24)
+                PreferencesView(titles: ["Diet", "Food I don’t eat", "Time I have to cook Lunch", "Time I have to cook Dinner", "My cooking level", "Spice Tolerance", "See meals that are", "Top Cuisines"], settings: ["Vegan", "Eggs", "30min", "1 hour", "Intermediate", "Low", "Healthy", "American"], preferencesPresented: $preferencesPresented).padding([.top, .bottom], UIApplication.bottomInset)
             }
+            .edgesIgnoringSafeArea(.all)
+            .offset(x: 0, y: self.preferencesPresented ? 0 : UIScreen.screenHeight + UIApplication.bottomInset)
+            
+
         }
+            
+            
+//        .overlay(self.preferencesPresented ? PreferencesView(titles: ["Diet", "Food I don’t eat", "Time I have to cook Lunch", "Time I have to cook Dinner", "My cooking level", "Spice Tolerance", "See meals that are", "Top Cuisines"], settings: ["Vegan", "Eggs", "30min", "1 hour", "Intermediate", "Low", "Healthy", "American"], preferencesPresented: $preferencesPresented) : nil)
+        
     }
 }
 
@@ -195,17 +298,10 @@ struct ContentView_Previews: PreviewProvider {
         DiscoveryItem(title: "Pasta", imageUrl: "food", category: "Ingredient"),
         DiscoveryItem(title: "Salmon", imageUrl: "food", category: "Ingredient")
     ]
-    @State static var colors: [Color] = [.pink, .red, .orange, .yellow, .green, .blue, .purple, .gray, .black]
     
-    @State static var searchPresented = false
-    @State static var preferencesPresented = false
-
     static var previews: some View {
         Group {
-            ContentView(data: data, cols: 2, spacing: -10) { item in
-                // add cell content here
-                DiscoveryCell(title: item.title, backgroundImageUrl: item.imageUrl).frame(width: 160, height: 100)
-            }
+            ContentView(data: data, spacing: -10)
         }
     }
 }

@@ -18,8 +18,8 @@ public struct RetinaToggle: View {
     var style: Style
     
     struct ColoredToggleStyle: ToggleStyle {
-        var onColor = Color.retinaPrimary
-        var offColor = Color.retinaDanger
+        var onColor = Color.retinaBase
+        var offColor = Color.retinaBase
         var thumbColor = Color.white
         
         func makeBody(configuration: Self.Configuration) -> some View {
@@ -65,8 +65,8 @@ public struct RetinaToggle: View {
         Toggle("", isOn: $toggleState)
             .toggleStyle(
                 ColoredToggleStyle(
-                    onColor: .retinaBasic,
-                    offColor: Color.retinaBasic.opacity(0.1),
+                    onColor: .retinaBase,
+                    offColor: Color.retinaBase.opacity(0.1),
                     thumbColor: .white))
     }
     
@@ -74,8 +74,8 @@ public struct RetinaToggle: View {
         Toggle("", isOn: $toggleState)
             .toggleStyle(
                 ColoredToggleStyle(
-                    onColor: .retinaPrimary,
-                    offColor: Color.retinaPrimary.opacity(0.1),
+                    onColor: .retinaBase,
+                    offColor: Color.retinaBase.opacity(0.1),
                     thumbColor: .white))
     }
     
@@ -83,8 +83,8 @@ public struct RetinaToggle: View {
         Toggle("", isOn: $toggleState)
             .toggleStyle(
                 ColoredToggleStyle(
-                    onColor: .retinaSuccess,
-                    offColor: Color.retinaSuccess.opacity(0.1),
+                    onColor: .retinaBase,
+                    offColor: Color.retinaBase.opacity(0.1),
                     thumbColor: .white))
     }
     
@@ -92,8 +92,8 @@ public struct RetinaToggle: View {
         Toggle("", isOn: $toggleState)
             .toggleStyle(
                 ColoredToggleStyle(
-                    onColor: .retinaInfo,
-                    offColor: Color.retinaInfo.opacity(0.1),
+                    onColor: .retinaBase,
+                    offColor: Color.retinaBase.opacity(0.1),
                     thumbColor: .white))
     }
     
@@ -102,8 +102,8 @@ public struct RetinaToggle: View {
         Toggle("", isOn: $toggleState)
             .toggleStyle(
                 ColoredToggleStyle(
-                    onColor: .retinaWarning,
-                    offColor: Color.retinaWarning.opacity(0.1),
+                    onColor: .retinaBase,
+                    offColor: Color.retinaBase.opacity(0.1),
                     thumbColor: .white))
     }
     
@@ -112,8 +112,8 @@ public struct RetinaToggle: View {
         Toggle("", isOn: $toggleState)
             .toggleStyle(
                 ColoredToggleStyle(
-                    onColor: .retinaDanger,
-                    offColor: Color.retinaDanger.opacity(0.1),
+                    onColor: .retinaBase,
+                    offColor: Color.retinaBase.opacity(0.1),
                     thumbColor: .white))
     }
 }

@@ -42,29 +42,29 @@ struct BannerModifier: ViewModifier {
     @Binding var show:Bool
     
     func body(content: Content) -> some View {
-        ZStack {
+        ZStack(alignment: .top) {
             content
             if show {
-                VStack {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(data.title).retinaTypography(.h4_main)
                     HStack {
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text(data.title).retinaTypography(.h4)
-                            HStack {
-                                Image(systemName: "info.circle.fill").foregroundColor(.red)
-                                Text(data.detail).retinaTypography(.p5)
-                                Spacer()
-                            }
-                        }.padding(.leading, 24)
+                        Image(systemName: "info.circle.fill").foregroundColor(.retinaPink)
+                        Text(data.detail).retinaTypography(.p6_main)
+                        .foregroundColor(Color.retinaSnowWhite)
                         Spacer()
                     }
-                    .frame(width: UIScreen.screenWidth, height: 148)
-                    .foregroundColor(Color.white)
-                    .background(data.type.tintColor)
-                    .edgesIgnoringSafeArea(.all)
-                    Spacer()
+                    .padding(.top, 12)
                 }
+                .padding(.leading, 24)
+                .frame(width: UIScreen.screenWidth, height: 120)
+                .foregroundColor(Color.retinaSnowWhite)
+                .background(Color.retinaOverlayLight)
+                .edgesIgnoringSafeArea(.all)
+                    
                 .animation(.easeInOut)
-                .transition(AnyTransition.move(edge: .top).combined(with: .opacity))
+                    .transition(AnyTransition.move(edge: .top).combined(with: .opacity).combined(with: .offset(
+                        .init(width: 0, height: 0)
+                    )))
                 .onTapGesture {
                     withAnimation {
                         self.show = false
@@ -77,7 +77,7 @@ struct BannerModifier: ViewModifier {
                     }
                 })
             }
-        }
+        }.edgesIgnoringSafeArea(.all)
     }
 
 }

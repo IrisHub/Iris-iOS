@@ -11,10 +11,10 @@ import SwiftUI
 struct LoadingView: View {
     var body: some View {
         ZStack(alignment: .top) {
-          Color.black.edgesIgnoringSafeArea(.all)
+          Color.retinaBase.edgesIgnoringSafeArea(.all)
             VStack {
-                Text("Customizing").retinaTypography(.h3).foregroundColor(.retinaBasic)
-                LottieView(name: "loading").frame(width:200, height:200)
+                Text("Customizing").retinaTypography(.h4_main).foregroundColor(.retinaSnowWhite)
+                LottieView(name: "loading").frame(width:150, height:150).padding(.top, 12)
             }.padding(.top, UIScreen.main.bounds.size.height/5)
         }
     }

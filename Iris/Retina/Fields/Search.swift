@@ -23,13 +23,13 @@ struct Search: View {
                         UIApplication.shared.endEditing(true) // this must be placed before the other commands here
                         self.buttonCommit()
                     }) {
-                        Image(systemName: isBack ? "chevron.left" : "magnifyingglass").retinaTypography(.h5)
-                    }.padding(6).padding(.leading, 12)
+                        Image(systemName: isBack ? "chevron.left" : "magnifyingglass").retinaTypography(.h5_main)
+                    }.padding(6).padding(.leading, 12).foreground(Color.retinaPink)
 
                                         
                     ZStack(alignment: .leading) {
-                        if searchText.isEmpty { Text(placeholder).foregroundColor(.white).retinaTypography(.p5).padding(.leading, 12) }
-                        TextField("", text: $searchText).retinaTypography(.p5).padding(.leading, 12)
+                        if searchText.isEmpty { Text(placeholder).foregroundColor(.retinaSnowWhite).retinaTypography(.p6_main).padding(.leading, 12) }
+                        TextField("", text: $searchText).retinaTypography(.p6_main).padding(.leading, 12)
                     }
                     
 
@@ -39,9 +39,9 @@ struct Search: View {
                     }) {
                         Image(systemName: "xmark.circle.fill").opacity(searchText == "" ? 0 : 1)
                     }.padding(6).padding(.trailing, 12)
-                }.frame(minHeight: 56)
-                    .foregroundColor(.white)
-                    .background(Color(.gray))
+                }.frame(minHeight: 36)
+                    .foregroundColor(.retinaSnowWhite)
+                    .background(Color.retinaOverlayDark)
                     .cornerRadius(4)
                     .padding([.leading, .trailing], 24)
 

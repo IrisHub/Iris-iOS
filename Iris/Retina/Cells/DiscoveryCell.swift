@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import URLImage
 
 struct DiscoveryCell: View {
     var title: String
@@ -14,9 +15,15 @@ struct DiscoveryCell: View {
 
     var body: some View {
         ZStack {
-            Image(backgroundImageUrl).retinaRectangle(width: 172, height: 100)
-            Rectangle().frame(width: 172, height: 100).opacity(0.6)
-            Text(title).frame(width: 148, height: 100).foregroundColor(.white).retinaTypography(.p5)
+            URLImage((URL(string: backgroundImageUrl))!, delay: 0.25){ proxy in
+            proxy.image
+                .resizable()                     // Make image resizable
+                .aspectRatio(contentMode: .fill) // Fill the frame
+                .frame(width: 182, height: 182)
+                .clipped()                       // Clip overlaping parts
+            }
+            Rectangle().frame(width: 182, height: 182).opacity(0.4)
+            Text(title).frame(width: 160, height: 182).foregroundColor(.white).retinaTypography(.p5_main)
                 .multilineTextAlignment(.center)
         }
     }

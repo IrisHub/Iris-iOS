@@ -12,6 +12,41 @@ import SwiftUI
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
+    @State var data = [
+        DiscoveryItem(title: "Chicken", imageUrl: "food", category: "Ingredient"),
+        DiscoveryItem(title: "Beef", imageUrl: "food", category: "Ingredient"),
+        DiscoveryItem(title: "Carrots", imageUrl: "food", category: "Ingredient"),
+        DiscoveryItem(title: "Broccoli", imageUrl: "food", category: "Ingredient"),
+        DiscoveryItem(title: "Pasta", imageUrl: "food", category: "Ingredient"),
+        DiscoveryItem(title: "Chicken", imageUrl: "food", category: "Ingredient"),
+        DiscoveryItem(title: "Beef", imageUrl: "food", category: "Ingredient"),
+        DiscoveryItem(title: "Carrots", imageUrl: "food", category: "Ingredient"),
+        DiscoveryItem(title: "Broccoli", imageUrl: "food", category: "Ingredient"),
+        DiscoveryItem(title: "Pasta", imageUrl: "food", category: "Ingredient"),
+        DiscoveryItem(title: "Chicken", imageUrl: "food", category: "Ingredient"),
+        DiscoveryItem(title: "Beef", imageUrl: "food", category: "Ingredient"),
+        DiscoveryItem(title: "Carrots", imageUrl: "food", category: "Ingredient"),
+        DiscoveryItem(title: "Broccoli", imageUrl: "food", category: "Ingredient"),
+        DiscoveryItem(title: "Pasta", imageUrl: "food", category: "Ingredient"),
+        DiscoveryItem(title: "Chicken", imageUrl: "food", category: "Ingredient"),
+        DiscoveryItem(title: "Beef", imageUrl: "food", category: "Ingredient"),
+        DiscoveryItem(title: "Carrots", imageUrl: "food", category: "Ingredient"),
+        DiscoveryItem(title: "Broccoli", imageUrl: "food", category: "Ingredient"),
+        DiscoveryItem(title: "Pasta", imageUrl: "food", category: "Ingredient"),
+        DiscoveryItem(title: "Chicken", imageUrl: "food", category: "Ingredient"),
+        DiscoveryItem(title: "Beef", imageUrl: "food", category: "Ingredient"),
+        DiscoveryItem(title: "Carrots", imageUrl: "food", category: "Ingredient"),
+        DiscoveryItem(title: "Broccoli", imageUrl: "food", category: "Ingredient"),
+        DiscoveryItem(title: "Pasta", imageUrl: "food", category: "Ingredient"),
+        DiscoveryItem(title: "Chicken", imageUrl: "food", category: "Ingredient"),
+        DiscoveryItem(title: "Beef", imageUrl: "food", category: "Ingredient"),
+        DiscoveryItem(title: "Carrots", imageUrl: "food", category: "Ingredient"),
+        DiscoveryItem(title: "Broccoli", imageUrl: "food", category: "Ingredient"),
+        DiscoveryItem(title: "Pasta", imageUrl: "food", category: "Ingredient"),
+        DiscoveryItem(title: "Salmon", imageUrl: "food", category: "Ingredient")
+    ]
+
+
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
@@ -23,43 +58,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 //        // Create the SwiftUI view that provides the window contents.
 //        let contentView = SettingsView(titles: ["Diet", "Food I don’t eat", "Time I have to cook Lunch", "Time I have to cook Dinner", "My cooking level", "Spice Tolerance", "See meals that are", "Top Cuisines"], settings: ["Vegan", "Eggs", "30min", "1 hour", "Intermediate", "Low", "Healthy", "American"])
 
-        let contentView = RecipeView()
-//        ContentView(discoveryItem: [
-//            DiscoveryItem(title: "Chicken", imageUrl: "food", category: "Ingredient"),
-//            DiscoveryItem(title: "Beef", imageUrl: "food", category: "Ingredient"),
-//            DiscoveryItem(title: "Carrots", imageUrl: "food", category: "Ingredient"),
-//            DiscoveryItem(title: "Broccoli", imageUrl: "food", category: "Ingredient"),
-//            DiscoveryItem(title: "Pasta", imageUrl: "food", category: "Ingredient"),
-//            DiscoveryItem(title: "Broccoli", imageUrl: "food", category: "Ingredient"),
-//            DiscoveryItem(title: "Pasta", imageUrl: "food", category: "Ingredient"),
-//            DiscoveryItem(title: "Broccoli", imageUrl: "food", category: "Ingredient"),
-//            DiscoveryItem(title: "Pasta", imageUrl: "food", category: "Ingredient"),
-//            DiscoveryItem(title: "Broccoli", imageUrl: "food", category: "Ingredient"),
-//            DiscoveryItem(title: "Pasta", imageUrl: "food", category: "Ingredient"),
-//            DiscoveryItem(title: "Broccoli", imageUrl: "food", category: "Ingredient"),
-//            DiscoveryItem(title: "Pasta", imageUrl: "food", category: "Ingredient"),
-//            DiscoveryItem(title: "Broccoli", imageUrl: "food", category: "Ingredient"),
-//            DiscoveryItem(title: "Pasta", imageUrl: "food", category: "Ingredient"),
-//            DiscoveryItem(title: "Broccoli", imageUrl: "food", category: "Ingredient"),
-//            DiscoveryItem(title: "Pasta", imageUrl: "food", category: "Ingredient"),
-//            DiscoveryItem(title: "Broccoli", imageUrl: "food", category: "Ingredient"),
-//            DiscoveryItem(title: "Pasta", imageUrl: "food", category: "Ingredient"),
-//            DiscoveryItem(title: "Broccoli", imageUrl: "food", category: "Ingredient"),
-//            DiscoveryItem(title: "Pasta", imageUrl: "food", category: "Ingredient"),
-//            DiscoveryItem(title: "Broccoli", imageUrl: "food", category: "Ingredient"),
-//            DiscoveryItem(title: "Pasta", imageUrl: "food", category: "Ingredient"),
-//            DiscoveryItem(title: "Broccoli", imageUrl: "food", category: "Ingredient"),
-//            DiscoveryItem(title: "Pasta", imageUrl: "food", category: "Ingredient"),
-//            DiscoveryItem(title: "Broccoli", imageUrl: "food", category: "Ingredient"),
-//            DiscoveryItem(title: "Pasta", imageUrl: "food", category: "Ingredient"),
-//            DiscoveryItem(title: "Broccoli", imageUrl: "food", category: "Ingredient"),
-//            DiscoveryItem(title: "Pasta", imageUrl: "food", category: "Ingredient"),
-//            DiscoveryItem(title: "Broccoli", imageUrl: "food", category: "Ingredient"),
-//            DiscoveryItem(title: "Pasta", imageUrl: "food", category: "Ingredient"),
-//            DiscoveryItem(title: "Broccoli", imageUrl: "food", category: "Ingredient"),
-//            DiscoveryItem(title: "Pasta", imageUrl: "food", category: "Ingredient"),
-//            DiscoveryItem(title: "Salmon", imageUrl: "food", category: "Ingredient")
-//        ])
+        let contentView = //RecipeView()
+//        ContentView(data: data, spacing: -10)
+        SecondView()
 
 
 

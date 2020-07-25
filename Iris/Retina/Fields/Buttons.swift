@@ -18,9 +18,28 @@ struct RetinaButtonStyle: ButtonStyle {
         switch style {
         case .fill: return AnyView(FillButton(color: color, configuration: configuration))
         case .outline: return AnyView(OutlineButton(color: color, configuration: configuration))
+        case .outlineOnly: return AnyView(OutlineOnlyButton(color: color, configuration: configuration))
         case .ghost: return AnyView(GhostButton(color: color, configuration: configuration))
+        case .search: return AnyView(SearchButton(color: color, configuration: configuration))
         }
     }
+    
+    struct SearchButton: View {
+        var color: Color
+        let configuration: ButtonStyle.Configuration
+        @Environment(\.isEnabled) private var isEnabled: Bool
+        var body: some View {
+            configuration.label
+                .retinaTypography(.h6_main)
+                .foregroundColor(isEnabled ? .white : .retinaOverlayDark)
+                .padding([.leading, .trailing])
+                .frame(minHeight: 36)
+                .background(isEnabled ? color : Color.retinaBase.opacity(0.2))
+                .cornerRadius(4)
+                .opacity(configuration.isPressed ? 0.7 : 1)
+        }
+    }
+
     
     struct FillButton: View {
         var color: Color
@@ -28,11 +47,11 @@ struct RetinaButtonStyle: ButtonStyle {
         @Environment(\.isEnabled) private var isEnabled: Bool
         var body: some View {
             configuration.label
-                .retinaTypography(.s1)
-                .foregroundColor(isEnabled ? .white : .retinaFontDisabled)
+                .retinaTypography(.p5_main)
+                .foregroundColor(isEnabled ? .white : .retinaBase)
                 .padding()
                 .frame(minHeight: 56)
-                .background(isEnabled ? color : Color.retinaBasic.opacity(0.2))
+                .background(isEnabled ? color : Color.retinaBase.opacity(0.2))
                 .cornerRadius(4)
                 .opacity(configuration.isPressed ? 0.7 : 1)
         }
@@ -44,19 +63,40 @@ struct RetinaButtonStyle: ButtonStyle {
         @Environment(\.isEnabled) private var isEnabled: Bool
         var body: some View {
             configuration.label
-                .retinaTypography(.s1)
-                .foregroundColor(isEnabled ? color : .retinaFontDisabled)
+                .retinaTypography(.p5_main)
+                .foregroundColor(isEnabled ? color : .retinaBase)
                 .padding()
                 .frame(minHeight: 56)
-                .background(isEnabled ? color.opacity(0.2) : Color.retinaBasic.opacity(0.15))
+                .background(isEnabled ? color.opacity(0.2) : Color.retinaBase.opacity(0.15))
                 .cornerRadius(4)
                 .overlay(
                     RoundedRectangle(cornerRadius: 4)
-                        .stroke(isEnabled ? color : Color.retinaBasic.opacity(0.5), lineWidth: 1)
+                        .stroke(isEnabled ? color : Color.retinaBase.opacity(0.5), lineWidth: 1)
                 )
                 .opacity(configuration.isPressed ? 0.7 : 1)
         }
     }
+    
+    struct OutlineOnlyButton: View {
+        var color: Color
+        let configuration: ButtonStyle.Configuration
+        @Environment(\.isEnabled) private var isEnabled: Bool
+        var body: some View {
+            configuration.label
+                .retinaTypography(.h5_main)
+                .foregroundColor(isEnabled ? color : .retinaBase)
+                .padding(12)
+                .frame(minHeight: 56)
+                .background(Color.clear)
+                .cornerRadius(4)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 4)
+                        .stroke(isEnabled ? color : Color.retinaBase.opacity(0.5), lineWidth: 2)
+                )
+                .opacity(configuration.isPressed ? 0.7 : 1)
+        }
+    }
+
     
     struct GhostButton: View {
         var color: Color
@@ -64,8 +104,8 @@ struct RetinaButtonStyle: ButtonStyle {
         @Environment(\.isEnabled) private var isEnabled: Bool
         var body: some View {
             configuration.label
-                .retinaTypography(.s1)
-                .foregroundColor(isEnabled ? color : .retinaFontDisabled)
+                .retinaTypography(.p5_main)
+                .foregroundColor(isEnabled ? color : .retinaBase)
                 .padding()
                 .frame(minHeight: 56)
                 .background(Color.white)
@@ -87,13 +127,13 @@ extension Button {
 struct retinaButton: View {
     
     enum Style {
-        case fill, outline, ghost
+        case fill, outline, outlineOnly, ghost, search
     }
     
     var text: String?
     var image: Image?
     var style: Style = .fill
-    var color: Color = .retinaPrimary
+    var color: Color = .retinaBase
     var action: () -> Void
     var textAndImage: Bool { text != nil && image != nil }
     
@@ -112,13 +152,9 @@ struct retinaButton: View {
 }
 
 struct retinaSearchButton: View {
-    enum Style {
-        case fill, outline, ghost
-    }
-
     var text: String?
-    var color: Color = .retinaPrimary
-    var backgroundColor: Color = .black
+    var color: Color = .retinaOverlayDark
+    var backgroundColor: Color = .retinaOverflow
     var action: () -> Void
     
     var body: some View {
@@ -126,12 +162,12 @@ struct retinaSearchButton: View {
             Button(action: action, label: {
                 HStack() {
                     HStack(spacing: 12) {
-                        Image(systemName: "magnifyingglass").padding(6)
-                        Text(text ?? "").retinaTypography(.p5)
+                        Image(systemName: "magnifyingglass").padding(6).foreground(Color.retinaPink)
+                        Text(text ?? "").retinaTypography(.p6_main)
                     }
                     Spacer()
                 }
-            }).style(.fill, color: color).padding([.leading, .trailing], 24)
+            }).style(.search, color: color).padding([.leading, .trailing], 24)
         }.frame(width: UIScreen.screenWidth, height: 90).background(backgroundColor)
     }
 }
@@ -149,7 +185,7 @@ struct retinaIconButton: View {
     var body: some View {
         HStack {
             Button(action: action, label: {
-                image?.foregroundColor(.white).retinaTypography(.h5)
+                image?.foregroundColor(.white).retinaTypography(.h5_main)
             })
         }
         .frame(width: 48, height: 48)
@@ -171,14 +207,14 @@ public struct Input_Previews: PreviewProvider {
             
             HStack(spacing: 5) {
                 retinaButton(text: "Fill", style: .fill, action: { print("click") })
-                retinaButton(text: "Outline", style: .outline, action: { print("click") })
+                retinaButton(text: "Outline", style: .outline, color: .retinaBase, action: { print("click") })
                 retinaButton(text: "Ghost", style: .ghost, action: { print("click") })
             }
             
             HStack(spacing: 5) {
-                retinaButton(text: "Danger", color: .retinaDanger, action: { print("click") })
-                retinaButton(text: "Warning", color: .retinaWarning, action: { print("click") })
-                retinaButton(text: "Success", color: .retinaSuccess, action: { print("click") })
+                retinaButton(text: "Danger", color: .retinaBase, action: { print("click") })
+                retinaButton(text: "Warning", color: .retinaBase, action: { print("click") })
+                retinaButton(text: "Success", color: .retinaBase, action: { print("click") })
             }
             
             HStack(spacing: 5) {
@@ -206,7 +242,7 @@ public struct Input_Previews: PreviewProvider {
 
             
             Button(action: { print("click") }, label: { Text("Custom") })
-                .style(.outline, color: .retinaFontBtn)
+                .style(.outline, color: .retinaBase)
         }
     .padding(10)
     }

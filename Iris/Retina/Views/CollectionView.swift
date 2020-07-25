@@ -67,7 +67,7 @@ struct CollectionView<Content: View, Data: Hashable>: View {
                 VStack(alignment: .leading, spacing: 12) {
                     HStack {
                         Text(headerTop)
-                            .retinaTypography(.h4)
+                            .retinaTypography(.h4_main)
                             .padding([.leading], 24)
                         Spacer()
                         retinaIconButton(image: (Image(systemName: "line.horizontal.3.decrease")), action: { self.showingPopupA.toggle() })                            .padding([.trailing], 24)
@@ -91,7 +91,7 @@ struct CollectionView<Content: View, Data: Hashable>: View {
 
                     
                     Text(headerMain)
-                        .retinaTypography(.h3)
+                        .retinaTypography(.h3_main)
                         .padding([.leading], 24)
                         .frame(width: UIScreen.screenWidth, alignment: .leading)
                 }

@@ -14,7 +14,8 @@ struct HorizontalLabel: View {
     var body: some View {
         Text(text)
         .rotationEffect(.radians(-.pi/2))
-        .retinaTypography(.h6)
+        .retinaTypography(.h6_main)
+        .foregroundColor(.retinaSnowWhite)
     }
 }
 

@@ -13,12 +13,12 @@ public struct RetinaTypography: ViewModifier {
     
     private enum Family: String {
         case
-        main = "HelveticaNeue",
-        secondary = "Georgia"
+        main = "DMSans",
+        secondary = "DMSerifDisplay"
     }
     
     private enum Weight: String {
-        case regular, medium, light, heavy, bold, semibold, black
+        case regular, medium, bold
     }
     
     private enum Size: CGFloat {
@@ -32,26 +32,26 @@ public struct RetinaTypography: ViewModifier {
     }
     
     enum Style {
-        
         /// Titles
-        case h1, h2, h3, h4, h5, h6
-        
-        /// Subtitles
-        case s1, s2
+        case h1_main, h2_main, h3_main, h4_main, h5_main, h6_main
         
         /// Paragraphs
-        case p5, p6
+        case p5_main, p6_main
         
-        /// Captions
-        case c1, c2
+        /// Titles
+        case h1_secondary, h2_secondary, h3_secondary, h4_secondary, h5_secondary, h6_secondary
+        
+        /// Paragraphs
+        case p5_secondary, p6_secondary
+
     }
         
     var style: Style
     
     private func getName(_ family: Family, _ weight: Weight) -> String {
-        let fontWeight = weight.rawValue
+        let fontWeight = weight.rawValue.capitalizingFirstLetter()
         let familyName = family.rawValue
-
+        print("\(familyName)-\(fontWeight)")
         return "\(familyName)-\(fontWeight)"
     }
     
@@ -61,33 +61,42 @@ public struct RetinaTypography: ViewModifier {
     
     public func body(content: Content) -> some View {
         switch style {
-        case .h1: return content
-            .font(customFont(family: .secondary, weight: .bold, size: .one))
-        case .h2: return content
+        case .h1_main: return content
+            .font(customFont(family: .main, weight: .bold, size: .one))
+        case .h2_main: return content
             .font(customFont(family: .main, weight: .bold, size: .two))
-        case .h3: return content
+        case .h3_main: return content
             .font(customFont(family: .main, weight: .bold, size: .three))
-        case .h4: return content
+        case .h4_main: return content
             .font(customFont(family: .main, weight: .bold, size: .four))
-        case .h5: return content
+        case .h5_main: return content
             .font(customFont(family: .main, weight: .bold, size: .five))
-        case .h6: return content
+        case .h6_main: return content
             .font(customFont(family: .main, weight: .bold, size: .six))
-
-        case .s1: return content
-            .font(.system(size: 15, weight: .semibold))
-        case .s2: return content
-            .font(.system(size: 13, weight: .semibold))
             
-        case .p5: return content
+        case .p5_main: return content
             .font(customFont(family: .main, weight: .regular, size: .five))
-        case .p6: return content
+        case .p6_main: return content
             .font(customFont(family: .main, weight: .regular, size: .six))
+            
+        case .h1_secondary: return content
+            .font(customFont(family: .secondary, weight: .regular, size: .one))
+        case .h2_secondary: return content
+            .font(customFont(family: .secondary, weight: .regular, size: .two))
+        case .h3_secondary: return content
+            .font(customFont(family: .secondary, weight: .regular, size: .three))
+        case .h4_secondary: return content
+            .font(customFont(family: .secondary, weight: .regular, size: .four))
+        case .h5_secondary: return content
+            .font(customFont(family: .secondary, weight: .regular, size: .five))
+        case .h6_secondary: return content
+            .font(customFont(family: .secondary, weight: .regular, size: .six))
 
-        case .c1: return content
-            .font(.system(size: 12, weight: .regular))
-        case .c2: return content
-            .font(.system(size: 12, weight: .bold))
+        case .p5_secondary: return content
+            .font(customFont(family: .secondary, weight: .regular, size: .five))
+        case .p6_secondary: return content
+            .font(customFont(family: .secondary, weight: .regular, size: .six))
+            
         }
     }
 }
@@ -111,23 +120,23 @@ struct Typography_Previews: PreviewProvider {
         HStack {
             VStack(alignment: .leading, spacing: 20) {
                 Group {
-                    Text("Text").retinaTypography(.h1, color: .retinaPrimary)
-                    Text("Text").retinaTypography(.h1, color: .retinaSuccess)
-                    Text("Text").retinaTypography(.h1, color: .retinaDanger)
+                    Text("Text").retinaTypography(.h1_main, color: .retinaBase)
+                    Text("Text").retinaTypography(.h1_main, color: .retinaBase)
+                    Text("Text").retinaTypography(.h1_main, color: .retinaBase)
                 
-                    Text("Text").retinaTypography(.h1)
-                    Text("Text").retinaTypography(.h2)
-                    Text("Text").retinaTypography(.h3)
-                    Text("Text").retinaTypography(.h4)
-                    Text("Text").retinaTypography(.h5)
+                    Text("Text").retinaTypography(.h1_main)
+                    Text("Text").retinaTypography(.h2_main)
+                    Text("Text").retinaTypography(.h3_main)
+                    Text("Text").retinaTypography(.h4_main)
+                    Text("Text").retinaTypography(.h5_main)
                     Text("Text")
                 }
                 Group {
     //                Text("Text").retinaTypography(.s1)
     //                Text("Text").retinaTypography(.s2)
                     
-                    Text("Text").retinaTypography(.p5)
-                    Text("Text").retinaTypography(.p6)
+                    Text("Text").retinaTypography(.p5_main)
+                    Text("Text").retinaTypography(.p6_main)
                     
     //                Text("Text").retinaTypography(.c1)
     //                Text("Text").retinaTypography(.c2)

@@ -27,14 +27,14 @@ struct SelectionCell: View {
             }
         }) {
             ZStack(alignment: .leading) {
-                Rectangle().frame(width: UIScreen.screenWidth, height: 72).foregroundColor(.retinaFontBtn)
+                Rectangle().frame(width: UIScreen.screenWidth, height: 72).foregroundColor(.retinaBase)
                 HStack {
                     Circle()
-                        .fill(self.selectedTitles.contains(where: {$0.caseInsensitiveCompare(self.title) == .orderedSame}) ? Color.white : Color.retinaFontBtn)
+                        .fill(self.selectedTitles.contains(where: {$0.caseInsensitiveCompare(self.title) == .orderedSame}) ? Color.white : Color.retinaBase)
                         .frame(width: 8, height: 8)
                         .padding(.leading, 24)
                     
-                    Text(title.capitalizingFirstLetter()).foregroundColor(.white).retinaTypography(.h5).multilineTextAlignment(.leading).frame(width: 204, alignment: .leading).padding(.leading, 12)
+                    Text(title.capitalizingFirstLetter()).foregroundColor(.white).retinaTypography(.h5_main).fixedSize(horizontal: false, vertical: true).frame(width: 204, alignment: .leading).padding(.leading, 12)
                 }
             }
         }

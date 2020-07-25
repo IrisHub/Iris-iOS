@@ -53,111 +53,109 @@ public struct RetinaTextField: View {
     
     fileprivate func defaultStyle() -> some View {
         HStack {
+            Rectangle().frame(width: 2, height: 26, alignment: .leading).foregroundColor(.retinaPink).cornerRadius(1).padding(.leading, 12)
             ZStack(alignment: .leading) {
-                if input.isEmpty { Text(placeholder).foregroundColor(.retinaBasic) }
+                if input.isEmpty { Text(placeholder).foregroundColor(.retinaWinterGrey).retinaTypography(.p5_main).padding(.leading, 12) }
                 TextField("", text: $input, onEditingChanged: { editingChanged in
                     self.focused = editingChanged
                     print(editingChanged ? "TextField focused" : "TextField focus removed")
-                }, onCommit: commit).foregroundColor(.retinaFontStd)
+                }, onCommit: commit).padding(.leading, 12).foregroundColor(.retinaSnowWhite)
             }
-            if focused { icon.imageScale(.large).foregroundColor(.retinaPrimary) }
-            else { icon.imageScale(.large).foregroundColor(.retinaBasic) }
+            if focused { icon.imageScale(.large).foregroundColor(.retinaWinterGrey) }
+            else { icon.imageScale(.large).foregroundColor(.retinaWinterGrey) }
         }
-        .padding()
-        .background(RoundedRectangle(cornerRadius: 5)
-        .foregroundColor(Color.retinaBasic.opacity(self.focused ? 0 : 0.1)))
-        .overlay(RoundedRectangle(cornerRadius: 5)
-        .stroke(self.focused ? Color.retinaPrimary : Color.retinaBasic.opacity(0.4), lineWidth: 1))
+        .padding(12)
+        .background(Color.retinaOverlayLight)
     }
     
     fileprivate func primary() -> some View {
         HStack {
             ZStack(alignment: .leading) {
-                if input.isEmpty { Text(placeholder).foregroundColor(.retinaPrimary) }
+                if input.isEmpty { Text(placeholder).foregroundColor(.retinaBase) }
                 TextField("", text: $input, onEditingChanged: { editingChanged in
                     self.focused = editingChanged
                     print(editingChanged ? "TextField focused" : "TextField focus removed")
-                }, onCommit: commit).foregroundColor(.retinaFontStd)
+                }, onCommit: commit).foregroundColor(.retinaBase)
             }
-             icon.imageScale(.large).foregroundColor(.retinaPrimary)
+             icon.imageScale(.large).foregroundColor(.retinaBase)
         }
         .padding()
         .background(RoundedRectangle(cornerRadius: 5)
-        .foregroundColor(Color.retinaBasic.opacity(self.focused ? 0 : 0.1)))
+        .foregroundColor(Color.retinaBase.opacity(self.focused ? 0 : 0.1)))
         .overlay(RoundedRectangle(cornerRadius: 5)
-        .stroke(Color.retinaPrimary, lineWidth: 1))
+        .stroke(Color.retinaBase, lineWidth: 1))
     }
     
     fileprivate func success() -> some View {
         HStack {
             ZStack(alignment: .leading) {
-                if input.isEmpty { Text(placeholder).foregroundColor(.retinaBasic) }
+                if input.isEmpty { Text(placeholder).foregroundColor(.retinaBase) }
                 TextField("", text: $input, onEditingChanged: { editingChanged in
                     self.focused = editingChanged
                     print(editingChanged ? "TextField focused" : "TextField focus removed")
-                }, onCommit: commit).foregroundColor(.retinaFontStd)
+                }, onCommit: commit).foregroundColor(.retinaBase)
             }
-            icon.imageScale(.large).foregroundColor(.retinaSuccess)
+            icon.imageScale(.large).foregroundColor(.retinaBase)
         }
         .padding()
         .background(RoundedRectangle(cornerRadius: 5)
-        .foregroundColor(Color.retinaBasic.opacity(self.focused ? 0 : 0.1)))
+        .foregroundColor(Color.retinaBase.opacity(self.focused ? 0 : 0.1)))
         .overlay(RoundedRectangle(cornerRadius: 5)
-        .stroke(Color.retinaSuccess, lineWidth: 1))
+        .stroke(Color.retinaBase, lineWidth: 1))
     }
     
     fileprivate func warning() -> some View {
         HStack {
             ZStack(alignment: .leading) {
-                if input.isEmpty { Text(placeholder).foregroundColor(Color.retinaBasic) }
+                if input.isEmpty { Text(placeholder).foregroundColor(Color.retinaBase) }
                 TextField("", text: $input, onEditingChanged: { editingChanged in
                     self.focused = editingChanged
                     print(editingChanged ? "TextField focused" : "TextField focus removed")
-                }, onCommit: commit).foregroundColor(.retinaFontStd)
+                }, onCommit: commit).foregroundColor(.retinaBase)
             }
-            icon.imageScale(.large).foregroundColor(.retinaWarning)
+            icon.imageScale(.large).foregroundColor(.retinaBase)
         }
         .padding()
         .background(RoundedRectangle(cornerRadius: 5)
-        .foregroundColor(Color.retinaBasic.opacity(self.focused ? 0 : 0.1)))
+        .foregroundColor(Color.retinaBase.opacity(self.focused ? 0 : 0.1)))
         .overlay(RoundedRectangle(cornerRadius: 5)
-        .stroke(Color.retinaWarning, lineWidth: 1))
+        .stroke(Color.retinaBase, lineWidth: 1))
     }
     
     fileprivate func danger() -> some View {
         HStack {
             ZStack(alignment: .leading) {
-                if input.isEmpty { Text(placeholder).foregroundColor(.retinaBasic) }
+                if input.isEmpty { Text(placeholder).foregroundColor(.retinaBase) }
                 TextField("", text: $input, onEditingChanged: { editingChanged in
                     self.focused = editingChanged
                     print(editingChanged ? "TextField focused" : "TextField focus removed")
-                }, onCommit: commit).foregroundColor(.retinaFontStd)
+                }, onCommit: commit).foregroundColor(.retinaBase)
             }
-            icon.imageScale(.large).foregroundColor(.retinaDanger)
+            icon.imageScale(.large).foregroundColor(.retinaBase)
         }
         .padding()
         .background(RoundedRectangle(cornerRadius: 5)
-        .foregroundColor(Color.retinaBasic.opacity(self.focused ? 0 : 0.1)))
+        .foregroundColor(Color.retinaBase.opacity(self.focused ? 0 : 0.1)))
         .overlay(RoundedRectangle(cornerRadius: 5)
-        .stroke(Color.retinaDanger, lineWidth: 1))
+        .stroke(Color.retinaBase, lineWidth: 1))
     }
     
     fileprivate func info() -> some View {
         HStack {
             ZStack(alignment: .leading) {
-                if input.isEmpty { Text(placeholder).foregroundColor(.retinaBasic) }
+                if input.isEmpty { Text(placeholder).foregroundColor(.retinaBase) }
                 TextField("", text: $input, onEditingChanged: { editingChanged in
                     self.focused = editingChanged
                     print(editingChanged ? "TextField focused" : "TextField focus removed")
-                }, onCommit: commit).foregroundColor(.retinaFontStd)
+                }, onCommit: commit).foregroundColor(.retinaBase)
             }
-            icon.imageScale(.large).foregroundColor(.retinaInfo)
+            icon.imageScale(.large).foregroundColor(.retinaBase)
         }
         .padding()
         .background(RoundedRectangle(cornerRadius: 5)
-        .foregroundColor(Color.retinaBasic.opacity(self.focused ? 0 : 0.1)))
+        .foregroundColor(Color.retinaBase.opacity(self.focused ? 0 : 0.1)))
         .overlay(RoundedRectangle(cornerRadius: 5)
-        .stroke(Color.retinaInfo, lineWidth: 1))
+        .stroke(Color.retinaBase, lineWidth: 1))
     }
     
     // MARK:  Body

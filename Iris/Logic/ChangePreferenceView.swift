@@ -19,18 +19,11 @@ struct ChangePreferenceView: View {
             .edgesIgnoringSafeArea(.top)
             
             MultiSelectView(settings: ["apples", "pears", "bananas", "pineapples"], selectedSettings: ChangePreferenceView.settings)
-        }.background(Color.black)
-        .onAppear {
-            UITableView.appearance().separatorStyle = .none
-            UITableViewCell.appearance().backgroundColor = .black
-            UITableView.appearance().backgroundColor = .black
-            UITableViewCell.appearance().selectionStyle = .none
         }
-        .buttonStyle(PlainButtonStyle())
+        .background(Color.retinaBase)
         .navigationBarBackButtonHidden(true)
         .navigationBarTitle("")
         .navigationBarHidden(true)
-        .resignKeyboardOnDragGesture()
     }
 }
 
