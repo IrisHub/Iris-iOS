@@ -9,8 +9,8 @@
 import SwiftUI
 
 struct SelectionCell: View {
-//    var title: String
-//    @Binding var selectedTitles: [String]
+
+    @Binding var preference: Preference
     @Binding var items: [PreferenceItem]
     @State var item: PreferenceItem
     var isSingleSelect: Bool
@@ -30,6 +30,7 @@ struct SelectionCell: View {
                         self.items[location].selected = true
                     }
                 }
+                self.preference.items = self.items
             } else {
                 // set all items to unselected
                 
@@ -41,6 +42,7 @@ struct SelectionCell: View {
                 if let location = self.items.firstIndex(where: {$0.title.caseInsensitiveCompare(self.item.title) == .orderedSame}) {
                     self.items[location].selected = true
                 }
+                self.preference.items = self.items
             }
         }) {
             ZStack(alignment: .leading) {

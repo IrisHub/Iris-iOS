@@ -37,16 +37,21 @@ struct PreferencesView: View {
                     ScrollView(.vertical) {
                         ForEach(self.observed.preferences, id: \.self) { preference in
                             ZStack {
-                                NavigationLink(destination: ChangePreferenceView(preference: preference, items: preference.items)) {
+                                NavigationLink(destination: ChangePreferenceView(observed: self.observed, preference: preference, items: preference.items)) {
                                     SettingsCell(preference: preference)
                                 }
                             }
                         }
                         
                         Divider().frame(height: 2).background(Color.retinaOverlayDark).listRowInsets(EdgeInsets()).padding(.top, 24)
-
-//                        SettingsCell(title: "", setting: "Privacy Policy").listRowInsets(EdgeInsets())
-//                        SettingsCell(title: "", setting: "Terms of Service").listRowInsets(EdgeInsets())
+                        
+                        NavigationLink(destination: InformationView(type: .privacy)) {
+                            SettingsCell(preference: Preference(id: "", title: "", type: "", items: []), title: "Privacy Policy").listRowInsets(EdgeInsets())
+                        }
+                        
+                        NavigationLink(destination: InformationView(type: .tos)) {
+                            SettingsCell(preference: Preference(id: "", title: "", type: "", items: []), title: "Terms of Service").listRowInsets(EdgeInsets())
+                        }
                         
                         HStack(alignment: .top) {
                             Image("irissmall").resizable().padding(.trailing, 12).frame(width: 37, height: 33)

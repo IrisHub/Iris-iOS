@@ -12,6 +12,7 @@ struct DiscoverySearch: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @Binding var searchPresented: Bool
     @ObservedObject var observed: Observer
+    @ObservedObject var observedTopChoices: TopChoicesObserver
     @State private var searchText = ""
     
     var body: some View {
@@ -32,7 +33,7 @@ struct DiscoverySearch: View {
                         $0.ideas == true
                     }, id: \.self) { item in
                         NavigationLink(
-                          destination: TopChoicesView()) {
+                        destination: TopChoicesView(observed: self.observedTopChoices)) {
                             SearchCell(title: item.title, subtitle: item.category)
                             .listRowInsets(EdgeInsets())
                         }
@@ -45,7 +46,7 @@ struct DiscoverySearch: View {
                             self.searchText.isEmpty ? true : $0.title.lowercased().contains(self.searchText.lowercased())
                         }, id: \.self) { item in
                             NavigationLink(
-                              destination: TopChoicesView()) {
+                            destination: TopChoicesView(observed: self.observedTopChoices)) {
                                 SearchCell(title: item.title, subtitle: item.category)
                                 .listRowInsets(EdgeInsets())
 
@@ -73,8 +74,9 @@ struct DiscoverySearch: View {
 struct DiscoverySearch_Previews: PreviewProvider {
     @State static var searchPresented = true
     @ObservedObject static var observed = Observer()
+    @ObservedObject static var observedTopChoices = TopChoicesObserver()
 
     static var previews: some View {
-        DiscoverySearch(searchPresented: $searchPresented, observed: observed)
+        DiscoverySearch(searchPresented: $searchPresented, observed: observed, observedTopChoices: observedTopChoices)
     }
 }

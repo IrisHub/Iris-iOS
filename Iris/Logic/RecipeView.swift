@@ -15,7 +15,7 @@ struct RecipeView: View {
 
     // whether or not to show the Safari ViewController
     @ObservedObject var observed: TopChoicesObserver
-    var selectedChoice: Int
+    var selectedChoice: Int = 0
 
     @State var showSafari = false
     // initial URL string
@@ -29,53 +29,42 @@ struct RecipeView: View {
                 ScrollView(.vertical, showsIndicators: false) {
                     GeometryReader { geometry in
                         ZStack {
-                            if geometry.frame(in: .global).minY <= 0 {
-                                
-                                URLImage((URL(string: self.observed.recipes[self.selectedChoice].imageUrl))!){ proxy in
-                                proxy.image
-                                    .resizable()                     // Make image resizable
-                                    .renderingMode(.original)
-                                    .aspectRatio(contentMode: .fill) // Fill the frame
-                                    .frame(width: geometry.size.width, height: geometry.size.height)
-                                    .clipped()                       // Clip overlaping parts
-                                }
-                                .offset(y: geometry.frame(in: .global).minY/9)
+                            if self.observed.recipes.count > 1 {
+                                if geometry.frame(in: .global).minY <= 0 {
+                                    URLImage((URL(string: self.observed.recipes[self.selectedChoice].imageUrl))!){ proxy in
+                                    proxy.image
+                                        .resizable()                     // Make image resizable
+                                        .renderingMode(.original)
 
-                                
-//                                Image(self.observed.recipes[self.selectedChoice].imageUrl)
-//                                .resizable()
-//                                .aspectRatio(contentMode: .fill)
-//                                .frame(width: geometry.size.width, height: geometry.size.height)
-//                                .offset(y: geometry.frame(in: .global).minY/9)
-//                                .clipped()
-                            } else {
-//                                Image(self.observed.recipes[self.selectedChoice].imageUrl)
-//                                    .resizable()
-//                                    .aspectRatio(contentMode: .fill)
-//                                    .frame(width: geometry.size.width, height: geometry.size.height + geometry.frame(in: .global).minY)
-//                                    .clipped()
-//                                    .offset(y: -geometry.frame(in: .global).minY)
-                                
-                                URLImage((URL(string: self.observed.recipes[self.selectedChoice].imageUrl))!){ proxy in
-                                proxy.image
-                                    .resizable()                     // Make image resizable
-                                    .renderingMode(.original)
-                                    .aspectRatio(contentMode: .fill) // Fill the frame
-                                    .frame(width: geometry.size.width, height: geometry.size.height + geometry.frame(in: .global).minY)
-                                    .clipped()                       // Clip overlaping parts
-                                }
-                                .offset(y: -geometry.frame(in: .global).minY)
+                                        .aspectRatio(contentMode: .fill) // Fill the frame
+                                        .frame(width: geometry.size.width, height: geometry.size.height)
+                                        .clipped()                       // Clip overlaping parts
+                                    }
+                                    .offset(y: geometry.frame(in: .global).minY/9)
+                                } else {
+                                    URLImage((URL(string: self.observed.recipes[self.selectedChoice].imageUrl))!){ proxy in
+                                    proxy.image
+                                        .resizable()                     // Make image resizable
+                                        .renderingMode(.original)
+                                        .aspectRatio(contentMode: .fill) // Fill the frame
+                                        .frame(width: geometry.size.width, height: geometry.size.height + geometry.frame(in: .global).minY)
+                                        .clipped()                       // Clip overlaping parts
+                                    }
+                                    .offset(y: -geometry.frame(in: .global).minY)
 
+                                }
                             }
                         }
                     }
                     .frame(height: 400)
                     
                     VStack(alignment: .leading) {
-                        TitleView(title: self.observed.recipes[self.selectedChoice].title, metrics: [self.observed.recipes[self.selectedChoice].rating, self.observed.recipes[self.selectedChoice].difficulty, self.observed.recipes[self.selectedChoice].cookTime])
-                        .padding([.leading], 24)
-                        
-                        ListView(contents: self.observed.recipes[self.selectedChoice].ingredients).padding([.leading, .top, .bottom], 24)
+                        if self.observed.recipes.count > 1 {
+                            TitleView(title: self.observed.recipes[self.selectedChoice].title, metrics: [self.observed.recipes[self.selectedChoice].rating, self.observed.recipes[self.selectedChoice].difficulty, self.observed.recipes[self.selectedChoice].cookTime])
+                            .padding([.leading], 24)
+                            
+                            ListView(contents: self.observed.recipes[self.selectedChoice].ingredients).padding([.leading, .top, .bottom], 24)
+                        }
                     }
                     
                 }.edgesIgnoringSafeArea(.top)

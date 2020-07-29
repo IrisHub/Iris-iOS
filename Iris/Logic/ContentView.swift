@@ -15,7 +15,7 @@ struct Card {
     var shortcuts: [String]
 }
 
-struct DiscoveryItem: Hashable, Identifiable {
+struct DiscoveryItem: Hashable, Identifiable, Codable {
     var id: String = "1"
     var title: String
     var imageUrl: String
@@ -24,20 +24,20 @@ struct DiscoveryItem: Hashable, Identifiable {
     var ideas: Bool = false
 }
 
-struct PreferenceItem: Hashable, Identifiable {
+struct PreferenceItem: Hashable, Identifiable, Codable {
     var id: String = "1"
     var title: String
     var selected: Bool = false
 }
 
-struct Preference: Hashable, Identifiable {
+struct Preference: Hashable, Identifiable, Codable {
     var id: String = "1"
     var title: String
     var type: String
     var items: [PreferenceItem]
 }
 
-struct Recipe: Hashable, Identifiable {
+struct Recipe: Hashable, Identifiable, Codable {
     var id: String = "1"
     var title: String
     var rating: String
@@ -49,6 +49,52 @@ struct Recipe: Hashable, Identifiable {
 }
 
 
+class TopChoicesObserver : ObservableObject {
+    init() {
+        getTopChoices()
+    }
+        
+    @Published var recipes = [Recipe]()
+    @Published var category: String = "ingredient"
+    @Published var title: String = "None"
+    @Published var item: String = "None"
+    @Published var subtitle: String = "None"
+
+    func getTopChoices() {
+        let parameters = [
+            "user_id": "17ef5c4b-3ac9-4548-a309-41e30a61c6e8",
+            "query_type": "ingredient",
+            "query_string": "Chicken"
+        ]
+        let headers : HTTPHeaders = ["Content-Type": "application/json"]
+        AF.request("https://e2nmwaykqf.execute-api.us-west-1.amazonaws.com/alpha/cookingcardresults", method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
+            .responseJSON { response in
+            do {
+                let json = try JSON(data: response.data ?? Data())
+                print(json)
+                if let category = json["category"].string {
+                    self.category = category
+                }
+                if let title = json["title"].string {
+                    self.title = title
+                }
+                if let item = json["item"].string {
+                    self.item = item
+                }
+                if let subtitle = json["subtitle"].string {
+                    self.subtitle = subtitle
+                }
+
+                for (_,subJson):(String, JSON) in json["results"] {
+                    self.recipes.append(Recipe(id: subJson["id"].stringValue, title: subJson["title"].stringValue, rating: subJson["rating"].stringValue, cookTime: subJson["cook_time"].stringValue, difficulty: subJson["difficulty"].stringValue, imageUrl: subJson["image_url"].stringValue, ingredients: subJson["ingredients"].arrayValue.map { $0.stringValue}, link: subJson["link"].stringValue))
+                }
+            } catch {
+                print("error")
+            }
+        }
+    }
+
+}
 
 
 
@@ -62,7 +108,6 @@ class Observer : ObservableObject{
     init() {
         getSuggestions()
         getPreferences()
-        getTopChoices()
     }
     
     func getSuggestions() {
@@ -122,46 +167,6 @@ class Observer : ObservableObject{
             }
         }
     }
-    
-    
-    @Published var recipes = [Recipe]()
-    @Published var category: String = "ingredient"
-    @Published var recipeTitle: String = "None"
-    @Published var recipeItem: String = "None"
-    @Published var recipeSubtitle: String = "None"
-
-    func getTopChoices() {
-        let parameters = [
-            "user_id": "17ef5c4b-3ac9-4548-a309-41e30a61c6e8",
-            "query_type": "ingredient",
-            "query_body": "Chicken"
-        ]
-        let headers : HTTPHeaders = ["Content-Type": "application/json"]
-        AF.request("https://e2nmwaykqf.execute-api.us-west-1.amazonaws.com/alpha/cookingcardresults", method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
-            .responseJSON { response in
-            do {
-                let json = try JSON(data: response.data ?? Data(), options: .allowFragments)
-                if let category = json["category"].string {
-                    self.category = category
-                }
-                if let title = json["title"].string {
-                    self.recipeTitle = title
-                }
-                if let item = json["item"].string {
-                    self.recipeItem = item
-                }
-                if let subtitle = json["subtitle"].string {
-                    self.recipeSubtitle = subtitle
-                }
-
-                for (_,subJson):(String, JSON) in json["results"] {
-                    self.recipes.append(Recipe(id: subJson["id"].stringValue, title: subJson["title"].stringValue, rating: subJson["rating"].stringValue, cookTime: subJson["cook_time"].stringValue, difficulty: subJson["difficulty"].stringValue, imageUrl: subJson["image_url"].stringValue, ingredients: subJson["ingredients"].arrayValue.map { $0.stringValue}, link: subJson["link"].stringValue))
-                }
-            } catch {
-                print("error")
-            }
-        }
-    }
 
 }
 
@@ -192,7 +197,8 @@ struct ContentView: View {
     @State var searchPresented: Bool = false
     @State var preferencesPresented: Bool = false
     @ObservedObject var observed = Observer()
-    
+    @ObservedObject var observedTopChoices = TopChoicesObserver()
+
     init(data: [DiscoveryItem], spacing: CGFloat = 5) {
         self.spacing = spacing
         self.headerTop = "Header Top"
@@ -244,7 +250,7 @@ struct ContentView: View {
                             // Search view
                             GeometryReader { geometry in
                                 VStack {
-                                    NavigationLink(destination: DiscoverySearch(searchPresented: self.$searchPresented, observed: self.observed), isActive: self.$searchPresented) { EmptyView() }
+                                    NavigationLink(destination: DiscoverySearch(searchPresented: self.$searchPresented, observed: self.observed, observedTopChoices: self.observedTopChoices), isActive: self.$searchPresented) { EmptyView() }
                                     if geometry.frame(in: .global).minY >= UIApplication.topInset {
                                         ZStack {
                                             retinaSearchButton(text: self.searchBarText, color: .retinaOverlayDark, backgroundColor: .retinaOverflow, action: { self.searchPresented = true })
@@ -273,7 +279,7 @@ struct ContentView: View {
                                             $0.discover == true && $0.category == "ingredient"
                                         }, id: \.self) { item in
                                             NavigationLink(
-                                            destination: TopChoicesView()) {
+                                            destination: TopChoicesView(observed: self.observedTopChoices)) {
                                                 DiscoveryCell(title: item.title, backgroundImageUrl: item.imageUrl).padding([.leading, .trailing], 6)
                                             }.buttonStyle(PlainButtonStyle())
                                         }
@@ -291,7 +297,7 @@ struct ContentView: View {
                                             $0.discover == true && $0.category == "dish"
                                         }, id: \.self) { item in
                                             NavigationLink(
-                                            destination: TopChoicesView()) {
+                                            destination: TopChoicesView(observed: self.observedTopChoices)) {
                                                 DiscoveryCell(title: item.title, backgroundImageUrl: item.imageUrl).padding([.leading, .trailing], 6)
                                             }.buttonStyle(PlainButtonStyle())
                                         }
@@ -310,7 +316,7 @@ struct ContentView: View {
                                             $0.discover == true && $0.category == "cuisine"
                                         }, id: \.self) { item in
                                             NavigationLink(
-                                            destination: TopChoicesView()) {
+                                            destination: TopChoicesView(observed: self.observedTopChoices)) {
                                                 DiscoveryCell(title: item.title, backgroundImageUrl: item.imageUrl).padding([.leading, .trailing], 6)
                                             }.buttonStyle(PlainButtonStyle())
                                         }

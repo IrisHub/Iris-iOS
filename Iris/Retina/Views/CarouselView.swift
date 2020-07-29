@@ -16,6 +16,7 @@ struct CarouselView: View
     @Binding var recipePresented : Bool
     @Binding var selectedChoice: Int
     @ObservedObject var observed: TopChoicesObserver
+    var feedbackCommit : ()->()
     
     var body: some View
     {
@@ -45,7 +46,7 @@ struct CarouselView: View
                                 })
                                 .alert(isPresented: self.$showingAlert) {
                                     Alert(title: Text("Was this recipe helpful?"), message: Text(""), primaryButton: .default(Text("Not Helpful"), action: {
-                                        self.showBanner = true
+                                        self.showBanner = true; self.feedbackCommit()
                                     }), secondaryButton: .default(Text("Cancel")))
                                 }
                             }

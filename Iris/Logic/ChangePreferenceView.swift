@@ -7,28 +7,61 @@
 //
 
 import SwiftUI
+import Alamofire
 
 struct ChangePreferenceView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @ObservedObject var observed: Observer
     @State var preference: Preference
     @State var items: [PreferenceItem]
 
     var body: some View {
         VStack {
-            TopNavigationView(title: "Your Cuisines", bolded: "", subtitle: preference.type == "single_select" ? "Select one option" : "Select multiple options", leftIconString: "chevron.left", rightIconStrings: ["", ""], buttonCommits: [{self.presentationMode.wrappedValue.dismiss()}, {}, {}])
+            TopNavigationView(title: "Your Cuisines", bolded: "", subtitle: preference.type == "single_select" ? "Select one option" : "Select multiple options", leftIconString: "chevron.left", rightIconStrings: ["", ""], buttonCommits: [{self.presentationMode.wrappedValue.dismiss(); self.convertToJSON()}, {}, {}])
             .edgesIgnoringSafeArea(.horizontal)
             .edgesIgnoringSafeArea(.top)
             
             if preference.type == "single_select" {
-                SingleSelectView(items: items, preference: $preference)
+                SingleSelectView(items: $items, preference: $preference)
             } else {
-                MultiSelectView(items: items, preference: $preference)
+                MultiSelectView(items: $items, preference: $preference)
             }
         }
         .background(Color.retinaBase)
         .navigationBarBackButtonHidden(true)
         .navigationBarTitle("")
         .navigationBarHidden(true)
+    }
+        
+    func convertToJSON() {
+        struct ChangedPreference: Codable {
+            var user_id: String = "17ef5c4b-3ac9-4548-a309-41e30a61c6e8"
+            var preference: Preference
+        }
+
+        // Updates the table for the User
+        if let location = self.observed.preferences.firstIndex(where: {$0.title.caseInsensitiveCompare(self.preference.title) == .orderedSame}) {
+            self.observed.preferences[location] = self.preference
+        }
+
+        // Create a copy of the preference so we can filter out items that are not selected
+        var preference: Preference = self.preference
+        preference.items = self.items.filter { $0.selected }
+
+        do {
+            let pref = ChangedPreference(preference: preference)
+            let jsonData = try JSONEncoder().encode(pref)
+            let jsonString = String(data: jsonData, encoding: .utf8)!
+            print(jsonString)
+            
+            let parameters = convertToDictionary(text: jsonString)
+            let headers : HTTPHeaders = ["Content-Type": "application/json"]
+            AF.request("https://e2nmwaykqf.execute-api.us-west-1.amazonaws.com/alpha/preferencesupdate", method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
+                .responseJSON { response in
+                print(response)
+            }
+            
+        } catch { print(error) }
     }
 }
 
