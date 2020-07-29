@@ -7,28 +7,38 @@
 //
 
 import SwiftUI
+import URLImage
 
 struct HomeCell: View {
     var id:     Int
-    var name:   String = ""
-//    var commitDestination: Content
+    var recipe:   Recipe
     @Binding var recipePresented : Bool
+    @Binding var selectedChoice: Int
 
     var body: some View {
         ZStack(alignment: .top) {
 
             VStack(alignment: .leading) {
                 HStack(alignment: .top) {
-                    HorizontalLabel(text: "1 of 3").padding(.top, 12)
+                    HorizontalLabel(text: "1 of " + String(id+1)).padding(.top, 12)
                     Button(action: {
                         withAnimation {
+                            self.selectedChoice = self.id
                             self.recipePresented.toggle()
                         }
                     }) {
-                        Image("food").retinaRectangle(width: 320, height: 420)
+//                        Image(recipe.imageUrl).retinaRectangle(width: 320, height: 420)
+                        
+                        URLImage((URL(string: recipe.imageUrl))!){ proxy in
+                        proxy.image
+                            .resizable()                     // Make image resizable
+                            .renderingMode(.original)
+                            .aspectRatio(contentMode: .fill) // Fill the frame
+                            .frame(width: 320, height: 420)
+                            .clipped()                       // Clip overlaping parts
+                            
+                        }
                     }
-//                    NavigationLink(destination: self.commitDestination) {
-//                    }
                     
                     Spacer()
                 }.frame(width: UIScreen.screenWidth)
@@ -38,11 +48,9 @@ struct HomeCell: View {
                         self.recipePresented.toggle()
                     }
                 }) {
-                    TitleView(title: "Pasta with Broccoli and Cheddar Cheese", metrics: ["99% liked", "Intermediate", "30min"])
+                    TitleView(title: recipe.title, metrics: [recipe.rating, recipe.difficulty, recipe.cookTime])
                 }
 
-//                NavigationLink(destination: self.commitDestination) {
-//                }
                 .frame(height: 140)
                 .padding([.leading], 24)
 
@@ -51,9 +59,9 @@ struct HomeCell: View {
     }
 }
 
-struct HomeCell_Previews: PreviewProvider {
-    @State static var recipePresented: Bool = false
-    static var previews: some View {
-        HomeCell(id: 0, name: "Hello", recipePresented: $recipePresented)
-    }
-}
+//struct HomeCell_Previews: PreviewProvider {
+//    @State static var recipePresented: Bool = false
+//    static var previews: some View {
+//        HomeCell(id: 0, name: "Hello", recipePresented: $recipePresented)
+//    }
+//}

@@ -10,15 +10,20 @@ import SwiftUI
 
 struct ChangePreferenceView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-    @State static var settings = ["pEars", "apples"]
+    @State var preference: Preference
+    @State var items: [PreferenceItem]
 
     var body: some View {
         VStack {
-            TopNavigationView(title: "Your Cuisines", bolded: "", subtitle: "Select multiple options", leftIconString: "chevron.left", rightIconStrings: ["", ""], buttonCommits: [{self.presentationMode.wrappedValue.dismiss()}, {}, {}])
+            TopNavigationView(title: "Your Cuisines", bolded: "", subtitle: preference.type == "single_select" ? "Select one option" : "Select multiple options", leftIconString: "chevron.left", rightIconStrings: ["", ""], buttonCommits: [{self.presentationMode.wrappedValue.dismiss()}, {}, {}])
             .edgesIgnoringSafeArea(.horizontal)
             .edgesIgnoringSafeArea(.top)
             
-            MultiSelectView(settings: ["apples", "pears", "bananas", "pineapples"], selectedSettings: ChangePreferenceView.settings)
+            if preference.type == "single_select" {
+                SingleSelectView(items: items, preference: $preference)
+            } else {
+                MultiSelectView(items: items, preference: $preference)
+            }
         }
         .background(Color.retinaBase)
         .navigationBarBackButtonHidden(true)
@@ -27,8 +32,8 @@ struct ChangePreferenceView: View {
     }
 }
 
-struct ChangePreferenceView_Previews: PreviewProvider {
-    static var previews: some View {
-        ChangePreferenceView()
-    }
-}
+//struct ChangePreferenceView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ChangePreferenceView(preference: <#Preference#>, items: <#[PreferenceItem]#>)
+//    }
+//}

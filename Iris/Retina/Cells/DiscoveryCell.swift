@@ -15,15 +15,15 @@ struct DiscoveryCell: View {
 
     var body: some View {
         ZStack {
-            URLImage((URL(string: backgroundImageUrl))!, delay: 0.25){ proxy in
+            URLImage((URL(string: backgroundImageUrl))!){ proxy in
             proxy.image
                 .resizable()                     // Make image resizable
                 .aspectRatio(contentMode: .fill) // Fill the frame
                 .frame(width: 182, height: 182)
                 .clipped()                       // Clip overlaping parts
             }
-            Rectangle().frame(width: 182, height: 182).opacity(0.4)
-            Text(title).frame(width: 160, height: 182).foregroundColor(.white).retinaTypography(.p5_main)
+            Rectangle().frame(width: 182, height: 182).foregroundColor(.retinaOverflow).opacity(0.3)
+            Text(title).frame(width: 160, height: 182).foregroundColor(.retinaSnowWhite).retinaTypography(.p5_main)
                 .multilineTextAlignment(.center)
         }
     }

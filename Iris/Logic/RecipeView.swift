@@ -8,14 +8,19 @@
 
 import SwiftUI
 import SafariServices
+import URLImage
 
 struct RecipeView: View {
 //    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
 
     // whether or not to show the Safari ViewController
+    @ObservedObject var observed: TopChoicesObserver
+    var selectedChoice: Int
+
     @State var showSafari = false
     // initial URL string
     @State var urlString = "https://ifoodreal.com/healthy-iced-coffee/"
+    @State var imageURL = "None"
     @Binding var recipePresented : Bool
     
     var body: some View {
@@ -25,31 +30,52 @@ struct RecipeView: View {
                     GeometryReader { geometry in
                         ZStack {
                             if geometry.frame(in: .global).minY <= 0 {
-                                Image("food")
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(width: geometry.size.width, height: geometry.size.height)
+                                
+                                URLImage((URL(string: self.observed.recipes[self.selectedChoice].imageUrl))!){ proxy in
+                                proxy.image
+                                    .resizable()                     // Make image resizable
+                                    .renderingMode(.original)
+                                    .aspectRatio(contentMode: .fill) // Fill the frame
+                                    .frame(width: geometry.size.width, height: geometry.size.height)
+                                    .clipped()                       // Clip overlaping parts
+                                }
                                 .offset(y: geometry.frame(in: .global).minY/9)
-                                .clipped()
+
+                                
+//                                Image(self.observed.recipes[self.selectedChoice].imageUrl)
+//                                .resizable()
+//                                .aspectRatio(contentMode: .fill)
+//                                .frame(width: geometry.size.width, height: geometry.size.height)
+//                                .offset(y: geometry.frame(in: .global).minY/9)
+//                                .clipped()
                             } else {
-                                Image("food")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
+//                                Image(self.observed.recipes[self.selectedChoice].imageUrl)
+//                                    .resizable()
+//                                    .aspectRatio(contentMode: .fill)
+//                                    .frame(width: geometry.size.width, height: geometry.size.height + geometry.frame(in: .global).minY)
+//                                    .clipped()
+//                                    .offset(y: -geometry.frame(in: .global).minY)
+                                
+                                URLImage((URL(string: self.observed.recipes[self.selectedChoice].imageUrl))!){ proxy in
+                                proxy.image
+                                    .resizable()                     // Make image resizable
+                                    .renderingMode(.original)
+                                    .aspectRatio(contentMode: .fill) // Fill the frame
                                     .frame(width: geometry.size.width, height: geometry.size.height + geometry.frame(in: .global).minY)
-                                    .clipped()
-                                    .offset(y: -geometry.frame(in: .global).minY)
+                                    .clipped()                       // Clip overlaping parts
+                                }
+                                .offset(y: -geometry.frame(in: .global).minY)
+
                             }
                         }
                     }
                     .frame(height: 400)
                     
                     VStack(alignment: .leading) {
-                        TitleView(title: "Chicken Avocado", metrics: ["99% liked", "Intermediate", "30min"])
+                        TitleView(title: self.observed.recipes[self.selectedChoice].title, metrics: [self.observed.recipes[self.selectedChoice].rating, self.observed.recipes[self.selectedChoice].difficulty, self.observed.recipes[self.selectedChoice].cookTime])
                         .padding([.leading], 24)
                         
-                        ListView(contents: ["1 cup day old rice", "1 egg (yolk and white separated)", "1/2 cup frozen veggies ", "1/2 tbsp ham", "1/2 tbsp of thinly sliced chinese sausage", "2 tsp shaoxing rice wine ", "2 tsp dark soy sauce (replacable with regular soy sauce)", "Pinch of white pepper"]).padding([.leading, .top, .bottom], 24)
-
-                        
+                        ListView(contents: self.observed.recipes[self.selectedChoice].ingredients).padding([.leading, .top, .bottom], 24)
                     }
                     
                 }.edgesIgnoringSafeArea(.top)
@@ -78,7 +104,7 @@ struct RecipeView: View {
                         Spacer()
                         retinaButton(text: "See Recipe Steps", style: .outlineOnly, color: .retinaPink, action: {
                             // update the URL if you'd like to
-                            self.urlString = "https://ifoodreal.com/healthy-iced-coffee/"
+                            self.urlString = self.observed.recipes[self.selectedChoice].link
                             // tell the app that we want to show the Safari VC
                             self.showSafari = true
                         }).frame(width: 180, height: 36, alignment: .trailing).padding(24).padding(.bottom,12)
@@ -95,9 +121,9 @@ struct RecipeView: View {
     }
 }
 
-struct RecipeView_Previews: PreviewProvider {
-    @State static var recipePresented : Bool = true
-    static var previews: some View {
-        RecipeView(recipePresented: $recipePresented)
-    }
-}
+//struct RecipeView_Previews: PreviewProvider {
+//    @State static var recipePresented : Bool = true
+//    static var previews: some View {
+//        RecipeView(recipePresented: $recipePresented)
+//    }
+//}

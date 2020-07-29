@@ -59,8 +59,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 //        let contentView = SettingsView(titles: ["Diet", "Food I don’t eat", "Time I have to cook Lunch", "Time I have to cook Dinner", "My cooking level", "Spice Tolerance", "See meals that are", "Top Cuisines"], settings: ["Vegan", "Eggs", "30min", "1 hour", "Intermediate", "Low", "Healthy", "American"])
 
         let contentView = //RecipeView()
-//        ContentView(data: data, spacing: -10)
-        SecondView()
+        ContentView(data: data, spacing: -10)
+//        SecondView()
 
 
 

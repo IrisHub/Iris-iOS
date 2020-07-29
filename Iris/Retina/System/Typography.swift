@@ -51,7 +51,7 @@ public struct RetinaTypography: ViewModifier {
     private func getName(_ family: Family, _ weight: Weight) -> String {
         let fontWeight = weight.rawValue.capitalizingFirstLetter()
         let familyName = family.rawValue
-        print("\(familyName)-\(fontWeight)")
+//        print("\(familyName)-\(fontWeight)")
         return "\(familyName)-\(fontWeight)"
     }
     

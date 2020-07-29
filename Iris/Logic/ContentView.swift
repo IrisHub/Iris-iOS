@@ -24,6 +24,31 @@ struct DiscoveryItem: Hashable, Identifiable {
     var ideas: Bool = false
 }
 
+struct PreferenceItem: Hashable, Identifiable {
+    var id: String = "1"
+    var title: String
+    var selected: Bool = false
+}
+
+struct Preference: Hashable, Identifiable {
+    var id: String = "1"
+    var title: String
+    var type: String
+    var items: [PreferenceItem]
+}
+
+struct Recipe: Hashable, Identifiable {
+    var id: String = "1"
+    var title: String
+    var rating: String
+    var cookTime: String
+    var difficulty: String
+    var imageUrl: String
+    var ingredients: [String]
+    var link: String
+}
+
+
 
 
 
@@ -36,12 +61,15 @@ class Observer : ObservableObject{
     
     init() {
         getSuggestions()
+        getPreferences()
+        getTopChoices()
     }
     
     func getSuggestions() {
         AF.request("https://e2nmwaykqf.execute-api.us-west-1.amazonaws.com/alpha/cookingcardsearch")
             .responseJSON { response in
-                let json = try! JSON(data: response.data ?? Data())
+            do {
+                let json = try JSON(data: response.data ?? Data())
                 if let title = json["title"].string {
                     self.title = title
                 }
@@ -55,8 +83,86 @@ class Observer : ObservableObject{
                     print(item)
                     self.discoveryItems.append(item)
                 }
+            } catch {
+                print("error")
+            }
         }
     }
+    
+    @Published var preferences = [Preference]()
+    @Published var etching: String = "None"
+    @Published var userNumber: String = "None"
+    
+    func getPreferences() {
+        let parameters = ["user_id": "17ef5c4b-3ac9-4548-a309-41e30a61c6e8"]
+        let headers : HTTPHeaders = ["Content-Type": "application/json"]
+        AF.request("https://e2nmwaykqf.execute-api.us-west-1.amazonaws.com/alpha/preferencesget", method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
+            .responseJSON { response in
+            do {
+                let json = try JSON(data: response.data ?? Data(), options: .allowFragments)
+                if let etching = json["etching"].string {
+                    self.etching = etching
+                }
+                if let userNumber = json["user_number"].string {
+                    self.userNumber = userNumber
+                }
+
+                for (i,subJson):(String, JSON) in json["preferences"] {
+                    var items = [PreferenceItem]()
+                    for (j,item):(String, JSON) in subJson["items"] {
+                        let prefItem = PreferenceItem(id: j, title: item["name"].stringValue, selected: item["selected"].boolValue)
+                        items.append(prefItem)
+                    }
+                    let preference = Preference(id: i, title: subJson["title"].stringValue, type: subJson["type"].stringValue, items: items)
+                    print(preference)
+                    self.preferences.append(preference)
+                }
+            } catch {
+                print("error")
+            }
+        }
+    }
+    
+    
+    @Published var recipes = [Recipe]()
+    @Published var category: String = "ingredient"
+    @Published var recipeTitle: String = "None"
+    @Published var recipeItem: String = "None"
+    @Published var recipeSubtitle: String = "None"
+
+    func getTopChoices() {
+        let parameters = [
+            "user_id": "17ef5c4b-3ac9-4548-a309-41e30a61c6e8",
+            "query_type": "ingredient",
+            "query_body": "Chicken"
+        ]
+        let headers : HTTPHeaders = ["Content-Type": "application/json"]
+        AF.request("https://e2nmwaykqf.execute-api.us-west-1.amazonaws.com/alpha/cookingcardresults", method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
+            .responseJSON { response in
+            do {
+                let json = try JSON(data: response.data ?? Data(), options: .allowFragments)
+                if let category = json["category"].string {
+                    self.category = category
+                }
+                if let title = json["title"].string {
+                    self.recipeTitle = title
+                }
+                if let item = json["item"].string {
+                    self.recipeItem = item
+                }
+                if let subtitle = json["subtitle"].string {
+                    self.recipeSubtitle = subtitle
+                }
+
+                for (_,subJson):(String, JSON) in json["results"] {
+                    self.recipes.append(Recipe(id: subJson["id"].stringValue, title: subJson["title"].stringValue, rating: subJson["rating"].stringValue, cookTime: subJson["cook_time"].stringValue, difficulty: subJson["difficulty"].stringValue, imageUrl: subJson["image_url"].stringValue, ingredients: subJson["ingredients"].arrayValue.map { $0.stringValue}, link: subJson["link"].stringValue))
+                }
+            } catch {
+                print("error")
+            }
+        }
+    }
+
 }
 
 
@@ -218,26 +324,14 @@ struct ContentView: View {
                 .navigationBarTitle("")
                 .navigationBarHidden(true)
             }.background(Color.retinaSurface).edgesIgnoringSafeArea(.bottom)
-            
-            
-//            if self.preferencesPresented {
-//                PreferencesView(titles: ["Diet", "Food I don’t eat", "Time I have to cook Lunch", "Time I have to cook Dinner", "My cooking level", "Spice Tolerance", "See meals that are", "Top Cuisines"], settings: ["Vegan", "Eggs", "30min", "1 hour", "Intermediate", "Low", "Healthy", "American"], preferencesPresented: $preferencesPresented)
-//                .transition(.asymmetric(insertion: .move(edge: .bottom), removal: .opacity))
-//                    .animation(.easeInOut(duration: 0.2))
-//            }
-            
             ZStack {
-                PreferencesView(titles: ["Diet", "Food I don’t eat", "Time I have to cook Lunch", "Time I have to cook Dinner", "My cooking level", "Spice Tolerance", "See meals that are", "Top Cuisines"], settings: ["Vegan", "Eggs", "30min", "1 hour", "Intermediate", "Low", "Healthy", "American"], preferencesPresented: $preferencesPresented).padding([.top, .bottom], UIApplication.bottomInset)
+                PreferencesView(preferencesPresented: $preferencesPresented, observed: self.observed).padding([.top, .bottom], UIApplication.bottomInset)
             }
             .edgesIgnoringSafeArea(.all)
             .offset(x: 0, y: self.preferencesPresented ? 0 : UIScreen.screenHeight + UIApplication.bottomInset)
             
 
         }
-            
-            
-//        .overlay(self.preferencesPresented ? PreferencesView(titles: ["Diet", "Food I don’t eat", "Time I have to cook Lunch", "Time I have to cook Dinner", "My cooking level", "Spice Tolerance", "See meals that are", "Top Cuisines"], settings: ["Vegan", "Eggs", "30min", "1 hour", "Intermediate", "Low", "Healthy", "American"], preferencesPresented: $preferencesPresented) : nil)
-        
     }
 }
 
@@ -264,7 +358,6 @@ struct ContentView: View {
 
 
 struct ContentView_Previews: PreviewProvider {
-    
     @State static var data = [
         DiscoveryItem(title: "Chicken", imageUrl: "food", category: "Ingredient"),
         DiscoveryItem(title: "Beef", imageUrl: "food", category: "Ingredient"),

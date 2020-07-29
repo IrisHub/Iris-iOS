@@ -14,7 +14,8 @@ struct CarouselView: View
     @State private var showingAlert = false
     @Binding var showBanner : Bool
     @Binding var recipePresented : Bool
-
+    @Binding var selectedChoice: Int
+    @ObservedObject var observed: TopChoicesObserver
     
     var body: some View
     {
@@ -22,11 +23,10 @@ struct CarouselView: View
         let widthOfHiddenCards: CGFloat = 10    // UIScreen.main.bounds.width - 10
         let cardHeight:         CGFloat = 400
 
-        let items = [
-            HomeCell( id: 0, name: "Hey", recipePresented: self.$recipePresented ),
-            HomeCell( id: 1, name: "Ho", recipePresented: self.$recipePresented ),
-            HomeCell( id: 2, name: "Lets", recipePresented: self.$recipePresented )
-                    ]
+        var items: [HomeCell] = [HomeCell]()
+        for idx in 0..<self.observed.recipes.count {
+            items.append(HomeCell(id: idx, recipe: self.observed.recipes[idx], recipePresented: self.$recipePresented, selectedChoice: self.$selectedChoice))
+        }
         
         return  Canvas
                 {
@@ -181,12 +181,12 @@ struct Item<Content: View>: View {
     }
 }
 
-struct CarouselView_Previews: PreviewProvider {
-    static var state: UIStateModel = UIStateModel()
-    @State static var recipePresented: Bool = false
-    @State static var showBanner:Bool = false
-    static var previews: some View {
-        // Create the SwiftUI view that provides the window contents.
-        CarouselView(UIState: state, showBanner: $showBanner, recipePresented: $recipePresented)
-    }
-}
+//struct CarouselView_Previews: PreviewProvider {
+//    static var state: UIStateModel = UIStateModel()
+//    @State static var recipePresented: Bool = false
+//    @State static var showBanner:Bool = false
+//    static var previews: some View {
+//        // Create the SwiftUI view that provides the window contents.
+//        CarouselView(UIState: state, showBanner: $showBanner, recipePresented: $recipePresented, observed: <#Observer#>)
+//    }
+//}

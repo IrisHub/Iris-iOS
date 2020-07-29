@@ -9,9 +9,8 @@
 import SwiftUI
 
 struct PreferencesView: View {
-    var titles: [String]
-    var settings: [String]
     @Binding var preferencesPresented: Bool
+    @ObservedObject var observed: Observer
 
     var body: some View {
         NavigationView {
@@ -24,7 +23,6 @@ struct PreferencesView: View {
                             .foregroundColor(.white)
                         .padding(.leading, 24)
                         Spacer()
-    //                    Image(systemName: "xmark").foregroundColor(.white).retinaTypography(.h4).padding(.trailing, 24)
                         
                         Button(action: {
                             withAnimation {
@@ -34,28 +32,27 @@ struct PreferencesView: View {
                             Image(systemName: "xmark").foregroundColor(.white).retinaTypography(.h5_main)
                         }.padding(.trailing, 24)
 
-                        
                     }.padding(.top, 80)
                     
                     ScrollView(.vertical) {
-                        ForEach(0 ..< settings.count) { idx in
+                        ForEach(self.observed.preferences, id: \.self) { preference in
                             ZStack {
-                                NavigationLink(destination: ChangePreferenceView()) {
-                                    SettingsCell(title: self.titles[idx], setting: self.settings[idx]).listRowInsets(EdgeInsets())
+                                NavigationLink(destination: ChangePreferenceView(preference: preference, items: preference.items)) {
+                                    SettingsCell(preference: preference)
                                 }
                             }
                         }
                         
                         Divider().frame(height: 2).background(Color.retinaOverlayDark).listRowInsets(EdgeInsets()).padding(.top, 24)
 
-                        SettingsCell(title: "", setting: "Privacy Policy").listRowInsets(EdgeInsets())
-                        SettingsCell(title: "", setting: "Terms of Service").listRowInsets(EdgeInsets())
+//                        SettingsCell(title: "", setting: "Privacy Policy").listRowInsets(EdgeInsets())
+//                        SettingsCell(title: "", setting: "Terms of Service").listRowInsets(EdgeInsets())
                         
                         HStack(alignment: .top) {
                             Image("irissmall").resizable().padding(.trailing, 12).frame(width: 37, height: 33)
                             VStack(alignment: .leading) {
-                                Text("Crafted for Shalin on May 22nd 2020").foregroundColor(.retinaWinterGrey).retinaTypography(.p6_secondary)
-                                Text("User #1").foregroundColor(.retinaWinterGrey).retinaTypography(.p6_secondary)
+                                Text(observed.etching).foregroundColor(.retinaWinterGrey).retinaTypography(.p6_secondary)
+                                Text(observed.userNumber).foregroundColor(.retinaWinterGrey).retinaTypography(.p6_secondary)
                             }
                             Spacer()
                         }.padding([.top,.leading,.bottom], 24)
@@ -68,8 +65,9 @@ struct PreferencesView: View {
 
 struct PreferencesView_Previews: PreviewProvider {
     @State static var preferencesPresented: Bool = false
+    @ObservedObject static var observed = Observer()
 
     static var previews: some View {
-        PreferencesView(titles: ["Diet", "Food I don’t eat", "Time I have to cook Lunch", "Time I have to cook Dinner", "My cooking level", "Spice Tolerance", "See meals that are", "Top Cuisines"], settings: ["Vegan", "Eggs", "30min", "1 hour", "Intermediate", "Low", "Healthy", "American"], preferencesPresented: $preferencesPresented)
+        PreferencesView(preferencesPresented: $preferencesPresented, observed: self.observed)
     }
 }
