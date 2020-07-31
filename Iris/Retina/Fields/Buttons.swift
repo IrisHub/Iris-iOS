@@ -162,7 +162,7 @@ struct retinaSearchButton: View {
             Button(action: action, label: {
                 HStack() {
                     HStack(spacing: 12) {
-                        Image(systemName: "magnifyingglass").padding(6).foreground(Color.retinaPink)
+                        Image(systemName: "magnifyingglass").padding(6).foregroundColor(.retinaPink)
                         Text(text ?? "").retinaTypography(.p6_main)
                     }
                     Spacer()
@@ -189,7 +189,7 @@ struct retinaIconButton: View {
             })
         }
         .frame(width: 48, height: 48)
-        .background(backgroundColor.opacity(0.8))
+        .background(backgroundColor.opacity(0.6))
         .cornerRadius(2)
     }
 }

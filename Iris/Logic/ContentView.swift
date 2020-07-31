@@ -62,12 +62,12 @@ class TopChoicesObserver : ObservableObject {
 
     func getTopChoices() {
         let parameters = [
-            "user_id": "17ef5c4b-3ac9-4548-a309-41e30a61c6e8",
+            "user_id": UserDefaults.standard.string(forKey: "userID"),
             "query_type": "ingredient",
             "query_string": "Chicken"
         ]
         let headers : HTTPHeaders = ["Content-Type": "application/json"]
-        AF.request("https://e2nmwaykqf.execute-api.us-west-1.amazonaws.com/alpha/cookingcardresults", method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
+        AF.request("https://e2nmwaykqf.execute-api.us-west-1.amazonaws.com/alpha/cookingcardresults", method: .post, parameters: parameters as Parameters, encoding: JSONEncoding.default, headers: headers)
             .responseJSON { response in
             do {
                 let json = try JSON(data: response.data ?? Data())
@@ -139,9 +139,9 @@ class Observer : ObservableObject{
     @Published var userNumber: String = "None"
     
     func getPreferences() {
-        let parameters = ["user_id": "17ef5c4b-3ac9-4548-a309-41e30a61c6e8"]
+        let parameters = ["user_id": UserDefaults.standard.string(forKey: "userID")]
         let headers : HTTPHeaders = ["Content-Type": "application/json"]
-        AF.request("https://e2nmwaykqf.execute-api.us-west-1.amazonaws.com/alpha/preferencesget", method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
+        AF.request("https://e2nmwaykqf.execute-api.us-west-1.amazonaws.com/alpha/preferencesget", method: .post, parameters: parameters as Parameters, encoding: JSONEncoding.default, headers: headers)
             .responseJSON { response in
             do {
                 let json = try JSON(data: response.data ?? Data(), options: .allowFragments)
@@ -187,7 +187,6 @@ class Observer : ObservableObject{
 
 
 struct ContentView: View {
-    var data: [DiscoveryItem]
     let spacing: CGFloat
     
     let headerTop: String
@@ -196,15 +195,18 @@ struct ContentView: View {
     
     @State var searchPresented: Bool = false
     @State var preferencesPresented: Bool = false
+    @State var topChoicesPresented: Bool = false
     @ObservedObject var observed = Observer()
     @ObservedObject var observedTopChoices = TopChoicesObserver()
+    
+    @State var showPreferencesAlert: Bool = false
 
-    init(data: [DiscoveryItem], spacing: CGFloat = 5) {
+
+    init(spacing: CGFloat = 5) {
         self.spacing = spacing
         self.headerTop = "Header Top"
         self.headerMain = "Main Title"
         self.searchBarText = "Search for a cuisine, ingredient, dish"
-        self.data = data
     }
     
     var body: some View {
@@ -218,12 +220,24 @@ struct ContentView: View {
                                     HStack(alignment: .top) {
                                         Spacer()
                                         Button(action: {
-                                            withAnimation {
-                                                self.preferencesPresented.toggle()
+                                            if UserDefaults.standard.bool(forKey: "preferencesSeen") == false {
+                                                self.showPreferencesAlert.toggle()
+                                            } else {
+                                                withAnimation {
+                                                    self.preferencesPresented = true
+                                                }
                                             }
                                         }) {
                                             Image(systemName: "line.horizontal.3.decrease").foregroundColor(.retinaSnowWhite).retinaTypography(.h4_main)
                                         }.padding(.trailing, 24)
+                                        .alert(isPresented: self.$showPreferencesAlert) {
+                                            Alert(title: Text("Review your preferences at any time."), message: Text("Iris uses your preferences that don’t change often to filter results behind the scenes."), primaryButton: .default(Text("Review"), action: {
+                                                UserDefaults.standard.set(true, forKey: "preferencesSeen")
+                                                withAnimation {
+                                                    self.preferencesPresented = true
+                                                }
+                                            }), secondaryButton: .default(Text("Cancel")))
+                                        }
                                     }
                                     
                                     Text(self.observed.subtitle)
@@ -250,7 +264,7 @@ struct ContentView: View {
                             // Search view
                             GeometryReader { geometry in
                                 VStack {
-                                    NavigationLink(destination: DiscoverySearch(searchPresented: self.$searchPresented, observed: self.observed, observedTopChoices: self.observedTopChoices), isActive: self.$searchPresented) { EmptyView() }
+                                    NavigationLink(destination: LazyView(DiscoverySearch(searchPresented: self.$searchPresented, observed: self.observed, observedTopChoices: self.observedTopChoices)), isActive: self.$searchPresented) { EmptyView() }
                                     if geometry.frame(in: .global).minY >= UIApplication.topInset {
                                         ZStack {
                                             retinaSearchButton(text: self.searchBarText, color: .retinaOverlayDark, backgroundColor: .retinaOverflow, action: { self.searchPresented = true })
@@ -279,7 +293,7 @@ struct ContentView: View {
                                             $0.discover == true && $0.category == "ingredient"
                                         }, id: \.self) { item in
                                             NavigationLink(
-                                            destination: TopChoicesView(observed: self.observedTopChoices)) {
+                                            destination: LazyView(TopChoicesView(observed: self.observedTopChoices, topChoicesPresented: self.$topChoicesPresented))) {
                                                 DiscoveryCell(title: item.title, backgroundImageUrl: item.imageUrl).padding([.leading, .trailing], 6)
                                             }.buttonStyle(PlainButtonStyle())
                                         }
@@ -297,7 +311,7 @@ struct ContentView: View {
                                             $0.discover == true && $0.category == "dish"
                                         }, id: \.self) { item in
                                             NavigationLink(
-                                            destination: TopChoicesView(observed: self.observedTopChoices)) {
+                                            destination: LazyView(TopChoicesView(observed: self.observedTopChoices, topChoicesPresented: self.$topChoicesPresented))) {
                                                 DiscoveryCell(title: item.title, backgroundImageUrl: item.imageUrl).padding([.leading, .trailing], 6)
                                             }.buttonStyle(PlainButtonStyle())
                                         }
@@ -316,7 +330,7 @@ struct ContentView: View {
                                             $0.discover == true && $0.category == "cuisine"
                                         }, id: \.self) { item in
                                             NavigationLink(
-                                            destination: TopChoicesView(observed: self.observedTopChoices)) {
+                                            destination: TopChoicesView(observed: self.observedTopChoices, topChoicesPresented: self.$topChoicesPresented)) {
                                                 DiscoveryCell(title: item.title, backgroundImageUrl: item.imageUrl).padding([.leading, .trailing], 6)
                                             }.buttonStyle(PlainButtonStyle())
                                         }
@@ -400,7 +414,7 @@ struct ContentView_Previews: PreviewProvider {
     
     static var previews: some View {
         Group {
-            ContentView(data: data, spacing: -10)
+            ContentView(spacing: -10)
         }
     }
 }

@@ -11,6 +11,7 @@ import SwiftUI
 struct PreferencesView: View {
     @Binding var preferencesPresented: Bool
     @ObservedObject var observed: Observer
+    @State var changePreferencePresented: Bool = false
 
     var body: some View {
         NavigationView {
@@ -26,18 +27,17 @@ struct PreferencesView: View {
                         
                         Button(action: {
                             withAnimation {
-                                self.preferencesPresented.toggle()
+                                self.preferencesPresented = false
                             }
                         }) {
                             Image(systemName: "xmark").foregroundColor(.white).retinaTypography(.h5_main)
                         }.padding(.trailing, 24)
-
                     }.padding(.top, 80)
                     
                     ScrollView(.vertical) {
                         ForEach(self.observed.preferences, id: \.self) { preference in
                             ZStack {
-                                NavigationLink(destination: ChangePreferenceView(observed: self.observed, preference: preference, items: preference.items)) {
+                                NavigationLink(destination: LazyView(ChangePreferenceView(observed: self.observed, preference: preference, items: preference.items, changePreferencePresented: self.$changePreferencePresented))) {
                                     SettingsCell(preference: preference)
                                 }
                             }
@@ -45,11 +45,11 @@ struct PreferencesView: View {
                         
                         Divider().frame(height: 2).background(Color.retinaOverlayDark).listRowInsets(EdgeInsets()).padding(.top, 24)
                         
-                        NavigationLink(destination: InformationView(type: .privacy)) {
+                        NavigationLink(destination: LazyView(InformationView(type: .privacy))) {
                             SettingsCell(preference: Preference(id: "", title: "", type: "", items: []), title: "Privacy Policy").listRowInsets(EdgeInsets())
                         }
                         
-                        NavigationLink(destination: InformationView(type: .tos)) {
+                        NavigationLink(destination: LazyView(InformationView(type: .tos))) {
                             SettingsCell(preference: Preference(id: "", title: "", type: "", items: []), title: "Terms of Service").listRowInsets(EdgeInsets())
                         }
                         

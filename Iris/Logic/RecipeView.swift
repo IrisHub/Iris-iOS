@@ -11,8 +11,6 @@ import SafariServices
 import URLImage
 
 struct RecipeView: View {
-//    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-
     // whether or not to show the Safari ViewController
     @ObservedObject var observed: TopChoicesObserver
     var selectedChoice: Int = 0
@@ -71,9 +69,8 @@ struct RecipeView: View {
                 VStack {
                     HStack {
                         retinaIconButton(image: (Image(systemName: "xmark")), action: {
-//                            self.presentationMode.wrappedValue.dismiss()
                             withAnimation {
-                                self.recipePresented.toggle()
+                                self.recipePresented = false
                             }
                         }).padding(24)
                         Spacer()

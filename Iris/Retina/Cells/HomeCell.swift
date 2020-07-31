@@ -24,7 +24,7 @@ struct HomeCell: View {
                     Button(action: {
                         withAnimation {
                             self.selectedChoice = self.id
-                            self.recipePresented.toggle()
+                            self.recipePresented = true
                         }
                     }) {
 //                        Image(recipe.imageUrl).retinaRectangle(width: 320, height: 420)
@@ -45,7 +45,7 @@ struct HomeCell: View {
 
                 Button(action: {
                     withAnimation {
-                        self.recipePresented.toggle()
+                        self.recipePresented = true
                     }
                 }) {
                     TitleView(title: recipe.title, metrics: [recipe.rating, recipe.difficulty, recipe.cookTime])

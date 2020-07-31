@@ -10,14 +10,15 @@ import SwiftUI
 import Alamofire
 
 struct ChangePreferenceView: View {
-    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @ObservedObject var observed: Observer
     @State var preference: Preference
     @State var items: [PreferenceItem]
+    
+    @Binding var changePreferencePresented: Bool
 
     var body: some View {
         VStack {
-            TopNavigationView(title: "Your Cuisines", bolded: "", subtitle: preference.type == "single_select" ? "Select one option" : "Select multiple options", leftIconString: "chevron.left", rightIconStrings: ["", ""], buttonCommits: [{self.presentationMode.wrappedValue.dismiss(); self.convertToJSON()}, {}, {}])
+            TopNavigationView(title: "Your Cuisines", bolded: "", subtitle: preference.type == "single_select" ? "Select one option" : "Select multiple options", leftIconString: "chevron.left", rightIconStrings: ["", ""], buttonCommits: [{self.changePreferencePresented = false; self.convertToJSON()}, {}, {}])
             .edgesIgnoringSafeArea(.horizontal)
             .edgesIgnoringSafeArea(.top)
             
@@ -35,7 +36,7 @@ struct ChangePreferenceView: View {
         
     func convertToJSON() {
         struct ChangedPreference: Codable {
-            var user_id: String = "17ef5c4b-3ac9-4548-a309-41e30a61c6e8"
+            var user_id: String = UserDefaults.standard.string(forKey: "userID") ?? ""
             var preference: Preference
         }
 

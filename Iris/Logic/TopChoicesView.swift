@@ -13,19 +13,21 @@ import SwiftyJSON
 
 
 struct TopChoicesView: View {
-    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     var state: UIStateModel = UIStateModel()
     @State var recipePresented: Bool = false
     @State var showBanner:Bool = false
     @State var bannerData: BannerModifier.BannerData = BannerModifier.BannerData(title: "", detail: "Iris will show fewer results like that from now on.", type: .Warning)
     @ObservedObject var observed: TopChoicesObserver
     @State var selectedChoice: Int = 0
-
+    
+    @Binding var topChoicesPresented: Bool
+    
+    
     var body: some View {
         ZStack {
             VStack {
                 VStack() {
-                    TopNavigationView(title: observed.title, bolded: observed.item, subtitle: observed.subtitle, leftIconString: "chevron.left", rightIconStrings: ["", ""], buttonCommits: [{self.presentationMode.wrappedValue.dismiss()}, {}, {}])
+                    TopNavigationView(title: observed.title, bolded: observed.item, subtitle: observed.subtitle, leftIconString: "chevron.left", rightIconStrings: ["", ""], buttonCommits: [{ self.topChoicesPresented = false }, {}, {}])
                 }
                 .edgesIgnoringSafeArea(.horizontal)
                 .edgesIgnoringSafeArea(.top)
@@ -50,7 +52,7 @@ struct TopChoicesView: View {
     
     func feedback() {
         struct Feedback: Codable {
-            var user_id: String = "17ef5c4b-3ac9-4548-a309-41e30a61c6e8"
+            var user_id: String = UserDefaults.standard.string(forKey: "userID") ?? ""
             var recipe_id: String
         }
 

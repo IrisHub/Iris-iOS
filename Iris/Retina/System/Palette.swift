@@ -17,7 +17,8 @@ extension Color {
     static let retinaOverlayDark = Color("overlay_dark")
     static let retinaWinterGrey = Color("winter_grey")
     static let retinaSnowWhite = Color("snow_white")
-    
+    static let retinaDanger = Color("danger")
+
     static let retinaPink = Color(red: 248.0 / 255.0, green: 61.0 / 255.0, blue: 123.0 / 255.0)
     static let retinaPurple = Color(red: 189.0 / 255.0, green: 63.0 / 255.0, blue: 187.0 / 255.0)
 }

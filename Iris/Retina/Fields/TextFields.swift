@@ -19,31 +19,35 @@ public struct RetinaTextField: View {
     var icon: Image? = nil
     var commit: ()->() = { }
     @State private var focused: Bool = false
-    @State var input: String = ""
+    @Binding var input: String
     
     // MARK: Inits
     
-    init(_ placeholder: String, onCommit: @escaping ()->() = { }) {
+    init(_ placeholder: String, input:  Binding<String>, onCommit: @escaping ()->() = { }) {
         self.placeholder = placeholder
+        _input = input
         self.style = .defaultStyle
         self.commit = onCommit
     }
     
-    init(_ placeholder: String, style: Style, onCommit: @escaping ()->() = { }) {
+    init(_ placeholder: String, input:  Binding<String>, style: Style, onCommit: @escaping ()->() = { }) {
         self.placeholder = placeholder
+        _input = input
         self.style = style
         self.commit = onCommit
     }
     
-    init(_ placeholder: String, icon: Image, onCommit: @escaping ()->() = { }) {
+    init(_ placeholder: String, input:  Binding<String>, icon: Image, onCommit: @escaping ()->() = { }) {
         self.placeholder = placeholder
+        _input = input
         self.icon = icon
         self.style = .defaultStyle
         self.commit = onCommit
     }
     
-    init(_ placeholder: String, style: Style, icon: Image, onCommit: @escaping ()->() = { }) {
+    init(_ placeholder: String, input:  Binding<String>, style: Style, icon: Image, onCommit: @escaping ()->() = { }) {
         self.placeholder = placeholder
+        _input = input
         self.style = style
         self.icon = icon
         self.commit = onCommit
@@ -175,15 +179,16 @@ public struct RetinaTextField: View {
 // MARK: Preview
 
 struct TextField_Previews: PreviewProvider {
+    @State static var input: String = ""
     static var previews: some View {
         VStack(spacing: 20) {
-            RetinaTextField("Thats a default Textfield", onCommit: {print("party")})
-            RetinaTextField("Thats a default Textfield + Icon", icon: Image(systemName: "star.fill"), onCommit: {print("party")})
-            RetinaTextField("Primary", style: .primary, icon: Image(systemName: "star.fill"))
-            RetinaTextField("Success", style: .success, icon: Image(systemName: "star.fill"))
-            RetinaTextField("Warning", style: .warning, icon: Image(systemName: "star.fill"))
-            RetinaTextField("Danger", style: .danger, icon: Image(systemName: "star.fill"))
-            RetinaTextField("Info", style: .info, icon: Image(systemName: "star.fill"))
+            RetinaTextField("Thats a default Textfield", input: $input, onCommit: {print("party")})
+            RetinaTextField("Thats a default Textfield + Icon", input: $input, icon: Image(systemName: "star.fill"), onCommit: {print("party")})
+            RetinaTextField("Primary", input: $input, style: .primary, icon: Image(systemName: "star.fill"))
+            RetinaTextField("Success", input: $input, style: .success, icon: Image(systemName: "star.fill"))
+            RetinaTextField("Warning", input: $input, style: .warning, icon: Image(systemName: "star.fill"))
+            RetinaTextField("Danger", input: $input, style: .danger, icon: Image(systemName: "star.fill"))
+            RetinaTextField("Info", input: $input, style: .info, icon: Image(systemName: "star.fill"))
         }
         .padding()
     }

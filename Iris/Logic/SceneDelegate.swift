@@ -12,64 +12,26 @@ import SwiftUI
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-    @State var data = [
-        DiscoveryItem(title: "Chicken", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Beef", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Carrots", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Broccoli", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Pasta", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Chicken", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Beef", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Carrots", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Broccoli", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Pasta", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Chicken", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Beef", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Carrots", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Broccoli", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Pasta", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Chicken", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Beef", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Carrots", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Broccoli", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Pasta", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Chicken", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Beef", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Carrots", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Broccoli", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Pasta", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Chicken", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Beef", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Carrots", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Broccoli", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Pasta", imageUrl: "food", category: "Ingredient"),
-        DiscoveryItem(title: "Salmon", imageUrl: "food", category: "Ingredient")
-    ]
 
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
-        // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
-        // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
-
-//        var state: UIStateModel = UIStateModel()
-//
-//        // Create the SwiftUI view that provides the window contents.
-//        let contentView = SettingsView(titles: ["Diet", "Food I don’t eat", "Time I have to cook Lunch", "Time I have to cook Dinner", "My cooking level", "Spice Tolerance", "See meals that are", "Top Cuisines"], settings: ["Vegan", "Eggs", "30min", "1 hour", "Intermediate", "Low", "Healthy", "American"])
-
-        let contentView = //RecipeView()
-        ContentView(data: data, spacing: -10)
-//        SecondView()
-
-
-
-        // Use a UIHostingController as window root view controller.
-        if let windowScene = scene as? UIWindowScene {
-            let window = UIWindow(windowScene: windowScene)
-            window.rootViewController = UIHostingController(rootView: contentView)
-            self.window = window
-            window.makeKeyAndVisible()
+        if UserDefaults.standard.string(forKey: "userID")?.isEmpty ?? true {
+            let contentView = OnboardingFlowView()
+            if let windowScene = scene as? UIWindowScene {
+                let window = UIWindow(windowScene: windowScene)
+                window.rootViewController = UIHostingController(rootView: contentView)
+                self.window = window
+                window.makeKeyAndVisible()
+            }
+        } else {
+            let contentView = ContentView(spacing: -10)
+            if let windowScene = scene as? UIWindowScene {
+                let window = UIWindow(windowScene: windowScene)
+                window.rootViewController = UIHostingController(rootView: contentView)
+                self.window = window
+                window.makeKeyAndVisible()
+            }
         }
     }
 

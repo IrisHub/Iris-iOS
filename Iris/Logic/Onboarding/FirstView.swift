@@ -9,6 +9,8 @@
 import SwiftUI
 
 struct FirstView: View {
+    @Binding var secondPresented: Bool
+
     var body: some View {
         VStack {
             VStack {
@@ -23,8 +25,7 @@ struct FirstView: View {
                     .frame(width: UIScreen.screenWidth, height: 120)
                     
                     HStack {
-                        retinaButton(text: "Enter Invite Code", style: .outlineOnly, color: .retinaPink, action: {
-                        }).frame(width: 326, height: 36, alignment: .trailing)
+                        retinaButton(text: "Enter Invite Code", style: .outlineOnly, color: .retinaPink, action: { withAnimation { self.secondPresented = true } }).frame(width: 326, height: 36, alignment: .trailing)
                     }
                 }
             }
@@ -35,7 +36,9 @@ struct FirstView: View {
 }
 
 struct FirstView_Previews: PreviewProvider {
+    @State static var secondPresented: Bool = false
+
     static var previews: some View {
-        FirstView()
+        FirstView(secondPresented: $secondPresented)
     }
 }

@@ -9,16 +9,16 @@
 import SwiftUI
 
 struct DiscoverySearch: View {
-    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @Binding var searchPresented: Bool
     @ObservedObject var observed: Observer
     @ObservedObject var observedTopChoices: TopChoicesObserver
     @State private var searchText = ""
-    
+    @State var topChoicesPresented: Bool = false
+
     var body: some View {
         VStack {
             // Search bar
-            Search(isBack: true, placeholder: "Search for a cuisine, or an ingredient", searchText: $searchText, buttonCommit:{self.presentationMode.wrappedValue.dismiss()}).padding(.top, 40).background(Color.retinaOverlayLight)
+            Search(isBack: true, placeholder: "Search for a cuisine, or an ingredient", searchText: $searchText, buttonCommit:{ self.searchPresented = false }).padding(.top, 40).background(Color.retinaOverlayLight)
             
             HStack {
                 if (self.searchText.isEmpty) {
@@ -33,7 +33,7 @@ struct DiscoverySearch: View {
                         $0.ideas == true
                     }, id: \.self) { item in
                         NavigationLink(
-                        destination: TopChoicesView(observed: self.observedTopChoices)) {
+                        destination: LazyView(TopChoicesView(observed: self.observedTopChoices, topChoicesPresented: self.$topChoicesPresented))) {
                             SearchCell(title: item.title, subtitle: item.category)
                             .listRowInsets(EdgeInsets())
                         }
@@ -46,7 +46,7 @@ struct DiscoverySearch: View {
                             self.searchText.isEmpty ? true : $0.title.lowercased().contains(self.searchText.lowercased())
                         }, id: \.self) { item in
                             NavigationLink(
-                            destination: TopChoicesView(observed: self.observedTopChoices)) {
+                            destination: LazyView(TopChoicesView(observed: self.observedTopChoices, topChoicesPresented: self.$topChoicesPresented))) {
                                 SearchCell(title: item.title, subtitle: item.category)
                                 .listRowInsets(EdgeInsets())
 

@@ -19,12 +19,14 @@ struct Search: View {
             HStack {
                 HStack {
                     Button(action: {
+                        UIApplication.shared.endEditing(true)
                         self.searchText = ""
-                        UIApplication.shared.endEditing(true) // this must be placed before the other commands here
                         self.buttonCommit()
                     }) {
-                        Image(systemName: isBack ? "chevron.left" : "magnifyingglass").retinaTypography(.h5_main)
-                    }.padding(6).padding(.leading, 12).foreground(Color.retinaPink)
+                        Image(systemName: isBack ? "chevron.left" : "magnifyingglass")
+                        .retinaTypography(.h5_main)
+                        .foregroundColor(.retinaPink)
+                    }.padding(6).padding(.leading, 12)
 
                                         
                     ZStack(alignment: .leading) {
@@ -34,8 +36,8 @@ struct Search: View {
                     
 
                     Button(action: {
+                        UIApplication.shared.endEditing(true)
                         self.searchText = ""
-                        UIApplication.shared.endEditing(true) // this must be placed before the other commands here
                     }) {
                         Image(systemName: "xmark.circle.fill").opacity(searchText == "" ? 0 : 1)
                     }.padding(6).padding(.trailing, 12)
