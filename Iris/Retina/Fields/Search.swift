@@ -64,8 +64,8 @@ struct Search_Previews: PreviewProvider {
             HStack {
                 retinaSearchButton(text: "Hello", color: .gray, backgroundColor: .white, action: { print("click") })
             }
-            Search(isBack: true, placeholder: "Search", searchText: $searchTextEmpty, buttonCommit:{})
-            Search(isBack: true, placeholder: "Search", searchText: $searchTextFilled, buttonCommit:{})
+            Search(isBack: true, placeholder: "Try a cuisine, ingredient, or dish", searchText: $searchTextEmpty, buttonCommit:{})
+            Search(isBack: true, placeholder: "Try a cuisine, ingredient, or dish", searchText: $searchTextFilled, buttonCommit:{})
         }
     }
 }

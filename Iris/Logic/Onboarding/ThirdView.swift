@@ -24,46 +24,62 @@ struct ThirdView: View {
 
     var body: some View {
         VStack {
-            HStack() {
-                VStack(alignment: .leading) {
-                    if (preferences.count != 0) {
-                        VStack(alignment: .leading) {
-                            if showFirst {
-                                Text(preferences[0]).retinaTypography(.h3_secondary).foregroundColor(.retinaSnowWhite).padding(.bottom, 12).padding(.top, 12)
-                                    .transition(.opacity)
-                            }
-                            if showSecond {
-                                Text(preferences[1]).retinaTypography(.p5_main).foregroundColor(.retinaWinterGrey).padding(.bottom, 12).padding(.top, 12)
-                                    .transition(.opacity)
-                            }
-                        
-                            ForEach(shownPreferences, id: \.self) { pref in
-                                Text(pref).retinaTypography(.h4_secondary).foregroundColor(.retinaSnowWhite).padding(.bottom, 12).padding(.top, 12).listRowInsets(EdgeInsets()).transition(.opacity)
-                            }.onReceive(self.timer) { _ in
-                                self.delayText()
+            ScrollView(showsIndicators: false) {
+                HStack() {
+                    VStack(alignment: .leading) {
+                        if (preferences.count != 0) {
+                            VStack(alignment: .leading) {
+                                if showFirst {
+                                    Text(preferences[0])
+                                        .retinaTypography(.h3_secondary)
+                                        .foregroundColor(.retinaSnowWhite)
+                                        .padding(.bottom, 12)
+                                        .padding(.top, 12)
+                                        .transition(.opacity)
+                                        .fixedSize(horizontal: false, vertical: true)
+                                }
+                                if showSecond {
+                                    Text(preferences[1])
+                                        .retinaTypography(.p5_main)
+                                        .foregroundColor(.retinaWinterGrey)
+                                        .padding(.bottom, 12)
+                                        .padding(.top, 12)
+                                        .transition(.opacity)
+                                        .fixedSize(horizontal: false, vertical: true)
+                                }
+                            
+                                ForEach(shownPreferences, id: \.self) { pref in
+                                    Text(pref)
+                                        .retinaTypography(.h4_secondary)
+                                        .foregroundColor(.retinaSnowWhite)
+                                        .padding(.bottom, 12)
+                                        .padding(.top, 12)
+                                        .listRowInsets(EdgeInsets()).transition(.opacity)
+                                        .fixedSize(horizontal: false, vertical: true)
+                                }.onReceive(self.timer) { _ in
+                                    self.delayText()
+                                }
                             }
                         }
-                    }
-                }.padding(.top, UIScreen.screenHeight/8).padding([.leading, .trailing], 24)
-                Spacer()
+                    }.padding(.top, UIScreen.screenHeight/8).padding([.leading, .trailing], 24)
+                    Spacer()
+                }
             }
-            Spacer()
             if (self.showNextButton) {
-                Group {
-                    ZStack {
-                        Rectangle()
-                        .foregroundColor(Color.retinaOverlayDark)
-                        .frame(width: UIScreen.screenWidth, height: 120)
-                        
-                        HStack {
-                            retinaButton(text: "Unlock your Iris", style: .outlineOnly, color: .retinaPink, action: { withAnimation { self.fourthPresented = true } }).frame(width: 326, height: 36, alignment: .trailing).transition(.slide)
-                        }
+                ZStack {
+                    Rectangle()
+                    .foregroundColor(Color.retinaOverlayDark)
+                    .frame(width: UIScreen.screenWidth, height: 120)
+
+                    HStack {
+                        retinaButton(text: "Unlock your Iris", style: .outlineOnly, color: .retinaPink, action: { withAnimation { self.fourthPresented = true } }).frame(width: 326, height: 36, alignment: .trailing).transition(.slide)
                     }
-                }.transition(.move(edge: .bottom))
+                }.padding(.bottom, DeviceUtility.isIphoneXType ? 0 : UIApplication.bottomInset)
             }
         }
         .background(Color.retinaBase)
         .edgesIgnoringSafeArea(.all)
+
     }
     
     func delayText() {

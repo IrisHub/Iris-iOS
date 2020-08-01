@@ -12,16 +12,19 @@ struct ListView: View {
     var contents: [String]
     
     var body: some View {
-        VStack(alignment: .leading) {
-            ForEach(contents,  id: \.self) { content in
-                HStack {
-                    Circle()
-                    .fill(Color.retinaOverlayDark)
-                    .frame(width: 10, height: 10)
+        HStack {
+            VStack(alignment: .leading) {
+                ForEach(contents,  id: \.self) { content in
+                    HStack {
+                        Circle()
+                        .fill(Color.retinaOverlayDark)
+                        .frame(width: 10, height: 10)
 
-                    Text(content).retinaTypography(.p5_main).foregroundColor(.retinaSnowWhite).fixedSize(horizontal: false, vertical: true)
+                        Text(content).retinaTypography(.p5_main).foregroundColor(.retinaSnowWhite).fixedSize(horizontal: false, vertical: true)
+                    }
                 }
             }
+            Spacer()
         }
     }
 }

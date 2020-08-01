@@ -23,6 +23,7 @@ struct PreferencesView: View {
                             .retinaTypography(.h4_secondary)
                             .foregroundColor(.white)
                         .padding(.leading, 24)
+                        
                         Spacer()
                         
                         Button(action: {
@@ -32,8 +33,8 @@ struct PreferencesView: View {
                         }) {
                             Image(systemName: "xmark").foregroundColor(.white).retinaTypography(.h5_main)
                         }.padding(.trailing, 24)
-                    }.padding(.top, 80)
-                    
+                    }.padding(.top, UIScreen.screenHeight/8)
+
                     ScrollView(.vertical) {
                         ForEach(self.observed.preferences, id: \.self) { preference in
                             ZStack {
@@ -62,8 +63,11 @@ struct PreferencesView: View {
                             Spacer()
                         }.padding([.top,.leading,.bottom], 24)
                     }
-                }.edgesIgnoringSafeArea([.top])
+                }
             }
+            .navigationBarBackButtonHidden(true)
+            .navigationBarTitle("")
+            .navigationBarHidden(true)
         }
     }
 }

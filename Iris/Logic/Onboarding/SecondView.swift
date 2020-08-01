@@ -32,12 +32,10 @@ struct SecondView: View {
                 ZStack {
                     Rectangle()
                     .foregroundColor(Color.retinaOverlayDark)
-                    .frame(width: UIScreen.screenWidth, height: 120)
+                    .frame(width: UIScreen.screenWidth, height: 100)
                     
                     HStack {
-                        retinaButton(text: "Submit", style: .outlineOnly, color: .retinaPink, action: {
-                            self.verifyCode()
-                        }).frame(width: 326, height: 36, alignment: .trailing)
+                        retinaButton(text: "Submit", style: .outlineOnly, color: .retinaPink, action: { self.verifyCode() }).frame(width: UIScreen.screenWidth-48, height: 36, alignment: .trailing)
                     }
                 }
             }
@@ -64,6 +62,8 @@ struct SecondView: View {
     }
     
     func verifyCode() {
+        UIApplication.shared.endEditing(true)
+        
         if self.input.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             self.emptyAlert = true
             return

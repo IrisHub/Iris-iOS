@@ -19,13 +19,9 @@ struct InformationView: View {
     var body: some View {
         VStack {
             if (self.type == .privacy) {
-                TopNavigationView(title: "Privacy Policy", bolded: "", subtitle: "Last updated July 29, 2020", leftIconString: "chevron.left", rightIconStrings: ["", ""], buttonCommits: [{self.presentationMode.wrappedValue.dismiss()}, {}, {}])
-                .edgesIgnoringSafeArea(.horizontal)
-                .edgesIgnoringSafeArea(.top)
+                TopNavigationView(title: "Privacy Policy", bolded: "", subtitle: "Last updated July 29, 2020", leftIconString: "chevron.left", rightIconStrings: ["", ""], buttonCommit: {self.presentationMode.wrappedValue.dismiss()}).padding(.top, DeviceUtility.isIphoneXType ? 0 : UIApplication.topInset)
             } else if (self.type == .tos) {
-                TopNavigationView(title: "Terms of Service", bolded: "", subtitle: "Last updated July 29, 2020", leftIconString: "chevron.left", rightIconStrings: ["", ""], buttonCommits: [{self.presentationMode.wrappedValue.dismiss()}, {}, {}])
-                .edgesIgnoringSafeArea(.horizontal)
-                .edgesIgnoringSafeArea(.top)
+                TopNavigationView(title: "Terms of Service", bolded: "", subtitle: "Last updated July 29, 2020", leftIconString: "chevron.left", rightIconStrings: ["", ""], buttonCommit: {self.presentationMode.wrappedValue.dismiss()}).padding(.top, DeviceUtility.isIphoneXType ? 0 : UIApplication.topInset)
             }
             
             ScrollView {
@@ -292,7 +288,6 @@ struct InformationView: View {
                 }
             }
         }
-        .edgesIgnoringSafeArea(.all)
         .background(Color.retinaBase)
         .navigationBarBackButtonHidden(true)
         .navigationBarTitle("")

@@ -22,10 +22,10 @@ struct FirstView: View {
                 ZStack {
                     Rectangle()
                     .foregroundColor(Color.retinaOverlayDark)
-                    .frame(width: UIScreen.screenWidth, height: 120)
+                    .frame(width: UIScreen.screenWidth, height: 100)
                     
                     HStack {
-                        retinaButton(text: "Enter Invite Code", style: .outlineOnly, color: .retinaPink, action: { withAnimation { self.secondPresented = true } }).frame(width: 326, height: 36, alignment: .trailing)
+                        retinaButton(text: "Enter Invite Code", style: .outlineOnly, color: .retinaPink, action: { withAnimation { self.secondPresented = true } }).frame(width: UIScreen.screenWidth-48, height: 36, alignment: .trailing)
                     }
                 }
             }

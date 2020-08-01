@@ -10,22 +10,15 @@ import SwiftUI
 
 struct MultiSelectView: View {
 
-    let settings: [String]
-    @State var selectedSettings: [String]
+    @Binding var items: [PreferenceItem]
+    @Binding var preference: Preference
 
     var body: some View {
         ScrollView(.vertical) {
-            ForEach(settings, id: \.self) { item in
-                SelectionCell(title: item, selectedTitles: self.$selectedSettings, isSingleSelect: false)
+            ForEach(items, id: \.self) { item in
+                SelectionCell(preference: self.$preference, items: self.$items, item: item, isSingleSelect: false)
                 .listRowInsets(EdgeInsets())
             }
         }
-    }
-}
-
-struct MultiSelectView_Previews: PreviewProvider {
-    @State static var settings = ["pEars", "apples"]
-    static var previews: some View {
-        MultiSelectView(settings: ["apples", "pears", "bananas", "pineapples"], selectedSettings: settings)
     }
 }

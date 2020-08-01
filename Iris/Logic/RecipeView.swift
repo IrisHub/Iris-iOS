@@ -26,37 +26,19 @@ struct RecipeView: View {
             ZStack {
                 ScrollView(.vertical, showsIndicators: false) {
                     GeometryReader { geometry in
-                        ZStack {
-                            if self.observed.recipes.count > 1 {
-                                if geometry.frame(in: .global).minY <= 0 {
-                                    URLImage((URL(string: self.observed.recipes[self.selectedChoice].imageUrl))!){ proxy in
-                                    proxy.image
-                                        .resizable()                     // Make image resizable
-                                        .renderingMode(.original)
-
-                                        .aspectRatio(contentMode: .fill) // Fill the frame
-                                        .frame(width: geometry.size.width, height: geometry.size.height)
-                                        .clipped()                       // Clip overlaping parts
-                                    }
-                                    .offset(y: geometry.frame(in: .global).minY/9)
-                                } else {
-                                    URLImage((URL(string: self.observed.recipes[self.selectedChoice].imageUrl))!){ proxy in
-                                    proxy.image
-                                        .resizable()                     // Make image resizable
-                                        .renderingMode(.original)
-                                        .aspectRatio(contentMode: .fill) // Fill the frame
-                                        .frame(width: geometry.size.width, height: geometry.size.height + geometry.frame(in: .global).minY)
-                                        .clipped()                       // Clip overlaping parts
-                                    }
-                                    .offset(y: -geometry.frame(in: .global).minY)
-
-                                }
-                            }
+                        URLImage((URL(string: self.observed.recipes.count > 1 ? self.observed.recipes[self.selectedChoice].imageUrl : ""))!){ proxy in
+                        proxy.image
+                            .resizable()
+                            .renderingMode(.original)
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: geometry.size.width, height: geometry.frame(in: .global).minY <= 0 ? geometry.size.height : geometry.size.height + geometry.frame(in: .global).minY)
+                            .clipped()
                         }
+                        .offset(y: geometry.frame(in: .global).minY <= 0 ? geometry.frame(in: .global).minY/9 : -geometry.frame(in: .global).minY)
                     }
-                    .frame(height: 400)
+                    .frame(height: UIScreen.screenHeight/3)
                     
-                    VStack(alignment: .leading) {
+                    VStack() {
                         if self.observed.recipes.count > 1 {
                             TitleView(title: self.observed.recipes[self.selectedChoice].title, metrics: [self.observed.recipes[self.selectedChoice].rating, self.observed.recipes[self.selectedChoice].difficulty, self.observed.recipes[self.selectedChoice].cookTime])
                             .padding([.leading], 24)
@@ -64,8 +46,8 @@ struct RecipeView: View {
                             ListView(contents: self.observed.recipes[self.selectedChoice].ingredients).padding([.leading, .top, .bottom], 24)
                         }
                     }
-                    
-                }.edgesIgnoringSafeArea(.top)
+                }
+                
                 VStack {
                     HStack {
                         retinaIconButton(image: (Image(systemName: "xmark")), action: {
@@ -74,36 +56,31 @@ struct RecipeView: View {
                             }
                         }).padding(24)
                         Spacer()
-                    }
+                    }.padding([.top], UIApplication.topInset)
                     Spacer()
-                }.edgesIgnoringSafeArea(.top).padding([.top], 24)
-            }
-            
-            Group {
-                ZStack {
-                    Rectangle()
-                    .foregroundColor(Color.retinaOverlayDark)
-                    .frame(width: UIScreen.screenWidth, height: 120)
-                    .edgesIgnoringSafeArea(.bottom)
-                    
-                    HStack {
-                        Spacer()
-                        retinaButton(text: "See Recipe Steps", style: .outlineOnly, color: .retinaPink, action: {
-                            // update the URL if you'd like to
-                            self.urlString = self.observed.recipes[self.selectedChoice].link
-                            // tell the app that we want to show the Safari VC
-                            self.showSafari = true
-                        }).frame(width: 180, height: 36, alignment: .trailing).padding(24).padding(.bottom,12)
-                        .sheet(isPresented: $showSafari) {
-                            SafariView(url:URL(string: self.urlString)!)
-                        }
-                    }
                 }
             }
+            
+            ZStack {
+                Rectangle()
+                .foregroundColor(Color.retinaOverlayDark)
+                .frame(width: UIScreen.screenWidth, height: 100)
+                
+                HStack {
+                    Spacer()
+                    retinaButton(text: "Recipe Steps", style: .outlineOnly, color: .retinaPink, action: {
+                        // update the URL if you'd like to
+                        self.urlString = self.observed.recipes[self.selectedChoice].link
+                        // tell the app that we want to show the Safari VC
+                        self.showSafari = true
+                    }).frame(width: (UIScreen.screenWidth-48)/2, height: 36, alignment: .trailing).padding(24)
+                    .sheet(isPresented: $showSafari) {
+                        SafariView(url:URL(string: self.urlString)!)
+                    }
+                }
+            }.padding(.bottom, UIApplication.bottomInset)
+            
         }.background(Color.retinaBase)
-        .navigationBarTitle("")
-        .navigationBarHidden(true)
-        .padding([.bottom], 24)
     }
 }
 

@@ -9,16 +9,16 @@
 import SwiftUI
 
 struct DiscoverySearch: View {
-    @Binding var searchPresented: Bool
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @ObservedObject var observed: Observer
     @ObservedObject var observedTopChoices: TopChoicesObserver
     @State private var searchText = ""
-    @State var topChoicesPresented: Bool = false
+//    @State var topChoicesPresented: Bool = false
 
     var body: some View {
         VStack {
             // Search bar
-            Search(isBack: true, placeholder: "Search for a cuisine, or an ingredient", searchText: $searchText, buttonCommit:{ self.searchPresented = false }).padding(.top, 40).background(Color.retinaOverlayLight)
+            Search(isBack: true, placeholder: "Try a cuisine, ingredient, or dish", searchText: $searchText, buttonCommit:{ self.presentationMode.wrappedValue.dismiss() }).padding(.top, 40).background(Color.retinaOverlayLight)
             
             HStack {
                 if (self.searchText.isEmpty) {
@@ -33,7 +33,7 @@ struct DiscoverySearch: View {
                         $0.ideas == true
                     }, id: \.self) { item in
                         NavigationLink(
-                        destination: LazyView(TopChoicesView(observed: self.observedTopChoices, topChoicesPresented: self.$topChoicesPresented))) {
+                        destination: LazyView(TopChoicesView(observed: self.observedTopChoices))) {
                             SearchCell(title: item.title, subtitle: item.category)
                             .listRowInsets(EdgeInsets())
                         }
@@ -46,7 +46,7 @@ struct DiscoverySearch: View {
                             self.searchText.isEmpty ? true : $0.title.lowercased().contains(self.searchText.lowercased())
                         }, id: \.self) { item in
                             NavigationLink(
-                            destination: LazyView(TopChoicesView(observed: self.observedTopChoices, topChoicesPresented: self.$topChoicesPresented))) {
+                            destination: LazyView(TopChoicesView(observed: self.observedTopChoices))) {
                                 SearchCell(title: item.title, subtitle: item.category)
                                 .listRowInsets(EdgeInsets())
 
@@ -54,7 +54,7 @@ struct DiscoverySearch: View {
                         }
                     }
                 }
-            }.padding([.bottom], 60).background(Color.retinaOverflow).edgesIgnoringSafeArea(.bottom)
+            }.padding([.bottom], UIApplication.bottomInset).background(Color.retinaOverflow).edgesIgnoringSafeArea(.bottom)
             .onAppear {
                 UITableView.appearance().separatorStyle = .none
                 UITableViewCell.appearance().backgroundColor = Color.retinaOverflow.uiColor()
@@ -72,11 +72,10 @@ struct DiscoverySearch: View {
 }
 
 struct DiscoverySearch_Previews: PreviewProvider {
-    @State static var searchPresented = true
     @ObservedObject static var observed = Observer()
     @ObservedObject static var observedTopChoices = TopChoicesObserver()
 
     static var previews: some View {
-        DiscoverySearch(searchPresented: $searchPresented, observed: observed, observedTopChoices: observedTopChoices)
+        DiscoverySearch(observed: observed, observedTopChoices: observedTopChoices)
     }
 }

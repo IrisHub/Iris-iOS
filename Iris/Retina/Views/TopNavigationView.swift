@@ -14,23 +14,23 @@ struct TopNavigationView: View {
     var subtitle: String = ""
     var leftIconString: String
     var rightIconStrings : [String]
-    var buttonCommits : [()->()] = [{}, {}, {}]
+    var buttonCommit : ()->() = {}
     
     var body: some View {
         
-        HStack {
-            Group {
-                Button(action:
-                    self.buttonCommits[0]
-                ) {
-                    Image(systemName: self.leftIconString)
-                        .foregroundColor(Color.retinaWinterGrey)
-                        .padding(.horizontal, 4)
-                        .retinaTypography(.h5_main)
+        HStack(alignment: .center) {
+            ZStack {
+                HStack {
+                    Button(action:
+                        self.buttonCommit
+                    ) {
+                        Image(systemName: self.leftIconString)
+                            .foregroundColor(Color.retinaWinterGrey)
+                            .padding(.horizontal, 4)
+                            .retinaTypography(.h5_main)
+                    }
+                    Spacer()
                 }
-
-                Spacer()
-                
                 VStack {
                     HStack {
                         Text(bolded.isEmpty ? self.title : self.title + "").retinaTypography(.p5_main, color: .retinaSnowWhite).offset(y: self.subtitle == "" ? 5: 0)
@@ -38,32 +38,11 @@ struct TopNavigationView: View {
                     }
                     Text(self.subtitle).retinaTypography(.p6_main, color: .retinaWinterGrey).padding(.top, self.subtitle == "" ? 0: 5)
                 }
-                .offset(x: 23, y: 0)
-                
-                Spacer()
-                
-                HStack(spacing: 22){
-                    Button(action: self.buttonCommits[1]) {
-                        Image(systemName: self.rightIconStrings[0])
-                            .foregroundColor(Color.gray)
-                            .padding(.horizontal, 4)
-                            .retinaTypography(.h5_main)
-
-                    }
-                    Button(action: self.buttonCommits[2]) {
-                        Image(systemName: self.rightIconStrings[1])
-                            .foregroundColor(Color.gray)
-                            .padding(.horizontal, 4)
-                            .retinaTypography(.h5_main)
-                    }
-                }
-                .buttonStyle(RightNavButtonStyle())
-                .padding(.horizontal, 4)
             }
         }
         .padding(.vertical, 16)
         .padding(.horizontal, 16)
-        .padding(.top, UIApplication.shared.windows.first?.safeAreaInsets.top)
+        .padding(.top, UIApplication.topInset)
         .background(Color.retinaOverlayDark)
         .clipped()
 //        .shadow(color: Color.retinaBasic, radius: 3, x: 0, y: 0)

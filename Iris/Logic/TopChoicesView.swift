@@ -13,6 +13,8 @@ import SwiftyJSON
 
 
 struct TopChoicesView: View {
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+
     var state: UIStateModel = UIStateModel()
     @State var recipePresented: Bool = false
     @State var showBanner:Bool = false
@@ -20,17 +22,12 @@ struct TopChoicesView: View {
     @ObservedObject var observed: TopChoicesObserver
     @State var selectedChoice: Int = 0
     
-    @Binding var topChoicesPresented: Bool
-    
+//    @Binding var topChoicesPresented: Bool
     
     var body: some View {
         ZStack {
             VStack {
-                VStack() {
-                    TopNavigationView(title: observed.title, bolded: observed.item, subtitle: observed.subtitle, leftIconString: "chevron.left", rightIconStrings: ["", ""], buttonCommits: [{ self.topChoicesPresented = false }, {}, {}])
-                }
-                .edgesIgnoringSafeArea(.horizontal)
-                .edgesIgnoringSafeArea(.top)
+                TopNavigationView(title: observed.title, bolded: observed.item, subtitle: observed.subtitle, leftIconString: "chevron.left", rightIconStrings: ["", ""], buttonCommit: { self.presentationMode.wrappedValue.dismiss() })
                 
                 CarouselView(UIState: state, showBanner: $showBanner, recipePresented: $recipePresented, selectedChoice: self.$selectedChoice, observed: self.observed, feedbackCommit: self.feedback)
             }
@@ -41,11 +38,12 @@ struct TopChoicesView: View {
 
             ZStack {
                 RecipeView(observed: self.observed, selectedChoice: self.selectedChoice, recipePresented: self.$recipePresented)
+                .offset(x: 0, y: self.recipePresented ? 0 : UIScreen.screenHeight + UIApplication.bottomInset)
             }
-            .edgesIgnoringSafeArea(.all)
-            .offset(x: 0, y: self.recipePresented ? 0 : UIScreen.screenHeight + UIApplication.bottomInset)
+            
 
-        }
+        }.padding(.top, UIApplication.topInset)
+        .edgesIgnoringSafeArea(.all)
         .banner(data: self.$bannerData, show: self.$showBanner)
     }
     
@@ -73,8 +71,10 @@ struct TopChoicesView: View {
     }
 }
 
-//struct TopChoicesView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        TopChoicesView()
-//    }
-//}
+struct TopChoicesView_Previews: PreviewProvider {
+    @ObservedObject static var observedTopChoices = TopChoicesObserver()
+
+    static var previews: some View {
+        TopChoicesView(observed: self.observedTopChoices)
+    }
+}

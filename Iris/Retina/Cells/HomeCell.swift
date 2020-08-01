@@ -17,31 +17,28 @@ struct HomeCell: View {
 
     var body: some View {
         ZStack(alignment: .top) {
-
             VStack(alignment: .leading) {
                 HStack(alignment: .top) {
-                    HorizontalLabel(text: "1 of " + String(id+1)).padding(.top, 12)
+                    HorizontalLabel(text: String(id+1) + " of 3").padding(.top, 12)
                     Button(action: {
                         withAnimation {
                             self.selectedChoice = self.id
                             self.recipePresented = true
                         }
                     }) {
-//                        Image(recipe.imageUrl).retinaRectangle(width: 320, height: 420)
-                        
+
                         URLImage((URL(string: recipe.imageUrl))!){ proxy in
                         proxy.image
                             .resizable()                     // Make image resizable
                             .renderingMode(.original)
                             .aspectRatio(contentMode: .fill) // Fill the frame
-                            .frame(width: 320, height: 420)
+                            .frame(width: UIScreen.screenWidth * 0.75, height: (UIScreen.screenWidth * 0.75 * 4) / 3)
                             .clipped()                       // Clip overlaping parts
-                            
                         }
                     }
                     
                     Spacer()
-                }.frame(width: UIScreen.screenWidth)
+                }
 
                 Button(action: {
                     withAnimation {
@@ -50,9 +47,7 @@ struct HomeCell: View {
                 }) {
                     TitleView(title: recipe.title, metrics: [recipe.rating, recipe.difficulty, recipe.cookTime])
                 }
-
-                .frame(height: 140)
-                .padding([.leading], 24)
+                .padding(.leading, 12).padding(.trailing, 24)
 
             }.frame(width: UIScreen.screenWidth).padding([.leading], 24)
         }

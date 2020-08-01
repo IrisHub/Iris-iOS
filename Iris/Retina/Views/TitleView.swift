@@ -13,18 +13,24 @@ struct TitleView: View {
     var metrics: [String]
     
     var body: some View {
-        VStack(alignment: .leading) {
-            Text(title)
-                .retinaTypography(.h4_secondary)
-                .fixedSize(horizontal: false, vertical: true)
-                .foregroundColor(.retinaSnowWhite)
-            HStack {
-                Image(systemName: "star.fill")
-                    .foregroundColor(.retinaWinterGrey)
-                Text(metrics.joined(separator: "  •  "))
+        HStack {
+            VStack(alignment: .leading) {
+                Text(title)
+                    .retinaTypography(.h4_secondary)
                     .fixedSize(horizontal: false, vertical: true)
-                    .foregroundColor(.retinaWinterGrey)
+                    .foregroundColor(.retinaSnowWhite)
+                    .padding(.bottom, -12)
+                HStack {
+                    Image(systemName: "star.fill")
+                        .foregroundColor(.retinaWinterGrey)
+                        .retinaTypography(.p6_main)
+                    Text(metrics.joined(separator: "  •  "))
+                        .retinaTypography(.p6_main)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .foregroundColor(.retinaWinterGrey)
+                }
             }
+            Spacer()
         }
     }
 }

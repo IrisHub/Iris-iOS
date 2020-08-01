@@ -10,6 +10,7 @@ import SwiftUI
 import Alamofire
 
 struct ChangePreferenceView: View {
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @ObservedObject var observed: Observer
     @State var preference: Preference
     @State var items: [PreferenceItem]
@@ -17,21 +18,20 @@ struct ChangePreferenceView: View {
     @Binding var changePreferencePresented: Bool
 
     var body: some View {
-        VStack {
-            TopNavigationView(title: "Your Cuisines", bolded: "", subtitle: preference.type == "single_select" ? "Select one option" : "Select multiple options", leftIconString: "chevron.left", rightIconStrings: ["", ""], buttonCommits: [{self.changePreferencePresented = false; self.convertToJSON()}, {}, {}])
-            .edgesIgnoringSafeArea(.horizontal)
-            .edgesIgnoringSafeArea(.top)
-            
-            if preference.type == "single_select" {
-                SingleSelectView(items: $items, preference: $preference)
-            } else {
-                MultiSelectView(items: $items, preference: $preference)
+        ZStack {
+            VStack {
+                TopNavigationView(title: "Your Cuisines", bolded: "", subtitle: preference.type == "single_select" ? "Select one option" : "Select multiple options", leftIconString: "chevron.left", rightIconStrings: ["", ""], buttonCommit: {self.presentationMode.wrappedValue.dismiss(); self.convertToJSON()}).padding(.top, DeviceUtility.isIphoneXType ? 0 : UIApplication.topInset)
+                if preference.type == "single_select" {
+                    SingleSelectView(items: $items, preference: $preference)
+                } else {
+                    MultiSelectView(items: $items, preference: $preference)
+                }
             }
+            .navigationBarBackButtonHidden(true)
+            .navigationBarTitle("")
+            .navigationBarHidden(true)
+            .background(Color.retinaBase)
         }
-        .background(Color.retinaBase)
-        .navigationBarBackButtonHidden(true)
-        .navigationBarTitle("")
-        .navigationBarHidden(true)
     }
         
     func convertToJSON() {
@@ -61,7 +61,6 @@ struct ChangePreferenceView: View {
                 .responseJSON { response in
                 print(response)
             }
-            
         } catch { print(error) }
     }
 }
