@@ -7,7 +7,7 @@
 //
 
 import SwiftUI
-
+import Mixpanel
 
 struct ContentView: View {
     let spacing: CGFloat
@@ -41,6 +41,7 @@ struct ContentView: View {
                                 HStack(alignment: .top) {
                                     Spacer()
                                     Button(action: {
+                                        Mixpanel.mainInstance().track(event: "Checking Preferences")
                                         if UserDefaults.standard.bool(forKey: "preferencesSeen") == false {
                                             self.showPreferencesAlert.toggle()
                                         } else {
@@ -104,7 +105,7 @@ struct ContentView: View {
                                         $0.discover == true && $0.category == "ingredient"
                                     }, id: \.self) { item in
                                         NavigationLink(
-                                        destination: LazyView(TopChoicesView(observed: self.observedTopChoices))) {
+                                        destination: LazyView(TopChoicesView(observed: self.observedTopChoices, selectedItem: item))) {
                                             DiscoveryCell(title: item.title, backgroundImageUrl: item.imageUrl).padding([.leading, .trailing], 6)
                                         }.buttonStyle(PlainButtonStyle())
                                     }
@@ -122,7 +123,7 @@ struct ContentView: View {
                                         $0.discover == true && $0.category == "dish"
                                     }, id: \.self) { item in
                                         NavigationLink(
-                                        destination: LazyView(TopChoicesView(observed: self.observedTopChoices))) {
+                                        destination: LazyView(TopChoicesView(observed: self.observedTopChoices, selectedItem: item))) {
                                             DiscoveryCell(title: item.title, backgroundImageUrl: item.imageUrl).padding([.leading, .trailing], 6)
                                         }.buttonStyle(PlainButtonStyle())
                                     }
@@ -141,7 +142,7 @@ struct ContentView: View {
                                         $0.discover == true && $0.category == "cuisine"
                                     }, id: \.self) { item in
                                         NavigationLink(
-                                        destination: TopChoicesView(observed: self.observedTopChoices)) {
+                                        destination: TopChoicesView(observed: self.observedTopChoices, selectedItem: item)) {
                                             DiscoveryCell(title: item.title, backgroundImageUrl: item.imageUrl).padding([.leading, .trailing], 6)
                                         }.buttonStyle(PlainButtonStyle())
                                     }

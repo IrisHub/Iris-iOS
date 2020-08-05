@@ -8,6 +8,7 @@
 
 import SwiftUI
 import Alamofire
+import Mixpanel
 
 struct ChangePreferenceView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
@@ -20,7 +21,7 @@ struct ChangePreferenceView: View {
     var body: some View {
         ZStack {
             VStack {
-                TopNavigationView(title: "Your Cuisines", bolded: "", subtitle: preference.type == "single_select" ? "Select one option" : "Select multiple options", leftIconString: "chevron.left", rightIconStrings: ["", ""], buttonCommit: {self.presentationMode.wrappedValue.dismiss(); self.convertToJSON()}).padding(.top, DeviceUtility.isIphoneXType ? 0 : UIApplication.topInset)
+                TopNavigationView(title: preference.title, bolded: "", subtitle: preference.type == "single_select" ? "Select one option" : "Select multiple options", leftIconString: "chevron.left", rightIconStrings: ["", ""], buttonCommit: {self.presentationMode.wrappedValue.dismiss(); self.convertToJSON()}).padding(.top, DeviceUtility.isIphoneXType ? 0 : UIApplication.topInset)
                 if preference.type == "single_select" {
                     SingleSelectView(items: $items, preference: $preference)
                 } else {
@@ -60,6 +61,7 @@ struct ChangePreferenceView: View {
             AF.request("https://e2nmwaykqf.execute-api.us-west-1.amazonaws.com/alpha/preferencesupdate", method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
                 .responseJSON { response in
                 print(response)
+                Mixpanel.mainInstance().track(event: "Preference Changed", properties: ["Title" : pref.preference.title, "Changed To": pref.preference.items.first?.title] as? Properties)
             }
         } catch { print(error) }
     }

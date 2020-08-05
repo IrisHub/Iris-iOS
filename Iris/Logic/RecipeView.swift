@@ -9,6 +9,7 @@
 import SwiftUI
 import SafariServices
 import URLImage
+import Mixpanel
 
 struct RecipeView: View {
     // whether or not to show the Safari ViewController
@@ -18,7 +19,7 @@ struct RecipeView: View {
     @State var showSafari = false
     // initial URL string
     @State var urlString = "https://ifoodreal.com/healthy-iced-coffee/"
-    @State var imageURL = "None"
+    @State var imageURL = ""
     @Binding var recipePresented : Bool
     
     var body: some View {
@@ -26,7 +27,7 @@ struct RecipeView: View {
             ZStack {
                 ScrollView(.vertical, showsIndicators: false) {
                     GeometryReader { geometry in
-                        URLImage((URL(string: self.observed.recipes.count > 1 ? self.observed.recipes[self.selectedChoice].imageUrl : ""))!){ proxy in
+                        URLImage((URL(string: self.observed.recipes.count > 1 ? self.observed.recipes[self.selectedChoice].imageUrl : "") ?? URL(string: "https://www.minasjr.com.br/wp-content/themes/minasjr/images/placeholders/placeholder_large_dark.jpg")!)){ proxy in
                         proxy.image
                             .resizable()
                             .renderingMode(.original)
@@ -73,6 +74,9 @@ struct RecipeView: View {
                         self.urlString = self.observed.recipes[self.selectedChoice].link
                         // tell the app that we want to show the Safari VC
                         self.showSafari = true
+                        
+                        Mixpanel.mainInstance().track(event: "Opened Recipe Website")
+
                     }).frame(width: (UIScreen.screenWidth-48)/2, height: 36, alignment: .trailing).padding(24)
                     .sheet(isPresented: $showSafari) {
                         SafariView(url:URL(string: self.urlString)!)
@@ -81,6 +85,11 @@ struct RecipeView: View {
             }.padding(.bottom, UIApplication.bottomInset)
             
         }.background(Color.retinaBase)
+        .onAppear() {
+            if self.observed.recipes.count > 1 {
+                Mixpanel.mainInstance().track(event: "Viewing Recipe Details", properties: ["Title" : self.observed.recipes[self.selectedChoice].title, "Rating": self.observed.recipes[self.selectedChoice].rating, "Difficulty": self.observed.recipes[self.selectedChoice].difficulty, "Cook Time": self.observed.recipes[self.selectedChoice].cookTime])
+            }
+        }
     }
 }
 

@@ -22,7 +22,6 @@ struct HomeCell: View {
                     HorizontalLabel(text: String(id+1) + " of 3").padding(.top, 12)
                     Button(action: {
                         withAnimation {
-                            self.selectedChoice = self.id
                             self.recipePresented = true
                         }
                     }) {

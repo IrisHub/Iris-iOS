@@ -30,7 +30,7 @@
 		B1607FD624C47D320075B436 /* MultiSelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1607FD524C47D320075B436 /* MultiSelectView.swift */; };
 		B1607FDB24C4B6DB0075B436 /* Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1607FDA24C4B6DB0075B436 /* Search.swift */; };
 		B16544F124C3BF8500A44117 /* DiscoveryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B16544F024C3BF8500A44117 /* DiscoveryCell.swift */; };
-		B167044D24CBE06E00BCCF0B /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = B167044C24CBE06E00BCCF0B /* SwiftPackageProductDependency */; };
+		B167044D24CBE06E00BCCF0B /* URLImage in Frameworks */ = {isa = PBXBuildFile; productRef = B167044C24CBE06E00BCCF0B /* URLImage */; };
 		B167045024CCBEDE00BCCF0B /* FirstView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B167044F24CCBEDE00BCCF0B /* FirstView.swift */; };
 		B167045224CCC0A800BCCF0B /* SecondView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B167045124CCC0A800BCCF0B /* SecondView.swift */; };
 		B167045624CCC7F500BCCF0B /* ThirdView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B167045524CCC7F500BCCF0B /* ThirdView.swift */; };
@@ -47,7 +47,7 @@
 		B1B10DED24C111E400F56835 /* IrisUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B10DEC24C111E400F56835 /* IrisUITests.swift */; };
 		B1B10DFB24C14F3200F56835 /* Typography.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B10DFA24C14F3200F56835 /* Typography.swift */; };
 		B1B1277324C391F400959667 /* TitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B1277224C391F400959667 /* TitleView.swift */; };
-		B1B1277724C398DF00959667 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = B1B1277624C398DF00959667 /* SwiftPackageProductDependency */; };
+		B1B1277724C398DF00959667 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = B1B1277624C398DF00959667 /* Lottie */; };
 		B1B1277924C3991300959667 /* LottieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B1277824C3991300959667 /* LottieView.swift */; };
 		B1B1277B24C39A5D00959667 /* loading.json in Resources */ = {isa = PBXBuildFile; fileRef = B1B1277A24C39A5D00959667 /* loading.json */; };
 		B1B1277D24C39AB700959667 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1B1277C24C39AB700959667 /* LoadingView.swift */; };
@@ -67,8 +67,8 @@
 		B1DDA69D24CA3C94005A9A3B /* DMSans-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B1DDA69724CA3C94005A9A3B /* DMSans-MediumItalic.ttf */; };
 		B1DDA69E24CA3C94005A9A3B /* DMSans-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B1DDA69824CA3C94005A9A3B /* DMSans-Italic.ttf */; };
 		B1DDA6A024CA8959005A9A3B /* Gradient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1DDA69F24CA8959005A9A3B /* Gradient.swift */; };
-		B1DDA6A324CBA86C005A9A3B /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = B1DDA6A224CBA86C005A9A3B /* SwiftPackageProductDependency */; };
-		B1DDA6A624CBABAC005A9A3B /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = B1DDA6A524CBABAC005A9A3B /* SwiftPackageProductDependency */; };
+		B1DDA6A324CBA86C005A9A3B /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = B1DDA6A224CBA86C005A9A3B /* Alamofire */; };
+		B1DDA6A624CBABAC005A9A3B /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = B1DDA6A524CBABAC005A9A3B /* SwiftyJSON */; };
 		BEF01D88815503CD03241BD3 /* Pods_Iris_IrisUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1500D85875960329905AE5A8 /* Pods_Iris_IrisUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -168,10 +168,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B1DDA6A624CBABAC005A9A3B /* BuildFile in Frameworks */,
-				B1B1277724C398DF00959667 /* BuildFile in Frameworks */,
-				B167044D24CBE06E00BCCF0B /* BuildFile in Frameworks */,
-				B1DDA6A324CBA86C005A9A3B /* BuildFile in Frameworks */,
+				B1DDA6A624CBABAC005A9A3B /* SwiftyJSON in Frameworks */,
+				B1B1277724C398DF00959667 /* Lottie in Frameworks */,
+				B167044D24CBE06E00BCCF0B /* URLImage in Frameworks */,
+				B1DDA6A324CBA86C005A9A3B /* Alamofire in Frameworks */,
 				1A8B56CAB03922D91CF3E6BE /* Pods_Iris.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -205,7 +205,6 @@
 				7F51510BC28D82E2832D77AE /* Pods-IrisTests.debug.xcconfig */,
 				E522A7C3D58E10BEE50AEC17 /* Pods-IrisTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -428,10 +427,10 @@
 			);
 			name = Iris;
 			packageProductDependencies = (
-				B1B1277624C398DF00959667 /* SwiftPackageProductDependency */,
-				B1DDA6A224CBA86C005A9A3B /* SwiftPackageProductDependency */,
-				B1DDA6A524CBABAC005A9A3B /* SwiftPackageProductDependency */,
-				B167044C24CBE06E00BCCF0B /* SwiftPackageProductDependency */,
+				B1B1277624C398DF00959667 /* Lottie */,
+				B1DDA6A224CBA86C005A9A3B /* Alamofire */,
+				B1DDA6A524CBABAC005A9A3B /* SwiftyJSON */,
+				B167044C24CBE06E00BCCF0B /* URLImage */,
 			);
 			productName = Iris;
 			productReference = B1B10DC724C111E000F56835 /* Iris.app */;
@@ -509,10 +508,10 @@
 			);
 			mainGroup = B1B10DBE24C111E000F56835;
 			packageReferences = (
-				B1B1277524C398DF00959667 /* RemoteSwiftPackageReference */,
-				B1DDA6A124CBA86C005A9A3B /* RemoteSwiftPackageReference */,
-				B1DDA6A424CBABAC005A9A3B /* RemoteSwiftPackageReference */,
-				B167044B24CBE06E00BCCF0B /* RemoteSwiftPackageReference */,
+				B1B1277524C398DF00959667 /* XCRemoteSwiftPackageReference "lottie-ios" */,
+				B1DDA6A124CBA86C005A9A3B /* XCRemoteSwiftPackageReference "Alamofire" */,
+				B1DDA6A424CBABAC005A9A3B /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
+				B167044B24CBE06E00BCCF0B /* XCRemoteSwiftPackageReference "url-image" */,
 			);
 			productRefGroup = B1B10DC824C111E000F56835 /* Products */;
 			projectDirPath = "";
@@ -877,19 +876,22 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 7;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_ASSET_PATHS = "\"Iris/Preview Content\"";
 				DEVELOPMENT_TEAM = GQ254GL522;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Iris/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.shalinshah.Iris;
+				MARKETING_VERSION = 2.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.shalinshah.iris;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -899,19 +901,22 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 7;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_ASSET_PATHS = "\"Iris/Preview Content\"";
 				DEVELOPMENT_TEAM = GQ254GL522;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Iris/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.shalinshah.Iris;
+				MARKETING_VERSION = 2.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.shalinshah.iris;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -1045,7 +1050,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		B167044B24CBE06E00BCCF0B /* RemoteSwiftPackageReference */ = {
+		B167044B24CBE06E00BCCF0B /* XCRemoteSwiftPackageReference "url-image" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/dmytro-anokhin/url-image.git";
 			requirement = {
@@ -1053,7 +1058,7 @@
 				minimumVersion = 0.9.19;
 			};
 		};
-		B1B1277524C398DF00959667 /* RemoteSwiftPackageReference */ = {
+		B1B1277524C398DF00959667 /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/airbnb/lottie-ios.git";
 			requirement = {
@@ -1061,7 +1066,7 @@
 				minimumVersion = 3.1.8;
 			};
 		};
-		B1DDA6A124CBA86C005A9A3B /* RemoteSwiftPackageReference */ = {
+		B1DDA6A124CBA86C005A9A3B /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
 			requirement = {
@@ -1069,7 +1074,7 @@
 				minimumVersion = 5.2.2;
 			};
 		};
-		B1DDA6A424CBABAC005A9A3B /* RemoteSwiftPackageReference */ = {
+		B1DDA6A424CBABAC005A9A3B /* XCRemoteSwiftPackageReference "SwiftyJSON" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SwiftyJSON/SwiftyJSON.git";
 			requirement = {
@@ -1080,24 +1085,24 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		B167044C24CBE06E00BCCF0B /* SwiftPackageProductDependency */ = {
+		B167044C24CBE06E00BCCF0B /* URLImage */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = B167044B24CBE06E00BCCF0B /* RemoteSwiftPackageReference */;
+			package = B167044B24CBE06E00BCCF0B /* XCRemoteSwiftPackageReference "url-image" */;
 			productName = URLImage;
 		};
-		B1B1277624C398DF00959667 /* SwiftPackageProductDependency */ = {
+		B1B1277624C398DF00959667 /* Lottie */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = B1B1277524C398DF00959667 /* RemoteSwiftPackageReference */;
+			package = B1B1277524C398DF00959667 /* XCRemoteSwiftPackageReference "lottie-ios" */;
 			productName = Lottie;
 		};
-		B1DDA6A224CBA86C005A9A3B /* SwiftPackageProductDependency */ = {
+		B1DDA6A224CBA86C005A9A3B /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = B1DDA6A124CBA86C005A9A3B /* RemoteSwiftPackageReference */;
+			package = B1DDA6A124CBA86C005A9A3B /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
 		};
-		B1DDA6A524CBABAC005A9A3B /* SwiftPackageProductDependency */ = {
+		B1DDA6A524CBABAC005A9A3B /* SwiftyJSON */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = B1DDA6A424CBABAC005A9A3B /* RemoteSwiftPackageReference */;
+			package = B1DDA6A424CBABAC005A9A3B /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
 			productName = SwiftyJSON;
 		};
 /* End XCSwiftPackageProductDependency section */

@@ -31,7 +31,7 @@ struct CarouselView: View
         
         return  Canvas
                 {
-                    Carousel( numberOfItems: CGFloat( items.count ), spacing: spacing, widthOfHiddenCards: widthOfHiddenCards )
+                    Carousel( numberOfItems: CGFloat( items.count ), spacing: spacing, widthOfHiddenCards: widthOfHiddenCards, selectedChoice: self.$selectedChoice )
                     {
                         ForEach( items, id: \.self.id ) { item in
                             Item( _id:                  Int(item.id),
@@ -45,9 +45,9 @@ struct CarouselView: View
                                     self.showingAlert = true
                                 })
                                 .alert(isPresented: self.$showingAlert) {
-                                    Alert(title: Text("Was this recipe helpful?"), message: Text(""), primaryButton: .default(Text("Not Helpful"), action: {
-                                        self.showBanner = true; self.feedbackCommit()
-                                    }), secondaryButton: .default(Text("Cancel")))
+                                    Alert(title: Text("Was this recipe helpful?"), message: Text(""), primaryButton: .default(Text("No, I don't want that!"), action: {
+                                            self.showBanner = true; self.feedbackCommit()
+                                        }), secondaryButton: .default(Text("Cancel")))
                                 }
                             }
                             .transition( AnyTransition.slide )
@@ -77,13 +77,15 @@ struct Carousel<Items : View> : View {
     let cardWidth: CGFloat
     
     @GestureState var isDetectingLongPress = false
-    
     @EnvironmentObject var UIState: UIStateModel
-        
+    
+    @Binding var selectedChoice: Int
+
     @inlinable public init(
         numberOfItems: CGFloat,
         spacing: CGFloat,
         widthOfHiddenCards: CGFloat,
+        selectedChoice: Binding<Int>,
         @ViewBuilder _ items: () -> Items) {
         
         self.items = items()
@@ -92,6 +94,7 @@ struct Carousel<Items : View> : View {
         self.widthOfHiddenCards = widthOfHiddenCards
         self.totalSpacing = (numberOfItems - 1) * spacing
         self.cardWidth = UIScreen.main.bounds.width - (widthOfHiddenCards*2) - (spacing*2) //279
+        _selectedChoice = selectedChoice
         
     }
     
@@ -132,6 +135,7 @@ struct Carousel<Items : View> : View {
                 let impactMed = UIImpactFeedbackGenerator(style: .medium)
                 impactMed.impactOccurred()
             }
+            self.selectedChoice = self.UIState.activeCard
         })
     }
 }

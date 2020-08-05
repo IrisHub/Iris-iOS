@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import Mixpanel
 
 struct OnboardingFlowView: View {
     @State var secondPresented: Bool = false

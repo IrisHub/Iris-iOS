@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import Mixpanel
 
 struct ThirdView: View {
     @Binding var fourthPresented: Bool
@@ -72,7 +73,7 @@ struct ThirdView: View {
                     .frame(width: UIScreen.screenWidth, height: 120)
 
                     HStack {
-                        retinaButton(text: "Unlock your Iris", style: .outlineOnly, color: .retinaPink, action: { withAnimation { self.fourthPresented = true } }).frame(width: 326, height: 36, alignment: .trailing).transition(.slide)
+                        retinaButton(text: "Unlock your Iris", style: .outlineOnly, color: .retinaPink, action: {                             Mixpanel.mainInstance().track(event: "Finished Onboarding"); withAnimation { self.fourthPresented = true } }).frame(width: 326, height: 36, alignment: .trailing).transition(.slide)
                     }
                 }.padding(.bottom, DeviceUtility.isIphoneXType ? 0 : UIApplication.bottomInset)
             }

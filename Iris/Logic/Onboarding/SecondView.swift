@@ -9,6 +9,7 @@
 import SwiftUI
 import Alamofire
 import SwiftyJSON
+import Mixpanel
 
 struct SecondView: View {
     @State var value: CGFloat = 0
@@ -88,6 +89,8 @@ struct SecondView: View {
                         print(json)
                         if let userID = json["user_id"].string {
                             UserDefaults.standard.set(userID, forKey: "userID")
+                            Mixpanel.mainInstance().track(event: "Fetched UserID From Server")
+
                             self.preferences = json["text"].arrayValue.map {$0.stringValue}
                             withAnimation {
                                 self.thirdPresented = true

@@ -86,14 +86,15 @@ struct RetinaButtonStyle: ButtonStyle {
                 .retinaTypography(.h5_main)
                 .foregroundColor(isEnabled ? color : .retinaBase)
                 .padding(12)
-                .frame(minHeight: 56)
-                .background(Color.clear)
+                .frame(maxWidth: .infinity, minHeight: 36)
+                .background(Color.retinaBase.opacity(0.01))
                 .cornerRadius(4)
                 .overlay(
                     RoundedRectangle(cornerRadius: 4)
                         .stroke(isEnabled ? color : Color.retinaBase.opacity(0.5), lineWidth: 2)
                 )
                 .opacity(configuration.isPressed ? 0.7 : 1)
+            
         }
     }
 
@@ -140,12 +141,16 @@ struct retinaButton: View {
     var body: some View {
         Button(action: action, label: {
             HStack() {
-                Spacer()
-                HStack(spacing: textAndImage ? 12 : 0) {
-                    Text(text ?? "")
-                    image
+                ZStack {
+                    if style == .outlineOnly {
+                    }
+                    Spacer()
+                    HStack(spacing: textAndImage ? 12 : 0) {
+                        Text(text ?? "")
+                        image
+                    }
+                    Spacer()
                 }
-                Spacer()
             }
         }).style(style, color: color)
     }
@@ -207,7 +212,7 @@ public struct Input_Previews: PreviewProvider {
             
             HStack(spacing: 5) {
                 retinaButton(text: "Fill", style: .fill, action: { print("click") })
-                retinaButton(text: "Outline", style: .outline, color: .retinaBase, action: { print("click") })
+                retinaButton(text: "Outline", style: .outlineOnly, color: .retinaBase, action: { print("click") })
                 retinaButton(text: "Ghost", style: .ghost, action: { print("click") })
             }
             
